@@ -1,0 +1,25 @@
+# Môi trường và file nhạy cảm
+# Bỏ qua tất cả các file .env ở mọi nơi trong dự án
+**/.env
+
+# Dependencies
+# Bỏ qua thư mục node_modules ở cả backend và frontend
+**/node_modules
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+**/build
+**/.next
+**/dist
+
+# Prisma
+# Bỏ qua file database SQLite nếu bạn dùng để test
+*.db
+
+# Mac & Windows files
+.DS_Store
+Thumbs.db
