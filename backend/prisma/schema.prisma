@@ -1,0 +1,368 @@
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum KYCStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PropertyStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  SOLD
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  LAND
+  VILLA
+  SHOPHOUSE
+}
+
+enum AuctionStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  AUCTION_DEPOSIT
+  AUCTION_REFUND
+  PAYMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  fullName      String
+  phone         String?  @unique
+  avatar        String?
+  role          UserRole @default(USER)
+  isVerified    Boolean  @default(false)
+  isBlocked     Boolean  @default(false)
+  
+  // KYC
+  kycStatus     KYCStatus @default(PENDING)
+  kycData       KYC?
+  
+  // Wallet
+  wallet        Wallet?
+  
+  // Relations
+  properties    Property[]
+  auctions      Auction[]
+  bids          Bid[]
+  favorites     Favorite[]
+  reviews       Review[]
+  notifications Notification[]
+  chats         ChatParticipant[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([email])
+}
+
+model KYC {
+  id              String     @id @default(uuid())
+  userId          String     @unique
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  idCardNumber    String     @unique
+  idCardFront     String     // URL
+  idCardBack      String     // URL
+  selfieWithId    String     // URL
+  fullName        String
+  dateOfBirth     DateTime
+  address         String
+  
+  status          KYCStatus  @default(PENDING)
+  rejectionReason String?
+  verifiedBy      String?    // Admin ID
+  verifiedAt      DateTime?
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Wallet {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  balance       Decimal  @default(0) @db.Decimal(15, 2)
+  
+  transactions  Transaction[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Transaction {
+  id            String            @id @default(uuid())
+  walletId      String
+  wallet        Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  
+  type          TransactionType
+  amount        Decimal           @db.Decimal(15, 2)
+  status        TransactionStatus @default(PENDING)
+  
+  // Payment gateway
+  paymentMethod String?           // VNPAY, MOMO, BLOCKCHAIN
+  paymentRef    String?           @unique
+  txHash        String?           // For blockchain
+  
+  description   String?
+  metadata      Json?
+  
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  
+  @@index([walletId])
+}
+
+model Property {
+  id              String         @id @default(uuid())
+  ownerId         String
+  owner           User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  title           String
+  description     String         @db.Text
+  type            PropertyType
+  status          PropertyStatus @default(DRAFT)
+  
+  // Location
+  address         String
+  city            String
+  district        String
+  ward            String
+  latitude        Float
+  longitude       Float
+  
+  // Details
+  price           Decimal        @db.Decimal(15, 2)
+  area            Float          // m2
+  bedrooms        Int?
+  bathrooms       Int?
+  floors          Int?
+  direction       String?        // Hướng nhà
+  hasLegalDoc     Boolean        @default(false)
+  isFurnished     Boolean        @default(false)
+  
+  // Media
+  images          String[]       // Array of URLs
+  videos          String[]
+  thumbnail       String?
+  
+  // Premium
+  isPremium       Boolean        @default(false)
+  premiumUntil    DateTime?
+  
+  views           Int            @default(0)
+  
+  // Relations
+  auctions        Auction[]
+  favorites       Favorite[]
+  reviews         Review[]
+  
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  publishedAt     DateTime?
+  
+  @@index([ownerId])
+  @@index([status])
+  @@index([type])
+  @@index([city, district])
+}
+
+model Auction {
+  id              String        @id @default(uuid())
+  propertyId      String
+  property        Property      @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  createdBy       String
+  creator         User          @relation(fields: [createdBy], references: [id])
+  
+  title           String
+  description     String?       @db.Text
+  
+  startPrice      Decimal       @db.Decimal(15, 2)
+  bidStep         Decimal       @db.Decimal(15, 2) // Bước giá
+  depositAmount   Decimal       @db.Decimal(15, 2) // Tiền cọc
+  
+  startTime       DateTime
+  endTime         DateTime
+  status          AuctionStatus @default(UPCOMING)
+  
+  currentPrice    Decimal       @db.Decimal(15, 2)
+  winnerId        String?
+  
+  // Relations
+  bids            Bid[]
+  participants    AuctionParticipant[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([propertyId])
+  @@index([status])
+  @@index([startTime])
+}
+
+model AuctionParticipant {
+  id            String   @id @default(uuid())
+  auctionId     String
+  auction       Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  
+  userId        String
+  
+  depositPaid   Boolean  @default(false)
+  depositTxId   String?
+  
+  isRefunded    Boolean  @default(false)
+  
+  createdAt     DateTime @default(now())
+  
+  @@unique([auctionId, userId])
+  @@index([auctionId])
+}
+
+model Bid {
+  id            String   @id @default(uuid())
+  auctionId     String
+  auction       Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  amount        Decimal  @db.Decimal(15, 2)
+  isAutoBid     Boolean  @default(false)
+  maxAmount     Decimal? @db.Decimal(15, 2)
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([auctionId])
+  @@index([userId])
+}
+
+model Favorite {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([userId, propertyId])
+  @@index([userId])
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  rating      Int      // 1-5
+  comment     String?  @db.Text
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([userId, propertyId])
+  @@index([propertyId])
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title       String
+  message     String   @db.Text
+  type        String   // BID, AUCTION, PAYMENT, KYC...
+  link        String?
+  
+  isRead      Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([userId, isRead])
+}
+
+model Chat {
+  id            String            @id @default(uuid())
+  
+  participants  ChatParticipant[]
+  messages      ChatMessage[]
+  
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model ChatParticipant {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  joinedAt  DateTime @default(now())
+  
+  @@unique([chatId, userId])
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  
+  senderId  String
+  content   String   @db.Text
+  
+  isRead    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([chatId])
+}
+
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  
+  updatedAt   DateTime @updatedAt
+}
