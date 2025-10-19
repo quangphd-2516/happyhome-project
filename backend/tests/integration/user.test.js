@@ -1,6 +1,6 @@
 const request = require('supertest');
 const faker = require('faker');
-const httpStatus = require('http-status');
+const StatusCodes = require('http-status-codes');
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
 const { User } = require('../../src/models');
@@ -29,7 +29,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.CREATED);
+        .expect(StatusCodes.CREATED);
 
       expect(res.body).not.toHaveProperty('password');
       expect(res.body).toEqual({
@@ -54,7 +54,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.CREATED);
+        .expect(StatusCodes.CREATED);
 
       expect(res.body.role).toBe('admin');
 
@@ -63,7 +63,7 @@ describe('User routes', () => {
     });
 
     test('should return 401 error if access token is missing', async () => {
-      await request(app).post('/v1/users').send(newUser).expect(httpStatus.UNAUTHORIZED);
+      await request(app).post('/v1/users').send(newUser).expect(StatusCodes.UNAUTHORIZED);
     });
 
     test('should return 403 error if logged in user is not admin', async () => {
@@ -73,7 +73,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.FORBIDDEN);
+        .expect(StatusCodes.FORBIDDEN);
     });
 
     test('should return 400 error if email is invalid', async () => {
@@ -84,7 +84,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 400 error if email is already used', async () => {
@@ -95,7 +95,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 400 error if password length is less than 8 characters', async () => {
@@ -106,7 +106,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 400 error if password does not contain both letters and numbers', async () => {
@@ -117,7 +117,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
 
       newUser.password = '1111111';
 
@@ -125,7 +125,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 400 error if role is neither user nor admin', async () => {
@@ -136,7 +136,7 @@ describe('User routes', () => {
         .post('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(newUser)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 
@@ -148,7 +148,7 @@ describe('User routes', () => {
         .get('/v1/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -170,7 +170,7 @@ describe('User routes', () => {
     test('should return 401 if access token is missing', async () => {
       await insertUsers([userOne, userTwo, admin]);
 
-      await request(app).get('/v1/users').send().expect(httpStatus.UNAUTHORIZED);
+      await request(app).get('/v1/users').send().expect(StatusCodes.UNAUTHORIZED);
     });
 
     test('should return 403 if a non-admin is trying to access all users', async () => {
@@ -180,7 +180,7 @@ describe('User routes', () => {
         .get('/v1/users')
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
-        .expect(httpStatus.FORBIDDEN);
+        .expect(StatusCodes.FORBIDDEN);
     });
 
     test('should correctly apply filter on name field', async () => {
@@ -191,7 +191,7 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ name: userOne.name })
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -212,7 +212,7 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ role: 'user' })
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -234,7 +234,7 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ sortBy: 'role:desc' })
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -257,7 +257,7 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ sortBy: 'role:asc' })
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -280,7 +280,7 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ sortBy: 'role:desc,name:asc' })
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -314,7 +314,7 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ limit: 2 })
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -336,7 +336,7 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ page: 2, limit: 2 })
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).toEqual({
         results: expect.any(Array),
@@ -358,7 +358,7 @@ describe('User routes', () => {
         .get(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).not.toHaveProperty('password');
       expect(res.body).toEqual({
@@ -373,7 +373,7 @@ describe('User routes', () => {
     test('should return 401 error if access token is missing', async () => {
       await insertUsers([userOne]);
 
-      await request(app).get(`/v1/users/${userOne._id}`).send().expect(httpStatus.UNAUTHORIZED);
+      await request(app).get(`/v1/users/${userOne._id}`).send().expect(StatusCodes.UNAUTHORIZED);
     });
 
     test('should return 403 error if user is trying to get another user', async () => {
@@ -383,7 +383,7 @@ describe('User routes', () => {
         .get(`/v1/users/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
-        .expect(httpStatus.FORBIDDEN);
+        .expect(StatusCodes.FORBIDDEN);
     });
 
     test('should return 200 and the user object if admin is trying to get another user', async () => {
@@ -393,7 +393,7 @@ describe('User routes', () => {
         .get(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
     });
 
     test('should return 400 error if userId is not a valid mongo id', async () => {
@@ -403,7 +403,7 @@ describe('User routes', () => {
         .get('/v1/users/invalidId')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 404 error if user is not found', async () => {
@@ -413,7 +413,7 @@ describe('User routes', () => {
         .get(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
-        .expect(httpStatus.NOT_FOUND);
+        .expect(StatusCodes.NOT_FOUND);
     });
   });
 
@@ -425,7 +425,7 @@ describe('User routes', () => {
         .delete(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
-        .expect(httpStatus.NO_CONTENT);
+        .expect(StatusCodes.NO_CONTENT);
 
       const dbUser = await User.findById(userOne._id);
       expect(dbUser).toBeNull();
@@ -434,7 +434,7 @@ describe('User routes', () => {
     test('should return 401 error if access token is missing', async () => {
       await insertUsers([userOne]);
 
-      await request(app).delete(`/v1/users/${userOne._id}`).send().expect(httpStatus.UNAUTHORIZED);
+      await request(app).delete(`/v1/users/${userOne._id}`).send().expect(StatusCodes.UNAUTHORIZED);
     });
 
     test('should return 403 error if user is trying to delete another user', async () => {
@@ -444,7 +444,7 @@ describe('User routes', () => {
         .delete(`/v1/users/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
-        .expect(httpStatus.FORBIDDEN);
+        .expect(StatusCodes.FORBIDDEN);
     });
 
     test('should return 204 if admin is trying to delete another user', async () => {
@@ -454,7 +454,7 @@ describe('User routes', () => {
         .delete(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
-        .expect(httpStatus.NO_CONTENT);
+        .expect(StatusCodes.NO_CONTENT);
     });
 
     test('should return 400 error if userId is not a valid mongo id', async () => {
@@ -464,7 +464,7 @@ describe('User routes', () => {
         .delete('/v1/users/invalidId')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 404 error if user already is not found', async () => {
@@ -474,7 +474,7 @@ describe('User routes', () => {
         .delete(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
-        .expect(httpStatus.NOT_FOUND);
+        .expect(StatusCodes.NOT_FOUND);
     });
   });
 
@@ -491,7 +491,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
 
       expect(res.body).not.toHaveProperty('password');
       expect(res.body).toEqual({
@@ -512,7 +512,7 @@ describe('User routes', () => {
       await insertUsers([userOne]);
       const updateBody = { name: faker.name.findName() };
 
-      await request(app).patch(`/v1/users/${userOne._id}`).send(updateBody).expect(httpStatus.UNAUTHORIZED);
+      await request(app).patch(`/v1/users/${userOne._id}`).send(updateBody).expect(StatusCodes.UNAUTHORIZED);
     });
 
     test('should return 403 if user is updating another user', async () => {
@@ -523,7 +523,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userTwo._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.FORBIDDEN);
+        .expect(StatusCodes.FORBIDDEN);
     });
 
     test('should return 200 and successfully update user if admin is updating another user', async () => {
@@ -534,7 +534,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
     });
 
     test('should return 404 if admin is updating another user that is not found', async () => {
@@ -545,7 +545,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.NOT_FOUND);
+        .expect(StatusCodes.NOT_FOUND);
     });
 
     test('should return 400 error if userId is not a valid mongo id', async () => {
@@ -556,7 +556,7 @@ describe('User routes', () => {
         .patch(`/v1/users/invalidId`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 400 if email is invalid', async () => {
@@ -567,7 +567,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 400 if email is already taken', async () => {
@@ -578,7 +578,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should not return 400 if email is my email', async () => {
@@ -589,7 +589,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.OK);
+        .expect(StatusCodes.OK);
     });
 
     test('should return 400 if password length is less than 8 characters', async () => {
@@ -600,7 +600,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
 
     test('should return 400 if password does not contain both letters and numbers', async () => {
@@ -611,7 +611,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
 
       updateBody.password = '11111111';
 
@@ -619,7 +619,7 @@ describe('User routes', () => {
         .patch(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
-        .expect(httpStatus.BAD_REQUEST);
+        .expect(StatusCodes.BAD_REQUEST);
     });
   });
 });

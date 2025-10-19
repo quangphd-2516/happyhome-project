@@ -1,9 +1,10 @@
-const httpStatus = require('http-status');
+const StatusCodes = require('http-status-codes');
 const bcrypt = require('bcryptjs');
 const userService = require('./user.service');
 const tokenService = require('./token.service');
 const ApiError = require('../utils/ApiError');
 const prisma = require('../client');
+const emailService = require('../services/email.service');
 
 /**
  * Login with username and password
@@ -16,7 +17,7 @@ const loginUserWithEmailAndPassword = async (email, password) => {
 
   // Check if user exists and if password is correct
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
   }
 
   return user;
@@ -54,18 +55,159 @@ const refreshAuth = async (refreshToken) => {
     const user = await userService.getUserById(userId);
 
     if (!user) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'User not found');
+      throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not found');
     }
 
     return tokenService.generateAuthTokens(user);
   } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate');
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Please authenticate');
   }
 };
+/**
+ * Đăng ký user mới với OTP
+ * @param {Object} userData - { fullName, email, password }
+ * @returns {Promise<Object>}
+ */
+const registerWithOTP = async (userData) => {
+  const { fullName, email, password } = userData;
 
+  // Kiểm tra email đã tồn tại chưa
+  const existingUser = await prisma.user.findUnique({
+    where: { email }
+  });
+
+  if (existingUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already registered');
+  }
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Generate OTP (6 chữ số)
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 phút
+
+  // Tạo user mới (chưa verify)
+  const user = await prisma.user.create({
+    data: {
+      fullName,
+      email,
+      password: hashedPassword,
+      isVerified: false,
+      otp,
+      otpExpiry
+    }
+  });
+
+  // Gửi OTP qua email
+  try {
+    await emailService.sendOTPEmail(email, otp, fullName);
+  } catch (emailError) {
+    console.error('Failed to send OTP email:', emailError);
+    // Không throw error, vì user đã được tạo
+  }
+
+  return {
+    userId: user.id,
+    email: user.email
+  };
+};
+
+/**
+ * Verify OTP
+ * @param {string} email
+ * @param {string} otp
+ * @returns {Promise<Object>}
+ */
+const verifyOTP = async (email, otp) => {
+  // Tìm user
+  const user = await prisma.user.findUnique({
+    where: { email }
+  });
+
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  // Kiểm tra đã verify chưa
+  if (user.isVerified) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Account already verified');
+  }
+
+  // Kiểm tra OTP hết hạn
+  if (user.otpExpiry && new Date() > user.otpExpiry) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'OTP has expired. Please request a new one.');
+  }
+
+  // Kiểm tra OTP đúng không
+  if (user.otp !== otp) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid OTP code');
+  }
+
+  // Update user: set verified = true
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      isVerified: true,
+      otp: null,
+      otpExpiry: null
+    }
+  });
+
+  // Tạo token
+  const tokens = await tokenService.generateAuthTokens(updatedUser);
+
+  // Omit password
+  const { password, ...userWithoutPassword } = updatedUser;
+
+  return {
+    user: userWithoutPassword,
+    tokens
+  };
+};
+
+/**
+ * Resend OTP
+ * @param {string} email
+ * @returns {Promise<void>}
+ */
+const resendOTP = async (email) => {
+  // Tìm user
+  const user = await prisma.user.findUnique({
+    where: { email }
+  });
+
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  // Kiểm tra đã verify chưa
+  if (user.isVerified) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Account already verified');
+  }
+
+  // Generate OTP mới
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+
+  // Update OTP
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      otp,
+      otpExpiry
+    }
+  });
+
+  // Gửi email
+  await emailService.sendOTPEmail(email, otp, user.fullName);
+};
 
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,
+  registerWithOTP,
+  verifyOTP,
+  resendOTP,
 };

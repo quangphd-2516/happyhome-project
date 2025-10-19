@@ -36,9 +36,12 @@ export default function Header() {
                         <button className="p-2 hover:bg-beige-100 rounded-full transition-colors">
                             <User className="w-5 h-5 text-gray-700" />
                         </button>
-                        <button className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-light transition-colors font-medium">
-                            Sign up
+                        <button className="bg-white text-primary border-2 border-primary px-6 py-2.5 rounded-lg hover:bg-beige-100 transition-colors font-medium">
+                            Login
                         </button>
+                        <a href="/register" className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-light transition-colors font-medium inline-block text-center">
+                            Sign up
+                        </a>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -67,9 +70,14 @@ export default function Header() {
                                     {link.label}
                                 </a>
                             ))}
-                            <button className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-light transition-colors font-medium mt-4">
-                                Sign up
-                            </button>
+                            <div className="flex gap-3 mt-4">
+                                <button className="flex-1 bg-white text-primary border-2 border-primary px-6 py-2.5 rounded-lg hover:bg-beige-100 transition-colors font-medium">
+                                    Login
+                                </button>
+                                <a href="/register" className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-light transition-colors font-medium inline-block text-center">
+                                    Sign up
+                                </a>
+                            </div>
                         </nav>
                     </div>
                 )}

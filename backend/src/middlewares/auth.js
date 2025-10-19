@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const httpStatus = require('http-status');
+const StatusCodes = require('http-status-codes');
 const ApiError = require('../utils/ApiError');
 const config = require('../config/config');
 const prisma = require('../client'); // Import prisma client của chúng ta
@@ -18,7 +18,7 @@ const auth = (...requiredRights) => async (req, res, next) => {
     }
 
     if (!token) {
-      return next(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
+      return next(new ApiError(StatusCodes.UNAUTHORIZED, 'Please authenticate'));
     }
 
     // 2. Xác thực token bằng JWT_SECRET
@@ -30,7 +30,7 @@ const auth = (...requiredRights) => async (req, res, next) => {
     });
 
     if (!user) {
-      return next(new ApiError(httpStatus.UNAUTHORIZED, 'User not found'));
+      return next(new ApiError(StatusCodes.UNAUTHORIZED, 'User not found'));
     }
 
     // 4. Gán thông tin user vào request để các hàm sau có thể dùng
@@ -41,14 +41,14 @@ const auth = (...requiredRights) => async (req, res, next) => {
       const userRights = [user.role]; // Lấy role từ user trong database
       const hasRequiredRights = requiredRights.every((requiredRight) => userRights.includes(requiredRight));
       if (!hasRequiredRights) {
-        return next(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
+        return next(new ApiError(StatusCodes.FORBIDDEN, 'Forbidden'));
       }
     }
 
     next();
   } catch (error) {
     // Xử lý các lỗi khác như token hết hạn hoặc không hợp lệ
-    return next(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
+    return next(new ApiError(StatusCodes.UNAUTHORIZED, 'Please authenticate'));
   }
 };
 

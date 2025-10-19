@@ -1,4 +1,4 @@
-const httpStatus = require('http-status');
+const StatusCodes = require('http-status-codes');
 const bcrypt = require('bcryptjs');
 const prisma = require('../client'); // Import Prisma Client của chúng ta
 const ApiError = require('../utils/ApiError');
@@ -24,7 +24,7 @@ const isEmailTaken = async (email, excludeUserId) => {
  */
 const createUser = async (userBody) => {
   if (await isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already taken');
   }
   const hashedPassword = await bcrypt.hash(userBody.password, 8);
   const user = await prisma.user.create({
@@ -67,10 +67,10 @@ const getUserByEmail = async (email) => {
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
   }
   if (updateBody.email && (await isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already taken');
   }
 
   // If password is being updated, hash it
@@ -93,7 +93,7 @@ const updateUserById = async (userId, updateBody) => {
 const deleteUserById = async (userId) => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
   }
   await prisma.user.delete({ where: { id: userId } });
   return user;

@@ -5,5 +5,8 @@ const authController = require('../../controllers/auth.controller');
 
 const router = express.Router();
 router.post('/register', validate(authValidation.register), authController.register);
+router.post('/register-otp', authController.registerWithOTP);
+router.post('/verify-otp', authController.verifyOTP);
+router.post('/resend-otp', authController.resendOTP);
 
 module.exports = router;
