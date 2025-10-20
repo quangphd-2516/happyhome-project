@@ -1,5 +1,5 @@
 const { Prisma } = require('@prisma/client');
-const StatusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const config = require('../config/config');
 const logger = require('../config/logger');
 const ApiError = require('../utils/ApiError');

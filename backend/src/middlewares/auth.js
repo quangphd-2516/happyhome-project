@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const StatusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const ApiError = require('../utils/ApiError');
 const config = require('../config/config');
 const prisma = require('../client'); // Import prisma client của chúng ta

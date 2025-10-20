@@ -1,4 +1,4 @@
-const StatusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const bcrypt = require('bcryptjs');
 const prisma = require('../client'); // Import Prisma Client của chúng ta
 const ApiError = require('../utils/ApiError');

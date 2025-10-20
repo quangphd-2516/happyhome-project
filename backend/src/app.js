@@ -2,14 +2,14 @@ const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
-const StatusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
-const route = require('./routes/v1');
+
 
 
 

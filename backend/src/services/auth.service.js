@@ -1,4 +1,4 @@
-const StatusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const bcrypt = require('bcryptjs');
 const userService = require('./user.service');
 const tokenService = require('./token.service');
@@ -14,7 +14,7 @@ const emailService = require('../services/email.service');
  */
 const loginUserWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
-
+  console.log("🧩 [DEBUG] User from DB:", user);
   // Check if user exists and if password is correct
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new ApiError(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
