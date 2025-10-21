@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Register from './pages/auth/Register';
 import VerifyOTP from './pages/auth/VerifyOTP';
 import Login from './pages/auth/Login';
+import Profile from './pages/user/Profile';
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +13,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/profile' element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
