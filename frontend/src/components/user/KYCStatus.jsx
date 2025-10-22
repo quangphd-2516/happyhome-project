@@ -65,14 +65,22 @@ export default function KYCStatus({ status }) {
                     </div>
                 </div>
 
-                {config.showButton && (
+                <div className="flex gap-3">
                     <button
                         onClick={() => navigate('/kyc')}
                         className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-light transition-colors font-medium"
                     >
-                        {config.buttonText}
+                        KYC
                     </button>
-                )}
+                    {config.showButton && (
+                        <button
+                            onClick={() => navigate('/kyc')}
+                            className="bg-white text-primary border-2 border-primary px-6 py-2.5 rounded-lg hover:bg-beige-100 transition-colors font-medium"
+                        >
+                            {config.buttonText}
+                        </button>
+                    )}
+                </div>
             </div>
 
             {status === 'PENDING' && (

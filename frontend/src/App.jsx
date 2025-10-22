@@ -5,6 +5,7 @@ import Register from './pages/auth/Register';
 import VerifyOTP from './pages/auth/VerifyOTP';
 import Login from './pages/auth/Login';
 import Profile from './pages/user/Profile';
+import KYC from './pages/user/KYC';
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/login" element={<Login />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/kyc' element={<KYC />} />
       </Routes>
     </BrowserRouter>
   );
