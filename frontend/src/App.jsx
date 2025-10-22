@@ -8,6 +8,10 @@ import Profile from './pages/user/Profile';
 import KYC from './pages/user/KYC';
 import PropertyList from './pages/property/PropertyList';
 import PropertyDetail from './pages/property/PropertyDetail';
+import CreateProperty from './pages/property/CreateProperty';
+import EditProperty from './pages/property/EditProperty';
+import MyProperties from './pages/property/MyProperties';
+import Favorites from './pages/property/Favorites';
 function App() {
   return (
     <BrowserRouter>
@@ -18,8 +22,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/kyc' element={<KYC />} />
-        <Route path="/properties" element={<PropertyList />} />
         <Route path="/properties/:id" element={<PropertyDetail />} />
+
+
+        {/* Property Routes */}
+        <Route path="/properties" element={<PropertyList />} />
+        <Route path="/properties/create" element={<CreateProperty />} />
+        <Route path="/properties/:id/edit" element={<EditProperty />} />
+        <Route path="/my-properties" element={<MyProperties />} />
+        <Route path="/favorites" element={<Favorites />} />
       </Routes>
     </BrowserRouter>
   );
