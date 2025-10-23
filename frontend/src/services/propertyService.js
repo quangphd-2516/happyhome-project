@@ -46,7 +46,7 @@ export const propertyService = {
 
     // Add to favorites
     addToFavorites: async (propertyId) => {
-        const response = await api.post(`/properties/${propertyId}/favorite`);
+        const response = await api.post('/properties/${propertyId}/favorite');
         return response.data;
     },
     // Remove from favorites
