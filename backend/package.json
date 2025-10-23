@@ -90,5 +90,8 @@
     "prettier": "^3.6.2",
     "prisma": "^6.17.1",
     "supertest": "^7.1.4"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }
