@@ -6,12 +6,19 @@ import VerifyOTP from './pages/auth/VerifyOTP';
 import Login from './pages/auth/Login';
 import Profile from './pages/user/Profile';
 import KYC from './pages/user/KYC';
+
 import PropertyList from './pages/property/PropertyList';
 import PropertyDetail from './pages/property/PropertyDetail';
 import CreateProperty from './pages/property/CreateProperty';
 import EditProperty from './pages/property/EditProperty';
 import MyProperties from './pages/property/MyProperties';
 import Favorites from './pages/property/Favorites';
+
+import AuctionList from './pages/auction/AuctionList';
+import AuctionRoom from './pages/auction/AuctionRoom';
+import MyAuctions from './pages/auction/MyAuctions';
+import AuctionDeposit from './pages/auction/AuctionDeposit';
+import AuctionDetail from './pages/auction/AuctionDetail';
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +38,13 @@ function App() {
         <Route path="/properties/:id/edit" element={<EditProperty />} />
         <Route path="/my-properties" element={<MyProperties />} />
         <Route path="/favorites" element={<Favorites />} />
+
+        {/* Auction Routes */}
+        <Route path="/auctions" element={<AuctionList />} />
+        <Route path="/auctions/my-auctions" element={<MyAuctions />} />
+        <Route path="/auctions/:id" element={<AuctionRoom />} />
+        <Route path="/auctions/:id/deposit" element={<AuctionDeposit />} />
+        <Route path="/auctions/:id/detail" element={<AuctionDetail />} />
       </Routes>
     </BrowserRouter>
   );
