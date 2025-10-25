@@ -9,9 +9,9 @@ import KYC from './pages/user/KYC';
 
 import PropertyList from './pages/property/PropertyList';
 import PropertyDetail from './pages/property/PropertyDetail';
+import MyProperties from './pages/property/MyProperties';
 import CreateProperty from './pages/property/CreateProperty';
 import EditProperty from './pages/property/EditProperty';
-import MyProperties from './pages/property/MyProperties';
 import Favorites from './pages/property/Favorites';
 
 import AuctionList from './pages/auction/AuctionList';
@@ -29,14 +29,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/kyc' element={<KYC />} />
-        <Route path="/properties/:id" element={<PropertyDetail />} />
+
 
 
         {/* Property Routes */}
         <Route path="/properties" element={<PropertyList />} />
         <Route path="/properties/create" element={<CreateProperty />} />
         <Route path="/properties/:id/edit" element={<EditProperty />} />
-        <Route path="/my-properties" element={<MyProperties />} />
+        <Route path="/properties/my-properties" element={<MyProperties />} />
+        <Route path="/properties/:id" element={<PropertyDetail />} />
         <Route path="/favorites" element={<Favorites />} />
 
         {/* Auction Routes */}

@@ -60,12 +60,18 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
     }));
 
     const formatDate = (date) => {
+        // Nếu không có giá trị hoặc là invalid date thì trả về text mặc định
+        if (!date) return 'Không rõ ngày';
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate)) return 'Không rõ ngày';
+
         return new Intl.DateTimeFormat('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
-        }).format(new Date(date));
+        }).format(parsedDate);
     };
+
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
@@ -105,8 +111,8 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
                     <Star
                         key={star}
                         className={`${size} ${star <= rating
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'fill-gray-200 text-gray-200'
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'fill-gray-200 text-gray-200'
                             }`}
                     />
                 ))}
@@ -181,8 +187,8 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
                                 >
                                     <Star
                                         className={`w-8 h-8 ${star <= newReview.rating
-                                                ? 'fill-yellow-400 text-yellow-400'
-                                                : 'fill-gray-200 text-gray-200'
+                                            ? 'fill-yellow-400 text-yellow-400'
+                                            : 'fill-gray-200 text-gray-200'
                                             }`}
                                     />
                                 </button>

@@ -25,38 +25,15 @@ export default function MyProperties() {
     const fetchProperties = async () => {
         setLoading(true);
         try {
-            // const response = await propertyService.getMyProperties();
-            // setProperties(response.data);
+            const response = await propertyService.getMyProperties();
+            setProperties(response.data);
+            setLoading(false);
 
-            // Mock data
-            setProperties([
-                {
-                    id: 1,
-                    title: 'Modern Villa in Beverly Hills',
-                    address: 'Beverly Hills, California',
-                    type: 'VILLA',
-                    price: 2500000,
-                    area: 450,
-                    status: 'PUBLISHED',
-                    views: 1250,
-                    thumbnail: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400',
-                    createdAt: '2024-01-15'
-                },
-                {
-                    id: 2,
-                    title: 'Luxury Apartment Downtown',
-                    address: 'San Francisco, California',
-                    type: 'APARTMENT',
-                    price: 850000,
-                    area: 120,
-                    status: 'PENDING',
-                    views: 890,
-                    thumbnail: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400',
-                    createdAt: '2024-02-20'
-                },
-            ]);
+
         } catch (error) {
             console.error('Fetch properties error:', error);
+            setProperties(response.data);
+
         } finally {
             setLoading(false);
         }
@@ -155,8 +132,8 @@ export default function MyProperties() {
                                 key={status}
                                 onClick={() => setFilter(status)}
                                 className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${filter === status
-                                        ? 'bg-primary text-white'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    ? 'bg-primary text-white'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
                             >
                                 {status.charAt(0).toUpperCase() + status.slice(1)}

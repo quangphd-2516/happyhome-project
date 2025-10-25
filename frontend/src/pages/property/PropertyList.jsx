@@ -67,17 +67,18 @@ export default function PropertyList() {
     const fetchProperties = async () => {
         setLoading(true);
         try {
-            // const response = await propertyService.getAll();
-            // setProperties(response.data);
+            const response = await propertyService.getAll();
+            setProperties(response.data);
+            setLoading(false);
 
             // Using mock data for now
-            setTimeout(() => {
+            /** setTimeout(() => {
                 setProperties(mockProperties);
                 setLoading(false);
-            }, 500);
+            }, 500);*/
         } catch (error) {
             console.error('Fetch properties error:', error);
-            setProperties(mockProperties);
+            setProperties(response.data);
             setLoading(false);
         }
     };

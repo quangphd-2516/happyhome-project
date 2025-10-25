@@ -39,7 +39,7 @@ export default function Profile() {
             label: 'My Properties',
             description: 'View your listings',
             color: 'bg-green-500',
-            onClick: () => navigate('/my-properties')
+            onClick: () => navigate('/properties/my-properties')
         },
         {
             icon: Gavel,

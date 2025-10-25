@@ -62,13 +62,12 @@ export default function PropertyDetail() {
     const fetchProperty = async () => {
         setLoading(true);
         try {
-            setTimeout(() => {
-                setProperty(mockProperty);
-                setLoading(false);
-            }, 500);
+            const response = await propertyService.getById(id);
+            setProperty(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Fetch property error:', error);
-            setProperty(mockProperty);
+            setProperty(response.data);
             setLoading(false);
         }
     };
