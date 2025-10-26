@@ -22,6 +22,8 @@ import AuctionDeposit from './pages/auction/AuctionDeposit';
 import AuctionDetail from './pages/auction/AuctionDetail';
 
 import Dashboard from './pages/admin/Dashboard';
+import UserDetail from './pages/admin/UserDetail';
+import UserManagement from './pages/admin/UserManagement';
 import { Navigate } from 'react-router-dom';
 function App() {
   const { user } = useAuthStore(); // 👉 lấy user từ Zustand
@@ -61,6 +63,8 @@ function App() {
               <Navigate to="/" replace />
           }
         />
+        <Route path="/admin/users" element={<UserManagement />} />
+        <Route path="/admin/users/:id" element={<UserDetail />} />
       </Routes>
     </BrowserRouter>
   );
