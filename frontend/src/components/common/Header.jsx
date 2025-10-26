@@ -33,7 +33,7 @@ export default function Header() {
                 <div className="flex items-center justify-between h-16 md:h-20">
                     {/* Logo */}
                     <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
-                        <span className="text-2xl md:text-3xl font-bold text-primary">Dwello</span>
+                        <span className="text-2xl md:text-3xl font-bold text-primary">HappyHome</span>
                     </div>
 
                     {/* Desktop Navigation */}
