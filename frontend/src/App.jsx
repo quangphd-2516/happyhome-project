@@ -1,5 +1,6 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useAuthStore } from './store/authStore';
 import Home from './pages/Home';
 import Register from './pages/auth/Register';
 import VerifyOTP from './pages/auth/VerifyOTP';
@@ -19,7 +20,11 @@ import AuctionRoom from './pages/auction/AuctionRoom';
 import MyAuctions from './pages/auction/MyAuctions';
 import AuctionDeposit from './pages/auction/AuctionDeposit';
 import AuctionDetail from './pages/auction/AuctionDetail';
+
+import Dashboard from './pages/admin/Dashboard';
+import { Navigate } from 'react-router-dom';
 function App() {
+  const { user } = useAuthStore(); // 👉 lấy user từ Zustand
   return (
     <BrowserRouter>
       <Routes>
@@ -46,6 +51,16 @@ function App() {
         <Route path="/auctions/:id" element={<AuctionRoom />} />
         <Route path="/auctions/:id/deposit" element={<AuctionDeposit />} />
         <Route path="/auctions/:id/detail" element={<AuctionDetail />} />
+
+        // Protected Admin Route
+        <Route
+          path="/admin/dashboard"
+          element={
+            user?.role === 'ADMIN' ?
+              <Dashboard /> :
+              <Navigate to="/" replace />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

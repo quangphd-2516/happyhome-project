@@ -34,13 +34,18 @@ export default function LoginForm() {
                 email: formData.email,
                 password: formData.password
             });
-
+            const user = response.user;
             // Lưu token và user vào store + localStorage
             setToken(response.tokens.access.token);
             setUser(response.user);
 
             // Redirect về trang chủ
-            navigate('/');
+            // After successful login in auth component
+            if (user.role === 'ADMIN') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/');
+            }
 
         } catch (err) {
             console.error('Login error:', err);
