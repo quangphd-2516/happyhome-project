@@ -32,7 +32,7 @@ export default function MyProperties() {
 
         } catch (error) {
             console.error('Fetch properties error:', error);
-            setProperties(response.data);
+            setProperties([]); // Gán mảng rỗng nếu lỗi
 
         } finally {
             setLoading(false);

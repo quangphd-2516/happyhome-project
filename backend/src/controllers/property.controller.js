@@ -16,6 +16,19 @@ const getAllProperties = catchAsync(async (req, res) => {
         pagination: result.pagination,
     });
 });
+/**
+ * Get current user's properties
+ * GET /api/v1/properties/my-properties
+ */
+const getMyProperties = catchAsync(async (req, res) => {
+    console.log('🔍 User in request:', req.user); // thêm dòng này kiểm tra
+    const properties = await propertyService.getUserProperties(req.user.id);
+
+    res.status(StatusCodes.OK).json({
+        success: true,
+        data: properties,
+    });
+});
 
 /**
  * Get property by ID
@@ -78,20 +91,6 @@ const deleteProperty = catchAsync(async (req, res) => {
     res.status(StatusCodes.OK).json({
         success: true,
         message: 'Property deleted successfully',
-    });
-});
-
-/**
- * Get current user's properties
- * GET /api/v1/properties/my-properties
- */
-const getMyProperties = catchAsync(async (req, res) => {
-    console.log('🔍 User in request:', req.user); // thêm dòng này kiểm tra
-    const properties = await propertyService.getUserProperties(req.user.id);
-
-    res.status(StatusCodes.OK).json({
-        success: true,
-        data: properties,
     });
 });
 

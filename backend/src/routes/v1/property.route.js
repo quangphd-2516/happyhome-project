@@ -8,7 +8,7 @@ const propertyController = require('../../controllers/property.controller');
 router.get('/search', propertyController.searchProperties);
 router.get('/nearby', propertyController.getNearbyProperties);
 router.get('/', propertyController.getAllProperties);
-router.get('/:id', propertyController.getPropertyById);
+//router.get('/:id', propertyController.getPropertyById);
 
 // Protected routes (authentication required)
 router.use(auth()); // Apply auth middleware to all routes below
@@ -20,5 +20,6 @@ router.put('/:id', propertyController.updateProperty);
 router.delete('/:id', propertyController.deleteProperty);
 router.post('/:id/favorite', propertyController.addToFavorites);
 router.delete('/:id/favorite', propertyController.removeFromFavorites);
+router.get('/:id', propertyController.getPropertyById);
 
 module.exports = router;

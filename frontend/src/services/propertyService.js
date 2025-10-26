@@ -8,11 +8,7 @@ export const propertyService = {
         return response.data;
     },
 
-    // Get property by ID
-    getById: async (id) => {
-        const response = await api.get(`/properties/${id}`);
-        return response.data;
-    },
+
 
     // Create property
     create: async (data) => {
@@ -35,6 +31,12 @@ export const propertyService = {
     // Get my properties
     getMyProperties: async () => {
         const response = await api.get('/properties/my-properties');
+        return response.data;
+    },
+
+    // Get property by ID
+    getById: async (id) => {
+        const response = await api.get(`/properties/${id}`);
         return response.data;
     },
 
