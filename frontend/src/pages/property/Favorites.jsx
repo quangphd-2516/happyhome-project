@@ -71,14 +71,14 @@ export default function Favorites() {
     const fetchFavorites = async () => {
         setLoading(true);
         try {
-            // const response = await propertyService.getFavorites();
-            // setFavorites(response.data);
-
-            // Using mock data
+            const response = await propertyService.getFavorites();
+            setFavorites(response.data);
+            setLoading(false);
+            /**  Using mock data
             setTimeout(() => {
                 setFavorites(mockFavorites);
                 setLoading(false);
-            }, 500);
+            }, 500); */
         } catch (error) {
             console.error('Fetch favorites error:', error);
             setFavorites(mockFavorites);
@@ -102,7 +102,7 @@ export default function Favorites() {
         if (!confirm('Remove all properties from favorites?')) return;
 
         try {
-            // await propertyService.clearFavorites();
+            await propertyService.clearFavorites();
             setFavorites([]);
             alert('All favorites cleared');
         } catch (error) {
