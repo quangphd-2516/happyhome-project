@@ -30,7 +30,9 @@ app.use(cors({
 
 
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));  // hoặc 50mb nếu bạn upload ảnh
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
 
 
 app.use('/api', routes);

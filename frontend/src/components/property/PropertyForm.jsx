@@ -1,5 +1,5 @@
 // src/components/property/PropertyForm.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, DollarSign, Maximize2, Bed, Bath, Compass, FileText, Image as ImageIcon, MapPin } from 'lucide-react';
 import ImageUploadMultiple from './ImageUploadMultiple';
@@ -10,29 +10,77 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    console.log("initialData nhận được từ EditProperty:", initialData);
 
     const [formData, setFormData] = useState({
         title: initialData?.title || '',
         description: initialData?.description || '',
         type: initialData?.type || '',
-        price: initialData?.price || '',
-        area: initialData?.area || '',
-        bedrooms: initialData?.bedrooms || '',
-        bathrooms: initialData?.bathrooms || '',
-        floors: initialData?.floors || '',
+        price: initialData?.price ? parseFloat(initialData.price) : '',
+        area: initialData?.area ? parseFloat(initialData.area) : '',
+        bedrooms: initialData?.bedrooms ? parseInt(initialData.bedrooms) : '',
+        bathrooms: initialData?.bathrooms ? parseInt(initialData.bathrooms) : '',
+        floors: initialData?.floors ? parseInt(initialData.floors) : '',
         direction: initialData?.direction || '',
         hasLegalDoc: initialData?.hasLegalDoc || false,
         isFurnished: initialData?.isFurnished || false,
-        images: initialData?.images || [],
+        images: Array.isArray(initialData?.images)
+            ? initialData.images.filter(img => typeof img === 'string' && img.trim() !== '')
+            : [],
+        // keep both flat address fields AND a location object used by LocationPicker
+        address: initialData?.address || '',
+        city: initialData?.city || '',
+        district: initialData?.district || '',
+        ward: initialData?.ward || '',
+        latitude: initialData?.latitude ? parseFloat(initialData.latitude) : '',
+        longitude: initialData?.longitude ? parseFloat(initialData.longitude) : '',
+        // <-- add location object so LocationPicker has a value immediately
         location: {
             address: initialData?.address || '',
             city: initialData?.city || '',
             district: initialData?.district || '',
             ward: initialData?.ward || '',
-            latitude: initialData?.latitude || '',
-            longitude: initialData?.longitude || '',
-        }
+            latitude: initialData?.latitude ? parseFloat(initialData.latitude) : '',
+            longitude: initialData?.longitude ? parseFloat(initialData.longitude) : '',
+        },
     });
+
+    // sync when initialData arrives (so edit form fills correctly)
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                title: initialData.title || '',
+                description: initialData.description || '',
+                type: initialData.type || '',
+                price: initialData.price ? parseFloat(initialData.price) : '',
+                area: initialData.area ? parseFloat(initialData.area) : '',
+                bedrooms: initialData.bedrooms ? parseInt(initialData.bedrooms) : '',
+                bathrooms: initialData.bathrooms ? parseInt(initialData.bathrooms) : '',
+                floors: initialData.floors ? parseInt(initialData.floors) : '',
+                direction: initialData.direction || '',
+                hasLegalDoc: initialData.hasLegalDoc || false,
+                isFurnished: initialData.isFurnished || false,
+                images: Array.isArray(initialData.images)
+                    ? initialData.images.filter(img => typeof img === 'string' && img.trim() !== '')
+                    : [],
+                address: initialData.address || '',
+                city: initialData.city || '',
+                district: initialData.district || '',
+                ward: initialData.ward || '',
+                latitude: initialData.latitude ? parseFloat(initialData.latitude) : '',
+                longitude: initialData.longitude ? parseFloat(initialData.longitude) : '',
+                // set location object too
+                location: {
+                    address: initialData.address || '',
+                    city: initialData.city || '',
+                    district: initialData.district || '',
+                    ward: initialData.ward || '',
+                    latitude: initialData.latitude ? parseFloat(initialData.latitude) : '',
+                    longitude: initialData.longitude ? parseFloat(initialData.longitude) : '',
+                },
+            });
+        }
+    }, [initialData]);
 
     const propertyTypes = ['HOUSE', 'APARTMENT', 'LAND', 'VILLA', 'SHOPHOUSE'];
     const directions = ['North', 'South', 'East', 'West', 'Northeast', 'Northwest', 'Southeast', 'Southwest'];
@@ -41,9 +89,17 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
         setFormData(prev => ({ ...prev, [field]: value }));
         if (error) setError('');
     };
-
     const handleLocationChange = (location) => {
-        setFormData(prev => ({ ...prev, location }));
+        setFormData(prev => ({
+            ...prev,
+            location,
+            address: location.address || prev.address,
+            city: location.city || prev.city,
+            district: location.district || prev.district,
+            ward: location.ward || prev.ward,
+            latitude: location.latitude != null ? parseFloat(location.latitude) : prev.latitude,
+            longitude: location.longitude != null ? parseFloat(location.longitude) : prev.longitude,
+        }));
     };
 
     const validateForm = () => {
@@ -86,8 +142,12 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
             const data = {
                 ...formData,
                 ...formData.location,
-                images: formData.images.map(img => img.preview), // In production, upload to server first
+                images: formData.images
+                    .map(img => typeof img === 'string' ? img : img.preview)
+                    .filter(img => img && img.trim() !== ''), // 👈 loại bỏ null, undefined, chuỗi rỗng
             };
+
+            console.log("📦 Submit data:", data);
 
             if (mode === 'edit') {
                 await propertyService.update(initialData.id, data);
@@ -97,14 +157,15 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                 alert('Property created successfully!');
             }
 
-            navigate('/my-properties');
+            navigate('/properties/my-properties');
         } catch (err) {
-            console.error('Submit error:', err);
+            console.error('❌ Submit error:', err);
             setError(err.response?.data?.message || 'Failed to save property');
         } finally {
             setIsSubmitting(false);
         }
     };
+
 
     return (
         <form onSubmit={handleSubmit} className="space-y-8">

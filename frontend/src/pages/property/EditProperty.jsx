@@ -26,6 +26,7 @@ export default function EditProperty() {
     const fetchProperty = async () => {
         try {
             const response = await propertyService.getById(id);
+            console.log("Fetched property:", response.data); // 👈 THÊM DÒNG NÀY
             setProperty(response.data);
         } catch (error) {
             console.error('Fetch property error:', error);
@@ -63,12 +64,19 @@ export default function EditProperty() {
                         </p>
                     </div>
 
-                    {/* Form */}
-                    {property && <PropertyForm initialData={property} mode="edit" />}
+                    {/* Form or Loading */}
+                    {property ? (
+                        <PropertyForm initialData={property} mode="edit" />
+                    ) : (
+                        <div className="flex justify-center items-center py-12">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                        </div>
+                    )}
                 </div>
             </main>
 
             <Footer />
         </div>
     );
+
 }

@@ -263,6 +263,9 @@ const createProperty = async (userId, propertyData) => {
             ownerId: userId,
             price: parseFloat(propertyData.price),
             area: parseFloat(propertyData.area),
+            bedrooms: propertyData.bedrooms ? parseInt(propertyData.bedrooms) : null,
+            bathrooms: propertyData.bathrooms ? parseInt(propertyData.bathrooms) : null,
+            floors: propertyData.floors ? parseInt(propertyData.floors) : null,
             latitude: parseFloat(propertyData.latitude || 0),
             longitude: parseFloat(propertyData.longitude || 0),
             status: 'DRAFT',
@@ -302,12 +305,27 @@ const updatePropertyById = async (propertyId, userId, userRole, updateData) => {
         throw new ApiError(StatusCodes.FORBIDDEN, 'You do not have permission to update this property');
     }
 
+    // Nếu có object location trong updateData thì bóc tách ra
+    const locationData = updateData.location || {};
+
     const updatedProperty = await prisma.property.update({
         where: { id: propertyId },
         data: {
             ...updateData,
+            // Gán location ra các trường riêng
+            address: locationData.address || updateData.address,
+            city: locationData.city || updateData.city,
+            district: locationData.district || updateData.district,
+            ward: locationData.ward || updateData.ward,
+            latitude: locationData.latitude || updateData.latitude,
+            longitude: locationData.longitude || updateData.longitude,
+
+            // Convert các giá trị số nếu có
             price: updateData.price ? parseFloat(updateData.price) : undefined,
             area: updateData.area ? parseFloat(updateData.area) : undefined,
+
+            // Loại bỏ field location (vì Prisma không hiểu)
+            location: undefined,
         },
     });
 
