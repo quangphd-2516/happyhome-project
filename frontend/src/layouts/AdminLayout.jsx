@@ -41,6 +41,7 @@ export default function AdminLayout({ children }) {
             icon: Gavel,
             path: '/admin/auctions',
         },
+
         {
             title: 'Settings',
             icon: Settings,
@@ -92,8 +93,8 @@ export default function AdminLayout({ children }) {
                                     key={item.path}
                                     onClick={() => navigate(item.path)}
                                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${active
-                                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg'
-                                            : 'hover:bg-gray-700'
+                                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg'
+                                        : 'hover:bg-gray-700'
                                         }`}
                                 >
                                     <Icon className="w-5 h-5 flex-shrink-0" />

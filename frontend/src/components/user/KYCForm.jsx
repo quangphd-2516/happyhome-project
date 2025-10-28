@@ -86,9 +86,9 @@ export default function KYCForm() {
                 fullName: formData.fullName,
                 dateOfBirth: formData.dateOfBirth,
                 address: formData.address,
-                idCardFront: frontRes.data.url,
-                idCardBack: backRes.data.url,
-                selfieWithId: selfieRes.data.url,
+                idCardFront: frontRes.url,
+                idCardBack: backRes.url,
+                selfieWithId: selfieRes.url,
             });
 
             alert('KYC submitted successfully! Your documents will be reviewed within 24-48 hours.');

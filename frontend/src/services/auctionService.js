@@ -88,7 +88,8 @@ export const auctionService = {
         return response.data;
     },
 
-    // Create auction (for property owners)
+    // Create auction (for property ADMIN)
+    // Từ dưới này là api dành cho ADMIN quản lý auction( hôm sau sửa lại các API link)
     createAuction: async (data) => {
         const response = await api.post('/auctions', data);
         return response.data;
@@ -111,4 +112,4 @@ export const auctionService = {
         const response = await api.get(`/auctions/${auctionId}/winner`);
         return response.data;
     },
-};
+};                                                                                          

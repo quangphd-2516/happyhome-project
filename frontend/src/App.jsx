@@ -26,6 +26,11 @@ import UserDetail from './pages/admin/UserDetail';
 import UserManagement from './pages/admin/UserManagement';
 import KYCManagement from './pages/admin/KYCManagement';
 import KYCReview from './pages/admin/KYCReview';
+
+import AdminAuctionDetail from './pages/admin/AdminAuctionDetail';
+import AuctionManagement from './pages/admin/AuctionManagement';
+import CreateAuction from './pages/admin/CreateAuction';
+
 import { Navigate } from 'react-router-dom';
 function App() {
   const { user } = useAuthStore(); // 👉 lấy user từ Zustand
@@ -49,7 +54,7 @@ function App() {
         <Route path="/properties/:id" element={<PropertyDetail />} />
         <Route path="/favorites" element={<Favorites />} />
 
-        {/* Auction Routes */}
+        {/* Auction Routes của USER */}
         <Route path="/auctions" element={<AuctionList />} />
         <Route path="/auctions/my-auctions" element={<MyAuctions />} />
         <Route path="/auctions/:id" element={<AuctionRoom />} />
@@ -69,6 +74,11 @@ function App() {
         <Route path="/admin/users/:id" element={<UserDetail />} />
         <Route path="/admin/kyc" element={<KYCManagement />} />
         <Route path="admin/kyc/:id" element={<KYCReview />} />
+
+        {/* Auction Management Routes của ADMIN */}
+        <Route path="/admin/auctions" element={<AuctionManagement />} />
+        <Route path="/admin/auctions/create" element={<CreateAuction />} />
+        <Route path="/admin/auctions/:id" element={<AdminAuctionDetail />} />
       </Routes>
     </BrowserRouter>
   );
