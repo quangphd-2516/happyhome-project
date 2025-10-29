@@ -14,6 +14,9 @@ const emailService = require('../services/email.service');
  */
 const loginUserWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
+  if (user.isBlocked) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Your account has been blocked. Please contact support.');
+  }
   console.log("🧩 [DEBUG] User from DB:", user);
   // Check if user exists and if password is correct
   if (!user || !(await bcrypt.compare(password, user.password))) {

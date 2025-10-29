@@ -69,7 +69,7 @@ export default function AdminLayout({ children }) {
                         {sidebarOpen && (
                             <div>
                                 <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                                    Dwello Admin
+                                    HappyHome Admin
                                 </h1>
                                 <p className="text-xs text-gray-400 mt-1">Management Panel</p>
                             </div>

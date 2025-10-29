@@ -231,7 +231,7 @@ const MOCK_USERS = [
     }
 ];
 
-const USE_MOCK_DATA = true; // Set false để dùng API thật
+const USE_MOCK_DATA = false; // Set false để dùng API thật
 // ==================== END MOCK DATA ====================
 
 export default function UserManagement() {
@@ -645,8 +645,8 @@ export default function UserManagement() {
                                                     key={pageNum}
                                                     onClick={() => setPagination(prev => ({ ...prev, page: pageNum }))}
                                                     className={`w-10 h-10 rounded-xl font-semibold transition-all ${pagination.page === pageNum
-                                                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                                                            : 'border-2 border-gray-200 hover:border-purple-500'
+                                                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                                                        : 'border-2 border-gray-200 hover:border-purple-500'
                                                         }`}
                                                 >
                                                     {pageNum}
