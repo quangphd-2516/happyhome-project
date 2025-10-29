@@ -91,19 +91,19 @@ export const auctionService = {
     // Create auction (for property ADMIN)
     // Từ dưới này là api dành cho ADMIN quản lý auction( hôm sau sửa lại các API link)
     createAuction: async (data) => {
-        const response = await api.post('/auctions', data);
+        const response = await api.post('/admin/auctions', data);
         return response.data;
     },
 
     // Update auction
     updateAuction: async (auctionId, data) => {
-        const response = await api.put(`/auctions/${auctionId}`, data);
+        const response = await api.put(`/admin/auctions/${auctionId}`, data);
         return response.data;
     },
 
     // Cancel auction
     cancelAuction: async (auctionId, reason) => {
-        const response = await api.post(`/auctions/${auctionId}/cancel`, { reason });
+        const response = await api.post(`/admin/auctions/${auctionId}/cancel`, { reason });
         return response.data;
     },
 
