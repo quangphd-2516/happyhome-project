@@ -257,6 +257,21 @@ const createProperty = async (userId, propertyData) => {
         }
     }
 
+    // ✅ Bỏ field location nếu client gửi theo dạng { location: {...} }
+    if (propertyData.location) {
+        const { address, city, district, ward, latitude, longitude } = propertyData.location;
+        propertyData = {
+            ...propertyData,
+            address,
+            city,
+            district,
+            ward,
+            latitude,
+            longitude,
+        };
+        delete propertyData.location;
+    }
+
     const property = await prisma.property.create({
         data: {
             ...propertyData,
@@ -268,7 +283,7 @@ const createProperty = async (userId, propertyData) => {
             floors: propertyData.floors ? parseInt(propertyData.floors) : null,
             latitude: parseFloat(propertyData.latitude || 0),
             longitude: parseFloat(propertyData.longitude || 0),
-            status: 'DRAFT',
+            status: 'PUBLISHED',
         },
         include: {
             owner: {
@@ -283,6 +298,7 @@ const createProperty = async (userId, propertyData) => {
 
     return property;
 };
+
 
 /**
  * Update property by ID
