@@ -1,5 +1,5 @@
 // src/components/common/Header.jsx
-import { Search, User, Menu, X, LogOut, Settings } from 'lucide-react';
+import { MessageCircle, Search, User, Menu, X, LogOut, Settings, MessagesSquare } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from '../../utils/constants';
@@ -51,8 +51,13 @@ export default function Header() {
 
                     {/* Desktop Actions */}
                     <div className="hidden md:flex items-center space-x-4">
-                        <button className="p-2 hover:bg-beige-100 rounded-full transition-colors">
-                            <Search className="w-5 h-5 text-gray-700" />
+                        <button
+                            onClick={() => navigate('/chats')}
+                            className="p-2 hover:bg-beige-100 rounded-full transition-colors relative"
+                        >
+                            <MessagesSquare className="w-7 h-7 text-gray-700" />
+                            {/* Optional: Unread badge */}
+                            {/* <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span> */}
                         </button>
 
                         {isAuthenticated && user ? (
