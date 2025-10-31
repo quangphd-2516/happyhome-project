@@ -50,6 +50,7 @@ export default function LoginForm() {
         } catch (err) {
             console.error('Login error:', err);
             setError(err.response?.data?.message || 'Invalid email or password');
+            alert('Your account has been blocked. Please contact admin to unblock');
         } finally {
             setIsLoading(false);
         }

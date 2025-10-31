@@ -11,14 +11,19 @@ import PropertyGallery from '../../components/property/PropertyGallery';
 import PropertyInfo from '../../components/property/PropertyInfo';
 import PropertyReviews from '../../components/property/PropertyReviews';
 import { propertyService } from '../../services/propertyService';
+import { chatService } from '../../services/chatService';
+import { useAuthStore } from '../../store/authStore';
 
 export default function PropertyDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuthStore();
+
     const [property, setProperty] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isFavorite, setIsFavorite] = useState(false);
     const [showContactForm, setShowContactForm] = useState(false);
+    const [creatingChat, setCreatingChat] = useState(false);
 
     // Mock property data for development
     const mockProperty = {
@@ -47,6 +52,7 @@ export default function PropertyDetail() {
             '24/7 Security', 'Garden', 'Balconies', 'Elevator',
         ],
         owner: {
+            id: 'owner-user-id-123', // Owner's user ID
             name: 'Premium Real Estate',
             phone: '+1 (555) 123-4567',
             email: 'contact@premium.com',
@@ -67,7 +73,7 @@ export default function PropertyDetail() {
             setLoading(false);
         } catch (error) {
             console.error('Fetch property error:', error);
-            setProperty(response.data);
+            setProperty(mockProperty);
             setLoading(false);
         }
     };
@@ -98,6 +104,29 @@ export default function PropertyDetail() {
         } else {
             navigator.clipboard.writeText(window.location.href);
             alert('Link copied!');
+        }
+    };
+
+    const handleChatNow = async () => {
+        // Check if user is authenticated
+        if (!isAuthenticated) {
+            alert('Please login to chat with the owner');
+            navigate('/login');
+            return;
+        }
+
+        setCreatingChat(true);
+        try {
+            // Create or get existing chat with property owner
+            const response = await chatService.createChat(property.owner.id);
+
+            // Navigate to chat page with the chat ID
+            navigate(`/chats/${response.data.id}`);
+        } catch (error) {
+            console.error('Create chat error:', error);
+            alert('Failed to start chat. Please try again.');
+        } finally {
+            setCreatingChat(false);
         }
     };
 
@@ -223,13 +252,35 @@ export default function PropertyDetail() {
                                 </div>
 
                                 <div className="space-y-3">
+                                    {/* Chat Now Button - UPDATED */}
+                                    <button
+                                        onClick={handleChatNow}
+                                        disabled={creatingChat}
+                                        className="w-full py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {creatingChat ? (
+                                            <>
+                                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                                <span>Opening Chat...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <MessageCircle className="w-5 h-5" />
+                                                <span>Chat Now</span>
+                                            </>
+                                        )}
+                                    </button>
+
+                                    {/* Call Button */}
                                     <a
                                         href={`tel:${property.owner.phone}`}
-                                        className="w-full py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium flex items-center justify-center gap-2"
+                                        className="w-full py-3 border-2 border-gray-200 rounded-xl hover:border-primary transition-colors font-medium flex items-center justify-center gap-2"
                                     >
                                         <Phone className="w-5 h-5" />
                                         Call Now
                                     </a>
+
+                                    {/* Email Button */}
                                     <a
                                         href={`mailto:${property.owner.email}`}
                                         className="w-full py-3 border-2 border-gray-200 rounded-xl hover:border-primary transition-colors font-medium flex items-center justify-center gap-2"
@@ -237,11 +288,13 @@ export default function PropertyDetail() {
                                         <Mail className="w-5 h-5" />
                                         Send Email
                                     </a>
+
+                                    {/* Message Form Toggle */}
                                     <button
                                         onClick={() => setShowContactForm(!showContactForm)}
                                         className="w-full py-3 border-2 border-gray-200 rounded-xl hover:border-primary transition-colors font-medium flex items-center justify-center gap-2"
                                     >
-                                        <MessageCircle className="w-5 h-5" />
+                                        <Mail className="w-5 h-5" />
                                         Send Message
                                     </button>
                                 </div>

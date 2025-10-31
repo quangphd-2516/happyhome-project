@@ -31,6 +31,9 @@ import AdminAuctionDetail from './pages/admin/AdminAuctionDetail';
 import AuctionManagement from './pages/admin/AuctionManagement';
 import CreateAuction from './pages/admin/CreateAuction';
 
+import ChatPage from './pages/chat/ChatPage';
+
+
 import { Navigate } from 'react-router-dom';
 function App() {
   const { user } = useAuthStore(); // 👉 lấy user từ Zustand
@@ -79,6 +82,10 @@ function App() {
         <Route path="/admin/auctions" element={<AuctionManagement />} />
         <Route path="/admin/auctions/create" element={<CreateAuction />} />
         <Route path="/admin/auctions/:id" element={<AdminAuctionDetail />} />
+
+        <Route path="/chats" element={<ChatPage />} />
+        <Route path="/chats/:id" element={<ChatPage />} />
+
       </Routes>
     </BrowserRouter>
   );

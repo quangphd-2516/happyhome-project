@@ -46,7 +46,7 @@ export default function Profile() {
             label: 'My Auctions',
             description: 'Active bids',
             color: 'bg-purple-500',
-            onClick: () => navigate('/my-auctions')
+            onClick: () => navigate('/auctions/my-auctions')
         },
         {
             icon: Heart,
