@@ -157,7 +157,7 @@ export default function ChatRoom({ chatId, onBack }) {
     return (
         <div className="h-full flex flex-col bg-white">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white shadow-sm flex-shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white shadow-sm ">
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onBack}
@@ -194,11 +194,7 @@ export default function ChatRoom({ chatId, onBack }) {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 "
-                style={{
-                    maxHeight: 'calc(100vh - 270px)',
-                    overflowAnchor: 'auto' // ✅ Ngăn auto-scroll không mong muốn
-                }}>
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 min-h-0">
                 <div className="max-w-4xl mx-auto">
                     {messages.map((message) => (
                         <ChatMessage
@@ -213,8 +209,9 @@ export default function ChatRoom({ chatId, onBack }) {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200 bg-white flex-shrink-0">
-                <div className="flex items-center gap-3 max-w-4xl mx-auto">
+            <div className="p-4 border-t border-gray-200 bg-white">
+                <form onSubmit={handleSendMessage} className="flex items-center gap-3 max-w-4xl mx-auto ">
+
                     <button
                         type="button"
                         className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
@@ -252,8 +249,9 @@ export default function ChatRoom({ chatId, onBack }) {
                     >
                         <Send className="w-6 h-6" />
                     </button>
-                </div>
-            </form>
+
+                </form>
+            </div>
         </div>
     );
 }

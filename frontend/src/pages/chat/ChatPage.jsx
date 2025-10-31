@@ -66,9 +66,9 @@ export default function ChatPage() {
 
             <main className="flex-1 container mx-auto px-4 py-8">
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden " style={{ height: 'calc(100vh - 200px)' }}>
-                    <div className="grid lg:grid-cols-3 h-full">
+                    <div className="grid lg:grid-cols-3 h-full min-h-0">
                         {/* Chat List */}
-                        <div className={`lg:col-span-1 border-r border-gray-200 flex flex-col h-full ${isMobile && selectedChatId ? 'hidden' : 'block'}`}>
+                        <div className={`lg:col-span-1 border-r border-gray-200 flex flex-col h-full min-h-0 ${isMobile && selectedChatId ? 'hidden' : 'block'}`}>
                             <ChatList
                                 onSelectChat={handleSelectChat}
                                 selectedChatId={selectedChatId}
@@ -76,7 +76,7 @@ export default function ChatPage() {
                         </div>
 
                         {/* Chat Room */}
-                        <div className={`lg:col-span-2 flex flex-col h-full ${isMobile && !selectedChatId ? 'hidden' : 'block'}`}>
+                        <div className={`lg:col-span-2 flex flex-col h-full min-h-0 ${isMobile && !selectedChatId ? 'hidden' : 'block'}`}>
                             {selectedChatId ? (
                                 <ChatRoom
                                     chatId={selectedChatId}
