@@ -4,6 +4,8 @@ const userRoute = require('./user.route');
 const propertyRoute = require('./property.route');
 const kycRoute = require('./kyc.route');
 const adminRoute = require('./admin.route');
+const chatRoute = require('./chat.route');
+
 const router = express.Router();
 
 const defaultRoutes = [
@@ -27,6 +29,11 @@ const defaultRoutes = [
     path: '/admin',
     route: adminRoute,
   },
+  {
+    path: '/chats',
+    route: chatRoute,
+  }
+
 ];
 
 /*
