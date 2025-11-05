@@ -185,16 +185,7 @@ export const adminService = {
         return response.data;
     },
 
-    // System Configuration
-    getSystemConfig: async () => {
-        const response = await api.get('/admin/config');
-        return response.data;
-    },
 
-    updateSystemConfig: async (key, value) => {
-        const response = await api.put('/admin/config', { key, value });
-        return response.data;
-    },
 };
 
 // Helper functions for the components

@@ -130,7 +130,7 @@ export default function AdminAuctionDetail() {
             }, 500); */
         } catch (error) {
             console.error('Error fetching auction detail:', error);
-            setAuction(mockAuctionDetail);
+            //setAuction(mockAuctionDetail);
             setLoading(false);
         }
     };
@@ -490,8 +490,8 @@ export default function AdminAuctionDetail() {
                                 <div className="space-y-3">
                                     {auction.participants.map((participant) => (
                                         <div key={participant.id} className="p-3 bg-gray-50 rounded-xl">
-                                            <p className="font-semibold text-gray-900">{participant.user.fullName}</p>
-                                            <p className="text-sm text-gray-600">{participant.user.email}</p>
+                                            <p className="font-semibold text-gray-900">{participant.user?.fullName || participant.userId}</p>
+                                            <p className="text-sm text-gray-600">{participant.user?.email || ''}</p>
                                             <div className="flex items-center gap-2 mt-2">
                                                 {participant.depositPaid ? (
                                                     <span className="flex items-center gap-1 text-xs text-green-600">

@@ -1,5 +1,5 @@
 // src/components/common/Header.jsx
-import { MessageCircle, Search, User, Menu, X, LogOut, Settings, MessagesSquare } from 'lucide-react';
+import { MessageCircle, Search, User, Menu, X, LogOut, Settings, MessagesSquare, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from '../../utils/constants';
@@ -10,6 +10,7 @@ export default function Header() {
     const { user, isAuthenticated, logout } = useAuthStore();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isServicesOpen, setIsServicesOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -38,15 +39,53 @@ export default function Header() {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center space-x-8">
-                        {NAV_LINKS.map((link) => (
-                            <a
-                                key={link.label}
-                                href={link.href}
-                                className="text-gray-700 hover:text-primary transition-colors font-medium"
-                            >
-                                {link.label}
-                            </a>
-                        ))}
+                        {NAV_LINKS.map((link) => {
+                            if (link.label?.toLowerCase() === 'service' || link.label?.toLowerCase() === 'services') {
+                                return (
+                                    <div key={link.label} className="relative">
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsServicesOpen(prev => !prev)}
+                                            className="flex items-center gap-1 text-gray-700 hover:text-primary transition-colors font-medium"
+                                        >
+                                            {link.label}
+                                            <ChevronDown className="w-4 h-4" />
+                                        </button>
+                                        {isServicesOpen && (
+                                            <div className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 border border-gray-200 z-50">
+                                                <button onClick={() => { navigate('/properties'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Properties</button>
+                                                <button onClick={() => { navigate('/auctions'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Auction</button>
+                                                <div className="my-1 h-px bg-gray-200" />
+                                                <button onClick={() => { navigate('/properties/my-properties'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">My Properties</button>
+                                                <button onClick={() => { navigate('/auctions/my-auctions'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">My Auction</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            }
+                            if (link.label?.toLowerCase() === 'contact') {
+                                return (
+                                    <button
+                                        key={link.label}
+                                        type="button"
+                                        onClick={() => navigate('/auctions')}
+                                        className="px-4 py-2 rounded-lg text-black font-semibold transition-colors"
+                                        style={{ backgroundColor: '#92B9E3' }}
+                                    >
+                                        Auction
+                                    </button>
+                                );
+                            }
+                            return (
+                                <a
+                                    key={link.label}
+                                    href={link.href}
+                                    className="text-gray-700 hover:text-primary transition-colors font-medium"
+                                >
+                                    {link.label}
+                                </a>
+                            );
+                        })}
                     </nav>
 
                     {/* Desktop Actions */}
@@ -161,15 +200,29 @@ export default function Header() {
                 {isMobileMenuOpen && (
                     <div className="md:hidden py-4 border-t border-beige-200">
                         <nav className="flex flex-col space-y-4">
-                            {NAV_LINKS.map((link) => (
-                                <a
-                                    key={link.label}
-                                    href={link.href}
-                                    className="text-gray-700 hover:text-primary transition-colors font-medium px-2"
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
+                            {NAV_LINKS.map((link) => {
+                                if (link.label?.toLowerCase() === 'contact') {
+                                    return (
+                                        <button
+                                            key={link.label}
+                                            onClick={() => { navigate('/auctions'); setIsMobileMenuOpen(false); }}
+                                            className="px-3 py-2 rounded-lg text-white font-semibold text-left"
+                                            style={{ backgroundColor: '#92B9E3' }}
+                                        >
+                                            Auction
+                                        </button>
+                                    );
+                                }
+                                return (
+                                    <a
+                                        key={link.label}
+                                        href={link.href}
+                                        className="text-gray-700 hover:text-primary transition-colors font-medium px-2"
+                                    >
+                                        {link.label}
+                                    </a>
+                                );
+                            })}
 
                             {isAuthenticated && user ? (
                                 <div className="pt-4 border-t border-beige-200 space-y-3">
@@ -214,11 +267,11 @@ export default function Header() {
                 )}
             </div>
 
-            {/* Click outside to close dropdown */}
-            {isDropdownOpen && (
+            {/* Click outside to close dropdowns */}
+            {(isDropdownOpen || isServicesOpen) && (
                 <div
                     className="fixed inset-0 z-40"
-                    onClick={() => setIsDropdownOpen(false)}
+                    onClick={() => { setIsDropdownOpen(false); setIsServicesOpen(false); }}
                 />
             )}
         </header>

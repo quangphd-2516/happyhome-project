@@ -123,7 +123,74 @@ const unblockUser = catchAsync(async (req, res) => {
     const user = await adminService.unblockUser(req.params.userId);
     res.send({ message: 'User unblocked successfully', user });
 });
+// ========== Auction Management ==========
 
+const getAllAuctions = catchAsync(async (req, res) => {
+    const { page = 1, limit = 10, status, propertyId, sortBy = 'createdAt:desc' } = req.query;
+    const auctions = await adminService.getAllAuctions({
+        page: parseInt(page),
+        limit: parseInt(limit),
+        status,
+        propertyId,
+        sortBy,
+    });
+    res.send(auctions);
+});
+
+const getAuctionById = catchAsync(async (req, res) => {
+    const { auctionId } = req.params;
+    const auction = await adminService.getAuctionById(auctionId);
+    if (!auction) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'Auction not found');
+    }
+    res.send(auction);
+});
+
+const createAuction = catchAsync(async (req, res) => {
+    const adminId = req.user.id;
+    const auction = await adminService.createAuction(adminId, req.body);
+    res.status(StatusCodes.CREATED).send(auction);
+});
+
+const updateAuction = catchAsync(async (req, res) => {
+    const { auctionId } = req.params;
+    const auction = await adminService.updateAuction(auctionId, req.body);
+    res.send(auction);
+});
+
+const cancelAuction = catchAsync(async (req, res) => {
+    const { auctionId } = req.params;
+    const { reason } = req.body;
+    const auction = await adminService.cancelAuction(auctionId, reason);
+    res.send(auction);
+});
+
+const getAuctionResults = catchAsync(async (req, res) => {
+    const { auctionId } = req.params;
+    const results = await adminService.getAuctionResults(auctionId);
+    res.send(results);
+});
+
+const getAuctionStatistics = catchAsync(async (req, res) => {
+    const stats = await adminService.getAuctionStatistics();
+    res.send(stats);
+});
+
+// ========== Property Management ==========
+
+const getAllProperties = catchAsync(async (req, res) => {
+    const { page = 1, limit = 10, status, type, city, district, sortBy = 'createdAt:desc' } = req.query;
+    const properties = await adminService.getAllProperties({
+        page: parseInt(page),
+        limit: parseInt(limit),
+        status,
+        type,
+        city,
+        district,
+        sortBy,
+    });
+    res.send(properties);
+});
 module.exports = {
     // KYC Management
     getKYCStats,
@@ -139,4 +206,15 @@ module.exports = {
     getUserById,
     blockUser,
     unblockUser,
+    // Auction Management
+    getAllAuctions,
+    getAuctionById,
+    createAuction,
+    updateAuction,
+    cancelAuction,
+    getAuctionResults,
+    getAuctionStatistics,
+
+    // Property Management
+    getAllProperties,
 };

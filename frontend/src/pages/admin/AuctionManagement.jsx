@@ -178,8 +178,8 @@ export default function AuctionManagement() {
             }, 500); */
         } catch (error) {
             console.error('Error fetching auctions:', error);
-            setAuctions(mockAuctions);
-            setStats(mockStats);
+            //setAuctions(mockAuctions);
+            //setStats(mockStats);
             setLoading(false);
         }
     };

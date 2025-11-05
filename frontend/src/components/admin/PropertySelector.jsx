@@ -95,7 +95,7 @@ export default function PropertySelector({ selectedProperty, onSelect }) {
             }, 500); */
         } catch (error) {
             console.error('Error fetching properties:', error);
-            setProperties(mockProperties);
+            //setProperties(mockProperties);
             setLoading(false);
         }
     };
@@ -190,8 +190,8 @@ export default function PropertySelector({ selectedProperty, onSelect }) {
                             key={property.id}
                             onClick={() => onSelect(property)}
                             className={`cursor-pointer rounded-xl overflow-hidden border-2 transition-all duration-200 ${selectedProperty?.id === property.id
-                                    ? 'border-indigo-600 shadow-lg scale-105'
-                                    : 'border-gray-200 hover:border-indigo-300 hover:shadow-md'
+                                ? 'border-indigo-600 shadow-lg scale-105'
+                                : 'border-gray-200 hover:border-indigo-300 hover:shadow-md'
                                 }`}
                         >
                             {/* Image */}
