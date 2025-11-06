@@ -400,71 +400,133 @@ const getAllAuctions = async (options) => {
     const skip = (page - 1) * limit;
     const [field, order] = sortBy.split(':');
 
+    // Validate orderBy field
+    const validFields = ['createdAt', 'updatedAt', 'startTime', 'endTime', 'currentPrice', 'startPrice'];
+    const orderByField = validFields.includes(field) ? field : 'createdAt';
+    const orderByDirection = order === 'asc' ? 'asc' : 'desc';
+
     const where = {};
     // Only filter by a specific status when it is not 'all'
-    if (status && status !== 'all') where.status = status;
+    if (status && status !== 'all' && status !== '') where.status = status;
     if (propertyId) where.propertyId = propertyId;
 
-    const [auctions, total] = await Promise.all([
-        prisma.auction.findMany({
-            where,
-            skip,
-            take: limit,
-            orderBy: { [field]: order || 'desc' },
-            include: {
-                property: {
-                    select: {
-                        id: true,
-                        title: true,
-                        address: true,
-                        thumbnail: true,
-                        type: true,
+    try {
+        const [auctions, total, totalAuctions, upcomingAuctions, ongoingAuctions, completedAuctions, cancelledAuctions, revenueSum] = await Promise.all([
+            prisma.auction.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { [orderByField]: orderByDirection },
+                include: {
+                    property: {
+                        select: {
+                            id: true,
+                            title: true,
+                            address: true,
+                            thumbnail: true,
+                            type: true,
+                        },
+                    },
+                    creator: {
+                        select: {
+                            id: true,
+                            fullName: true,
+                            email: true,
+                        },
+                    },
+                    bids: {
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    fullName: true,
+                                    email: true,
+                                },
+                            },
+                        },
+                        orderBy: { amount: 'desc' },
+                        take: 1,
+                    },
+                    participants: {
+                        select: {
+                            id: true,
+                            userId: true,
+                            depositPaid: true,
+                        },
+                    },
+                    _count: {
+                        select: {
+                            bids: true,
+                            participants: true,
+                        },
                     },
                 },
-                creator: {
-                    select: {
-                        id: true,
-                        fullName: true,
-                        email: true,
-                    },
-                },
-                bids: {
-                    select: {
-                        id: true,
-                        amount: true,
-                        userId: true,
-                        createdAt: true,
-                    },
-                    orderBy: { amount: 'desc' },
-                    take: 1,
-                },
-                participants: {
-                    select: {
-                        id: true,
-                        userId: true,
-                        depositPaid: true,
-                    },
-                },
-                _count: {
-                    select: {
-                        bids: true,
-                        participants: true,
-                    },
-                },
-            },
-        }),
-        prisma.auction.count({ where }),
-    ]);
+            }),
+            prisma.auction.count({ where }),
+            prisma.auction.count(),
+            prisma.auction.count({ where: { status: 'UPCOMING' } }),
+            prisma.auction.count({ where: { status: 'ONGOING' } }),
+            prisma.auction.count({ where: { status: 'COMPLETED' } }),
+            prisma.auction.count({ where: { status: 'CANCELLED' } }),
+            prisma.auction.aggregate({
+                where: { status: 'COMPLETED' },
+                _sum: { currentPrice: true },
+            }),
+        ]);
 
-    return {
-        data: auctions,
-        pagination: {
-            page,
-            limit,
-            total,
-            totalPages: Math.ceil(total / limit),
-        },
-    };
+        const totalRevenue = revenueSum._sum.currentPrice ? Number(revenueSum._sum.currentPrice) : 0;
+
+        // Populate user info for participants
+        const userIds = new Set();
+        auctions.forEach(auction => {
+            auction.participants.forEach(participant => {
+                if (participant.userId) {
+                    userIds.add(participant.userId);
+                }
+            });
+        });
+
+        const users = userIds.size > 0 ? await prisma.user.findMany({
+            where: { id: { in: Array.from(userIds) } },
+            select: {
+                id: true,
+                fullName: true,
+                email: true,
+            },
+        }) : [];
+
+        const userMap = new Map(users.map(user => [user.id, user]));
+
+        // Attach user info to participants
+        const auctionsWithUsers = auctions.map(auction => ({
+            ...auction,
+            participants: auction.participants.map(participant => ({
+                ...participant,
+                user: userMap.get(participant.userId) || null,
+            })),
+        }));
+
+        return {
+            data: auctionsWithUsers,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
+            stats: {
+                total: totalAuctions,
+                upcoming: upcomingAuctions,
+                ongoing: ongoingAuctions,
+                completed: completedAuctions,
+                cancelled: cancelledAuctions,
+                totalRevenue: totalRevenue,
+            },
+        };
+    } catch (error) {
+        console.error('Error in getAllAuctions:', error);
+        throw error;
+    }
 };
 
 /**

@@ -7,7 +7,7 @@ const getAllAuctions = {
     query: Joi.object().keys({
         page: Joi.number().integer().min(1),
         limit: Joi.number().integer().min(1).max(100),
-        status: Joi.string().valid('UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED'),
+        status: Joi.string().valid('all', 'UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED').allow(''),
         propertyId: Joi.string(),
         sortBy: Joi.string().valid(
             'createdAt:asc',
