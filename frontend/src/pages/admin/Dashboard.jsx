@@ -125,32 +125,26 @@ export default function Dashboard() {
     const fetchDashboardData = async () => {
         setLoading(true);
         try {
-            // const [statsRes, revenueRes, growthRes, activitiesRes] = await Promise.all([
-            //   adminService.getDashboardStats(),
-            //   adminService.getRevenueData('7days'),
-            //   adminService.getUserGrowthData('7days'),
-            //   adminService.getRecentActivities(10),
-            // ]);
+            const [statsRes, revenueRes, growthRes, activitiesRes] = await Promise.all([
+                adminService.getDashboardStats(),
+                adminService.getRevenueData('7days'),
+                adminService.getUserGrowthData('7days'),
+                adminService.getRecentActivities(10),
+            ]);
 
-            // setStats(statsRes.data);
-            // setRevenueData(revenueRes.data);
-            // setUserGrowthData(growthRes.data);
-            // setActivities(activitiesRes.data);
+            setStats(statsRes.data);
+            setRevenueData(revenueRes.data);
+            setUserGrowthData(growthRes.data);
+            setActivities(activitiesRes.data);
+            setLoading(false);
 
-            // Using mock data
-            setTimeout(() => {
-                setStats(mockStats);
-                setRevenueData(mockRevenueData);
-                setUserGrowthData(mockUserGrowthData);
-                setActivities(mockActivities);
-                setLoading(false);
-            }, 500);
+
         } catch (error) {
             console.error('Fetch dashboard data error:', error);
-            setStats(mockStats);
-            setRevenueData(mockRevenueData);
-            setUserGrowthData(mockUserGrowthData);
-            setActivities(mockActivities);
+            //setStats(mockStats);
+            //setRevenueData(mockRevenueData);
+            //setUserGrowthData(mockUserGrowthData);
+            //setActivities(mockActivities);
             setLoading(false);
         }
     };
@@ -197,33 +191,34 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <StatsCard
                         title="Total Users"
-                        value={stats.totalUsers.toLocaleString()}
-                        change={stats.usersChange}
+                        value={stats?.users?.total?.toLocaleString() ?? "0"}
+                        change={stats?.usersChange}
                         icon={Users}
                         color="blue"
                     />
                     <StatsCard
                         title="Total Properties"
-                        value={stats.totalProperties.toLocaleString()}
-                        change={stats.propertiesChange}
+                        value={stats?.properties?.total?.toLocaleString() ?? "0"}
+                        change={stats?.propertiesChange}
                         icon={Home}
                         color="green"
                     />
                     <StatsCard
                         title="Active Auctions"
-                        value={stats.totalAuctions}
-                        change={stats.auctionsChange}
+                        value={stats?.auctions?.total ?? 0}
+                        change={stats?.auctionsChange}
                         icon={Gavel}
                         color="purple"
                     />
                     <StatsCard
                         title="Total Revenue"
-                        value={formatCurrency(stats.totalRevenue)}
-                        change={stats.revenueChange}
+                        value={formatCurrency(stats?.transactions?.net ?? 0)}
+                        change={stats?.revenueChange}
                         icon={DollarSign}
                         color="orange"
                     />
                 </div>
+
 
                 {/* Charts */}
                 <div className="grid lg:grid-cols-2 gap-6">

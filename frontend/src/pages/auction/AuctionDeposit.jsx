@@ -76,13 +76,9 @@ export default function AuctionDeposit() {
     const fetchAuction = async () => {
         setLoading(true);
         try {
-            // const response = await auctionService.getById(id);
-            // setAuction(response.data);
-
-            setTimeout(() => {
-                setAuction(mockAuction);
-                setLoading(false);
-            }, 500);
+            const response = await auctionService.getById(id);
+            setAuction(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Fetch auction error:', error);
             setAuction(mockAuction);
@@ -263,8 +259,8 @@ export default function AuctionDeposit() {
                                             onClick={() => setSelectedMethod(method.id)}
                                             disabled={!method.available}
                                             className={`w-full p-6 rounded-xl border-2 transition-all ${selectedMethod === method.id
-                                                    ? 'border-primary bg-primary/5 shadow-lg'
-                                                    : 'border-gray-200 hover:border-gray-300'
+                                                ? 'border-primary bg-primary/5 shadow-lg'
+                                                : 'border-gray-200 hover:border-gray-300'
                                                 } ${!method.available ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                                         >
                                             <div className="flex items-center gap-4">

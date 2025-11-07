@@ -64,16 +64,12 @@ export default function AuctionList() {
     const fetchAuctions = async () => {
         setLoading(true);
         try {
-            // const response = await auctionService.getAll();
-            // setAuctions(response.data);
+            const response = await auctionService.getAll();
+            setAuctions(response.data);
+            setLoading(false);
 
-            setTimeout(() => {
-                setAuctions(mockAuctions);
-                setLoading(false);
-            }, 500);
         } catch (error) {
             console.error('Fetch auctions error:', error);
-            setAuctions(mockAuctions);
             setLoading(false);
         }
     };
@@ -155,8 +151,8 @@ export default function AuctionList() {
                                 key={key}
                                 onClick={() => setFilter(key)}
                                 className={`px-6 py-3 rounded-xl font-semibold transition-all ${filter === key
-                                        ? `${color} text-white shadow-lg`
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    ? `${color} text-white shadow-lg`
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
                             >
                                 {label}

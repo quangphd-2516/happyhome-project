@@ -104,15 +104,10 @@ export default function AuctionRoom() {
     const fetchAuction = async () => {
         setLoading(true);
         try {
-            // const response = await auctionService.getById(id);
-            // setAuction(response.data);
-            // setBids(response.data.bids);
-
-            setTimeout(() => {
-                setAuction(mockAuction);
-                setBids(mockBids);
-                setLoading(false);
-            }, 500);
+            const response = await auctionService.getById(id);
+            setAuction(response.data);
+            setBids(response.data.bids);
+            setLoading(false);
         } catch (error) {
             console.error('Fetch auction error:', error);
             setLoading(false);

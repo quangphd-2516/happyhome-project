@@ -3,6 +3,396 @@ const { StatusCodes } = require('http-status-codes');
 const prisma = require('../client');
 const ApiError = require('../utils/ApiError');
 
+// ==================== Dashboard ====================
+
+const PERIOD_CONFIG = {
+    '7days': { unit: 'day', count: 7 },
+    '14days': { unit: 'day', count: 14 },
+    '30days': { unit: 'day', count: 30 },
+    '90days': { unit: 'day', count: 90 },
+    '12months': { unit: 'month', count: 12 }
+};
+
+const POSITIVE_TRANSACTION_TYPES = new Set(['DEPOSIT', 'AUCTION_DEPOSIT', 'PAYMENT']);
+const NEGATIVE_TRANSACTION_TYPES = new Set(['WITHDRAWAL', 'AUCTION_REFUND']);
+
+const resolvePeriodConfig = (period = '7days') => {
+    return PERIOD_CONFIG[period] || PERIOD_CONFIG['7days'];
+};
+
+const getPeriodRange = (period) => {
+    const { unit, count } = resolvePeriodConfig(period);
+    const now = new Date();
+    const end = new Date(now);
+
+    if (unit === 'day') {
+        const start = new Date(now);
+        start.setHours(0, 0, 0, 0);
+        start.setDate(start.getDate() - (count - 1));
+        end.setHours(23, 59, 59, 999);
+        return { unit, count, start, end };
+    }
+
+    // Monthly range
+    const start = new Date(now.getFullYear(), now.getMonth() - (count - 1), 1);
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+    return { unit, count, start, end };
+};
+
+const formatBucketKey = (date, unit) => {
+    const d = new Date(date);
+    if (unit === 'day') {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+};
+
+const generateEmptyBuckets = ({ unit, count, start }) => {
+    const buckets = new Map();
+    const current = new Date(start);
+
+    for (let i = 0; i < count; i += 1) {
+        const key = formatBucketKey(current, unit);
+        buckets.set(key, { label: key, value: 0 });
+
+        if (unit === 'day') {
+            current.setDate(current.getDate() + 1);
+        } else {
+            current.setMonth(current.getMonth() + 1);
+        }
+    }
+
+    return buckets;
+};
+
+const toNumber = (value) => (value ? Number(value) : 0);
+
+const getDashboardStats = async () => {
+    const [
+        totalUsers,
+        verifiedUsers,
+        blockedUsers,
+        totalProperties,
+        pendingProperties,
+        publishedProperties,
+        totalAuctions,
+        upcomingAuctions,
+        ongoingAuctions,
+        completedAuctions,
+        cancelledAuctions,
+        totalKycs,
+        pendingKycs,
+        approvedKycs,
+        rejectedKycs,
+        totalTransactions,
+        completedTransactions,
+        pendingTransactions,
+        failedTransactions,
+        positiveRevenue,
+        negativeRevenue
+    ] = await Promise.all([
+        prisma.user.count(),
+        prisma.user.count({ where: { isVerified: true } }),
+        prisma.user.count({ where: { isBlocked: true } }),
+        prisma.property.count(),
+        prisma.property.count({ where: { status: 'PENDING' } }),
+        prisma.property.count({ where: { status: 'PUBLISHED' } }),
+        prisma.auction.count(),
+        prisma.auction.count({ where: { status: 'UPCOMING' } }),
+        prisma.auction.count({ where: { status: 'ONGOING' } }),
+        prisma.auction.count({ where: { status: 'COMPLETED' } }),
+        prisma.auction.count({ where: { status: 'CANCELLED' } }),
+        prisma.kYC.count(),
+        prisma.kYC.count({ where: { status: 'PENDING' } }),
+        prisma.kYC.count({ where: { status: 'APPROVED' } }),
+        prisma.kYC.count({ where: { status: 'REJECTED' } }),
+        prisma.transaction.count(),
+        prisma.transaction.count({ where: { status: 'COMPLETED' } }),
+        prisma.transaction.count({ where: { status: 'PENDING' } }),
+        prisma.transaction.count({ where: { status: 'FAILED' } }),
+        prisma.transaction.aggregate({
+            where: {
+                status: 'COMPLETED',
+                type: { in: Array.from(POSITIVE_TRANSACTION_TYPES) }
+            },
+            _sum: { amount: true }
+        }),
+        prisma.transaction.aggregate({
+            where: {
+                status: 'COMPLETED',
+                type: { in: Array.from(NEGATIVE_TRANSACTION_TYPES) }
+            },
+            _sum: { amount: true }
+        })
+    ]);
+
+    const totalInflow = toNumber(positiveRevenue._sum.amount);
+    const totalOutflow = toNumber(negativeRevenue._sum.amount);
+    const netRevenue = totalInflow - totalOutflow;
+
+    return {
+        users: {
+            total: totalUsers,
+            verified: verifiedUsers,
+            blocked: blockedUsers
+        },
+        kycs: {
+            total: totalKycs,
+            pending: pendingKycs,
+            approved: approvedKycs,
+            rejected: rejectedKycs
+        },
+        properties: {
+            total: totalProperties,
+            pending: pendingProperties,
+            published: publishedProperties
+        },
+        auctions: {
+            total: totalAuctions,
+            upcoming: upcomingAuctions,
+            ongoing: ongoingAuctions,
+            completed: completedAuctions,
+            cancelled: cancelledAuctions
+        },
+        transactions: {
+            total: totalTransactions,
+            completed: completedTransactions,
+            pending: pendingTransactions,
+            failed: failedTransactions,
+            inflow: totalInflow,
+            outflow: totalOutflow,
+            net: netRevenue
+        }
+    };
+};
+
+const getRevenueData = async (period = '7days') => {
+    const range = getPeriodRange(period);
+    const buckets = generateEmptyBuckets(range);
+
+    const transactions = await prisma.transaction.findMany({
+        where: {
+            status: 'COMPLETED',
+            createdAt: {
+                gte: range.start,
+                lte: range.end
+            }
+        },
+        select: {
+            amount: true,
+            type: true,
+            createdAt: true
+        }
+    });
+
+    let totalInflow = 0;
+    let totalOutflow = 0;
+
+    transactions.forEach((transaction) => {
+        const key = formatBucketKey(transaction.createdAt, range.unit);
+        const amount = toNumber(transaction.amount);
+
+        if (!buckets.has(key)) {
+            buckets.set(key, { label: key, value: 0 });
+        }
+
+        if (POSITIVE_TRANSACTION_TYPES.has(transaction.type)) {
+            buckets.get(key).value += amount;
+            totalInflow += amount;
+        } else if (NEGATIVE_TRANSACTION_TYPES.has(transaction.type)) {
+            buckets.get(key).value -= amount;
+            totalOutflow += amount;
+        } else {
+            buckets.get(key).value += amount;
+            totalInflow += amount;
+        }
+    });
+
+    const data = Array.from(buckets.values()).sort((a, b) => (a.label > b.label ? 1 : -1));
+
+    return {
+        period,
+        data,
+        summary: {
+            inflow: totalInflow,
+            outflow: totalOutflow,
+            net: totalInflow - totalOutflow
+        }
+    };
+};
+
+const getUserGrowthData = async (period = '7days') => {
+    const range = getPeriodRange(period);
+    const buckets = generateEmptyBuckets(range);
+
+    const users = await prisma.user.findMany({
+        where: {
+            createdAt: {
+                gte: range.start,
+                lte: range.end
+            }
+        },
+        select: {
+            id: true,
+            createdAt: true,
+            isVerified: true
+        }
+    });
+
+    let verifiedCount = 0;
+
+    users.forEach((user) => {
+        const key = formatBucketKey(user.createdAt, range.unit);
+        if (!buckets.has(key)) {
+            buckets.set(key, { label: key, value: 0 });
+        }
+        buckets.get(key).value += 1;
+        if (user.isVerified) {
+            verifiedCount += 1;
+        }
+    });
+
+    const data = Array.from(buckets.values()).sort((a, b) => (a.label > b.label ? 1 : -1));
+
+    return {
+        period,
+        data,
+        summary: {
+            totalNew: users.length,
+            verified: verifiedCount
+        }
+    };
+};
+
+const getRecentActivities = async (limit = 10) => {
+    const take = Math.min(Math.max(parseInt(limit, 10) || 10, 1), 50);
+    const fetchSize = take * 2;
+
+    const [recentUsers, recentProperties, recentAuctions, recentTransactions, recentKycs] = await Promise.all([
+        prisma.user.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: fetchSize,
+            select: {
+                id: true,
+                fullName: true,
+                email: true,
+                createdAt: true,
+                isVerified: true
+            }
+        }),
+        prisma.property.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: fetchSize,
+            select: {
+                id: true,
+                title: true,
+                status: true,
+                createdAt: true
+            }
+        }),
+        prisma.auction.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: fetchSize,
+            select: {
+                id: true,
+                title: true,
+                status: true,
+                createdAt: true
+            }
+        }),
+        prisma.transaction.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: fetchSize,
+            select: {
+                id: true,
+                type: true,
+                status: true,
+                amount: true,
+                createdAt: true
+            }
+        }),
+        prisma.kYC.findMany({
+            orderBy: { updatedAt: 'desc' },
+            take: fetchSize,
+            select: {
+                id: true,
+                fullName: true,
+                status: true,
+                updatedAt: true
+            }
+        })
+    ]);
+
+    const activities = [
+        ...recentUsers.map((user) => ({
+            id: `user-${user.id}`,
+            type: 'USER_REGISTERED',
+            title: user.fullName || user.email,
+            description: user.isVerified ? 'New verified user registered' : 'New user registered',
+            createdAt: user.createdAt,
+            metadata: {
+                userId: user.id,
+                email: user.email,
+                isVerified: user.isVerified
+            }
+        })),
+        ...recentProperties.map((property) => ({
+            id: `property-${property.id}`,
+            type: 'PROPERTY_CREATED',
+            title: property.title,
+            description: `Property status: ${property.status}`,
+            createdAt: property.createdAt,
+            metadata: {
+                propertyId: property.id,
+                status: property.status
+            }
+        })),
+        ...recentAuctions.map((auction) => ({
+            id: `auction-${auction.id}`,
+            type: 'AUCTION_CREATED',
+            title: auction.title,
+            description: `Auction status: ${auction.status}`,
+            createdAt: auction.createdAt,
+            metadata: {
+                auctionId: auction.id,
+                status: auction.status
+            }
+        })),
+        ...recentTransactions.map((transaction) => ({
+            id: `transaction-${transaction.id}`,
+            type: 'TRANSACTION',
+            title: `Transaction ${transaction.type}`,
+            description: `Status: ${transaction.status}`,
+            createdAt: transaction.createdAt,
+            metadata: {
+                transactionId: transaction.id,
+                type: transaction.type,
+                status: transaction.status,
+                amount: toNumber(transaction.amount)
+            }
+        })),
+        ...recentKycs.map((kyc) => ({
+            id: `kyc-${kyc.id}`,
+            type: 'KYC_UPDATED',
+            title: kyc.fullName,
+            description: `KYC status updated to ${kyc.status}`,
+            createdAt: kyc.updatedAt,
+            metadata: {
+                kycId: kyc.id,
+                status: kyc.status
+            }
+        }))
+    ];
+
+    activities.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    return {
+        limit: take,
+        data: activities.slice(0, take)
+    };
+};
+
 // ==================== KYC Management ====================
 
 /**
@@ -992,6 +1382,11 @@ const getAllProperties = async (options) => {
 };
 
 module.exports = {
+    // Dashboard
+    getDashboardStats,
+    getRevenueData,
+    getUserGrowthData,
+    getRecentActivities,
     // KYC Management
     getKYCStats,
     getKYCList,

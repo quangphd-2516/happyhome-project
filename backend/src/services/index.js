@@ -5,3 +5,7 @@ module.exports.userService = require('./user.service');
 module.exports.propertyService = require('./property.service');
 module.exports.kycService = require('./kyc.service');
 module.exports.adminService = require('./admin.service');
+module.exports.chatService = require('./chat.service');
+module.exports.auctionService = require('./auction.service');
+module.exports.websocketService = require('./websocket.service');
+module.exports.auctionScheduler = require('./auctionScheduler');

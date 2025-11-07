@@ -4,6 +4,31 @@ const catchAsync = require('../utils/catchAsync');
 const { adminService } = require('../services');
 const ApiError = require('../utils/ApiError');
 
+// ==================== Dashboard ====================
+
+const getDashboardStats = catchAsync(async (req, res) => {
+    const stats = await adminService.getDashboardStats();
+    res.send(stats);
+});
+
+const getRevenueData = catchAsync(async (req, res) => {
+    const { period = '7days' } = req.query;
+    const data = await adminService.getRevenueData(period);
+    res.send(data);
+});
+
+const getUserGrowthData = catchAsync(async (req, res) => {
+    const { period = '7days' } = req.query;
+    const data = await adminService.getUserGrowthData(period);
+    res.send(data);
+});
+
+const getRecentActivities = catchAsync(async (req, res) => {
+    const { limit = 10 } = req.query;
+    const data = await adminService.getRecentActivities(limit);
+    res.send(data);
+});
+
 // ==================== KYC Management ====================
 
 const getKYCStats = catchAsync(async (req, res) => {
@@ -192,6 +217,11 @@ const getAllProperties = catchAsync(async (req, res) => {
     res.send(properties);
 });
 module.exports = {
+    // Dashboard
+    getDashboardStats,
+    getRevenueData,
+    getUserGrowthData,
+    getRecentActivities,
     // KYC Management
     getKYCStats,
     getKYCList,

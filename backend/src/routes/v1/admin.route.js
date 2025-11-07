@@ -38,4 +38,12 @@ router.get('/auctions/:auctionId/results', validate(adminValidation.getAuctionBy
 // ========== Property Management Routes ==========
 router.get('/properties', validate(adminValidation.getAllProperties), adminController.getAllProperties);
 
+// ==================== Dashboard Routes ====================
+router.get('/dashboard/stats', adminController.getDashboardStats);
+router.get('/dashboard/revenue', adminController.getRevenueData);      // ✅ đổi tên
+router.get('/dashboard/user-growth', adminController.getUserGrowthData); // ✅ đổi tên
+router.get('/dashboard/activities', adminController.getRecentActivities);
+
+
+
 module.exports = router;

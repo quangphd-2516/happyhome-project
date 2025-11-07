@@ -59,16 +59,13 @@ export default function MyAuctions() {
     const fetchMyAuctions = async () => {
         setLoading(true);
         try {
-            // const response = await auctionService.getMyAuctions();
-            // setAuctions(response.data);
+            const response = await auctionService.getMyAuctions();
+            setAuctions(response.data);
+            setLoading(false);
 
-            setTimeout(() => {
-                setAuctions(mockAuctions);
-                setLoading(false);
-            }, 500);
         } catch (error) {
             console.error('Fetch my auctions error:', error);
-            setAuctions(mockAuctions);
+            //setAuctions(mockAuctions);
             setLoading(false);
         }
     };
@@ -146,8 +143,8 @@ export default function MyAuctions() {
                                 key={key}
                                 onClick={() => setFilter(key)}
                                 className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${filter === key
-                                        ? 'bg-primary text-white'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    ? 'bg-primary text-white'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
                             >
                                 {label}
@@ -212,8 +209,8 @@ export default function MyAuctions() {
                                                 )}
                                                 {auction.status === 'COMPLETED' && (
                                                     <span className={`px-3 py-1 ${auction.isWinning
-                                                            ? 'bg-yellow-100 text-yellow-700'
-                                                            : 'bg-gray-100 text-gray-700'
+                                                        ? 'bg-yellow-100 text-yellow-700'
+                                                        : 'bg-gray-100 text-gray-700'
                                                         } text-sm font-semibold rounded-full`}>
                                                         {auction.isWinning ? 'Won' : 'Lost'}
                                                     </span>

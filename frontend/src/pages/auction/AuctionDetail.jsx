@@ -88,13 +88,10 @@ export default function AuctionDetail() {
     const fetchAuction = async () => {
         setLoading(true);
         try {
-            // const response = await auctionService.getById(id);
-            // setAuction(response.data);
+            const response = await auctionService.getById(id);
+            setAuction(response.data);
+            setLoading(false);
 
-            setTimeout(() => {
-                setAuction(mockAuction);
-                setLoading(false);
-            }, 500);
         } catch (error) {
             console.error('Fetch auction error:', error);
             setAuction(mockAuction);
@@ -104,13 +101,13 @@ export default function AuctionDetail() {
 
     const fetchStatistics = async () => {
         try {
-            // const response = await auctionService.getStatistics(id);
-            // setStatistics(response.data);
+            const response = await auctionService.getStatistics(id);
+            setStatistics(response.data);
+            setLoading(false);
 
-            setStatistics(mockStatistics);
         } catch (error) {
             console.error('Fetch statistics error:', error);
-            setStatistics(mockStatistics);
+
         }
     };
 
