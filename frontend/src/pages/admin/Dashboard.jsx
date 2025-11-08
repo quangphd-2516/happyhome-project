@@ -131,8 +131,9 @@ export default function Dashboard() {
                 adminService.getUserGrowthData('7days'),
                 adminService.getRecentActivities(10),
             ]);
-
-            setStats(statsRes.data);
+            console.log("📊 statsRes:", statsRes);
+            setStats(statsRes);
+            //setStats(statsRes.data);
             setRevenueData(revenueRes.data);
             setUserGrowthData(growthRes.data);
             setActivities(activitiesRes.data);
@@ -262,7 +263,7 @@ export default function Dashboard() {
                                     <Clock className="w-5 h-5" />
                                     <div className="text-left">
                                         <p className="font-semibold text-sm">Pending KYC</p>
-                                        <p className="text-xs opacity-75">{stats.pendingKYC} verifications waiting</p>
+                                        <p className="text-xs opacity-75">{stats?.kyc?.pending ?? 0} verifications waiting</p>
                                     </div>
                                 </button>
                             </div>
@@ -283,7 +284,7 @@ export default function Dashboard() {
                                             <p className="text-xs text-gray-600">Awaiting verification</p>
                                         </div>
                                     </div>
-                                    <span className="text-2xl font-bold text-orange-600">{stats.pendingKYC}</span>
+                                    <span className="text-2xl font-bold text-orange-600">{stats?.kycs?.pending ?? 0}</span>
                                 </div>
 
                                 <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
@@ -296,7 +297,7 @@ export default function Dashboard() {
                                             <p className="text-xs text-gray-600">Pending approval</p>
                                         </div>
                                     </div>
-                                    <span className="text-2xl font-bold text-blue-600">{stats.pendingProperties}</span>
+                                    <span className="text-2xl font-bold text-blue-600">{stats?.properties?.pending ?? 0}</span>
                                 </div>
                             </div>
                         </div>
