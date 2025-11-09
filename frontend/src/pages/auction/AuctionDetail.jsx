@@ -15,67 +15,13 @@ import { auctionService } from '../../services/auctionService';
 export default function AuctionDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAuthenticated, user } = useAuthStore();
+    const { isAuthenticated } = useAuthStore();
 
     const [auction, setAuction] = useState(null);
     const [loading, setLoading] = useState(true);
     const [depositStatus, setDepositStatus] = useState(null);
     const [statistics, setStatistics] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false);
-
-    // Mock auction data
-    const mockAuction = {
-        id: 1,
-        title: 'Luxury Villa Auction - Beverly Hills',
-        description: 'Experience unparalleled luxury in this stunning modern villa. This architectural masterpiece features floor-to-ceiling windows, an infinity pool overlooking the city, state-of-the-art smart home technology, and premium finishes throughout. The property includes a chef\'s kitchen, home theater, wine cellar, and landscaped gardens. Located in the most prestigious neighborhood of Beverly Hills with 24/7 security and concierge services.',
-        status: 'UPCOMING',
-        startPrice: 2000000,
-        currentPrice: 2000000,
-        bidStep: 50000,
-        depositAmount: 200000,
-        startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        endTime: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
-        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        property: {
-            id: 1,
-            thumbnail: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200',
-            images: [
-                'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200',
-                'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200',
-                'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200',
-                'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200',
-            ],
-            title: 'Modern Luxury Villa',
-            address: '123 Luxury Avenue, Beverly Hills, California 90210',
-            city: 'Beverly Hills',
-            type: 'VILLA',
-            area: 450,
-            bedrooms: 4,
-            bathrooms: 3,
-            floors: 2,
-            direction: 'South',
-            hasLegalDoc: true,
-            isFurnished: true,
-            views: 2450,
-        },
-        creator: {
-            id: '1',
-            fullName: 'Premium Real Estate',
-            avatar: 'https://i.pravatar.cc/150?img=20',
-            email: 'contact@premium.com',
-            phone: '+1 (555) 123-4567',
-        },
-        participants: [],
-        bids: [],
-    };
-
-    const mockStatistics = {
-        totalParticipants: 15,
-        totalBids: 0,
-        uniqueBidders: 0,
-        averageBid: 0,
-        highestBidder: null,
-    };
 
     useEffect(() => {
         fetchAuction();
@@ -89,12 +35,11 @@ export default function AuctionDetail() {
         setLoading(true);
         try {
             const response = await auctionService.getById(id);
-            setAuction(response.data);
-            setLoading(false);
-
+            // Backend returns { data: auction }
+            setAuction(response.data || response);
         } catch (error) {
             console.error('Fetch auction error:', error);
-            setAuction(mockAuction);
+        } finally {
             setLoading(false);
         }
     };
@@ -102,34 +47,33 @@ export default function AuctionDetail() {
     const fetchStatistics = async () => {
         try {
             const response = await auctionService.getStatistics(id);
-            setStatistics(response.data);
-            setLoading(false);
-
+            setStatistics(response.data || response);
         } catch (error) {
             console.error('Fetch statistics error:', error);
-
         }
     };
 
     const checkDepositStatus = async () => {
         try {
             const response = await auctionService.checkDeposit(id);
-            setDepositStatus(response.data);
+            setDepositStatus(response.data || response);
         } catch (error) {
             console.error('Check deposit error:', error);
         }
     };
 
-    const handleJoinAuction = () => {
+    const handleJoinAuction = async () => {
         if (!isAuthenticated) {
             navigate('/login');
             return;
         }
 
-        // Check if deposit is paid
+        // Check deposit status
         if (depositStatus?.depositPaid) {
+            // Already paid → Go to room
             navigate(`/auctions/${id}/room`);
         } else {
+            // Not paid → Go to deposit page
             navigate(`/auctions/${id}/deposit`);
         }
     };
@@ -192,6 +136,128 @@ export default function AuctionDetail() {
         );
     };
 
+    // ✅ FIXED: Render action button based on status
+    const renderActionButton = () => {
+        // CASE 1: UPCOMING - Chưa bắt đầu
+        if (auction.status === 'UPCOMING') {
+            if (!isAuthenticated) {
+                return (
+                    <button
+                        onClick={() => navigate('/login')}
+                        className="w-full py-4 bg-gradient-to-r from-primary to-primary-light text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
+                    >
+                        <Gavel className="w-6 h-6" />
+                        Login to Register
+                    </button>
+                );
+            }
+
+            if (depositStatus?.depositPaid) {
+                return (
+                    <div className="space-y-3">
+                        <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center">
+                            <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
+                            <p className="font-bold text-green-900">You're Registered!</p>
+                            <p className="text-sm text-green-700 mt-1">
+                                Auction starts {formatDate(auction.startTime)}
+                            </p>
+                        </div>
+                        <button
+                            onClick={handleJoinAuction}
+                            className="w-full py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all font-semibold flex items-center justify-center gap-2"
+                        >
+                            <Clock className="w-5 h-5" />
+                            Join Waiting Room
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <button
+                    onClick={handleJoinAuction}
+                    className="w-full py-4 bg-gradient-to-r from-primary to-primary-light text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
+                >
+                    <Gavel className="w-6 h-6" />
+                    Register for Auction (Pay Deposit)
+                </button>
+            );
+        }
+
+        // CASE 2: ONGOING - Đang diễn ra
+        if (auction.status === 'ONGOING') {
+            if (!isAuthenticated) {
+                return (
+                    <button
+                        onClick={() => navigate('/login')}
+                        className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
+                    >
+                        <TrendingUp className="w-6 h-6" />
+                        Login to Bid Now
+                    </button>
+                );
+            }
+
+            if (!depositStatus?.depositPaid) {
+                return (
+                    <div className="space-y-3">
+                        <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
+                            <AlertCircle className="w-6 h-6 text-red-600 mx-auto mb-2" />
+                            <p className="font-bold text-red-900">Auction in Progress</p>
+                            <p className="text-sm text-red-700 mt-1">
+                                Deposit required to participate
+                            </p>
+                        </div>
+                        <button
+                            onClick={handleJoinAuction}
+                            className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
+                        >
+                            <AlertCircle className="w-6 h-6" />
+                            Pay Deposit to Bid Now
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <button
+                    onClick={handleJoinAuction}
+                    className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2 animate-pulse"
+                >
+                    <TrendingUp className="w-6 h-6" />
+                    🔴 Join Live Auction Now
+                </button>
+            );
+        }
+
+        // CASE 3: COMPLETED - Đã kết thúc
+        if (auction.status === 'COMPLETED') {
+            return (
+                <div className="bg-gray-100 rounded-xl p-4 text-center">
+                    <CheckCircle className="w-6 h-6 text-gray-600 mx-auto mb-2" />
+                    <p className="font-bold text-gray-900">Auction Ended</p>
+                    {auction.winnerId && (
+                        <p className="text-sm text-gray-600 mt-2">
+                            Winner: {auction.winner?.fullName || 'Announced'}
+                        </p>
+                    )}
+                </div>
+            );
+        }
+
+        // CASE 4: CANCELLED
+        if (auction.status === 'CANCELLED') {
+            return (
+                <div className="bg-red-100 rounded-xl p-4 text-center">
+                    <AlertCircle className="w-6 h-6 text-red-600 mx-auto mb-2" />
+                    <p className="font-bold text-red-900">Auction Cancelled</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -218,82 +284,6 @@ export default function AuctionDetail() {
             </div>
         );
     }
-
-    const canJoinAuction = auction.status === 'UPCOMING' || auction.status === 'ONGOING';
-    const renderActionButton = () => {
-        // CASE 1: Auction chưa bắt đầu (UPCOMING)
-        if (auction.status === 'UPCOMING') {
-            if (!isAuthenticated) {
-                return (
-                    <button onClick={() => navigate('/login')} className="...">
-                        Login to Register
-                    </button>
-                );
-            }
-
-            if (depositStatus?.depositPaid) {
-                return (
-                    <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center">
-                        <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
-                        <p className="font-bold text-green-900">You're Registered!</p>
-                        <p className="text-sm text-green-700">
-                            Auction starts {formatDate(auction.startTime)}
-                        </p>
-                    </div>
-                );
-            }
-
-            return (
-                <button
-                    onClick={() => navigate(`/auctions/${id}/deposit`)}
-                    className="w-full py-4 bg-gradient-to-r from-primary to-primary-light..."
-                >
-                    <Gavel className="w-6 h-6" />
-                    Register for Auction (Pay Deposit)
-                </button>
-            );
-        }
-
-        // CASE 2: Auction đang diễn ra (ONGOING)
-        if (auction.status === 'ONGOING') {
-            if (!depositStatus?.depositPaid) {
-                return (
-                    <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
-                        <AlertCircle className="w-6 h-6 text-red-600 mx-auto mb-2" />
-                        <p className="font-bold text-red-900">Auction in Progress</p>
-                        <p className="text-sm text-red-700">
-                            Deposit required to participate
-                        </p>
-                    </div>
-                );
-            }
-
-            return (
-                <button
-                    onClick={() => navigate(`/auctions/${id}/room`)}
-                    className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600..."
-                >
-                    <TrendingUp className="w-6 h-6" />
-                    🔴 Join Live Auction Now
-                </button>
-            );
-        }
-
-        // CASE 3: Auction đã kết thúc (COMPLETED)
-        if (auction.status === 'COMPLETED') {
-            return (
-                <div className="bg-gray-100 rounded-xl p-4 text-center">
-                    <CheckCircle className="w-6 h-6 text-gray-600 mx-auto mb-2" />
-                    <p className="font-bold text-gray-900">Auction Ended</p>
-                    {auction.winnerId && (
-                        <p className="text-sm text-gray-600 mt-2">
-                            Winner: {auction.winner?.fullName}
-                        </p>
-                    )}
-                </div>
-            );
-        }
-    };
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -331,13 +321,13 @@ export default function AuctionDetail() {
                         {/* Main Image */}
                         <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
                             <img
-                                src={auction.property.thumbnail}
+                                src={auction.property?.thumbnail}
                                 alt={auction.title}
                                 className="w-full h-96 object-cover"
                             />
 
                             {/* Image Gallery Thumbnails */}
-                            {auction.property.images && auction.property.images.length > 1 && (
+                            {auction.property?.images && auction.property.images.length > 1 && (
                                 <div className="grid grid-cols-4 gap-2 p-4">
                                     {auction.property.images.slice(0, 4).map((img, index) => (
                                         <img
@@ -360,7 +350,7 @@ export default function AuctionDetail() {
                                     </h1>
                                     <div className="flex items-center gap-2 text-gray-600 mb-4">
                                         <MapPin className="w-5 h-5" />
-                                        <span>{auction.property.address}</span>
+                                        <span>{auction.property?.address}</span>
                                     </div>
                                 </div>
 
@@ -390,7 +380,7 @@ export default function AuctionDetail() {
                                     </div>
                                     <div>
                                         <p className="text-sm text-gray-600">Type</p>
-                                        <p className="font-bold text-gray-900">{auction.property.type}</p>
+                                        <p className="font-bold text-gray-900">{auction.property?.type}</p>
                                     </div>
                                 </div>
 
@@ -400,7 +390,7 @@ export default function AuctionDetail() {
                                     </div>
                                     <div>
                                         <p className="text-sm text-gray-600">Area</p>
-                                        <p className="font-bold text-gray-900">{auction.property.area} m²</p>
+                                        <p className="font-bold text-gray-900">{auction.property?.area} m²</p>
                                     </div>
                                 </div>
 
@@ -410,7 +400,7 @@ export default function AuctionDetail() {
                                     </div>
                                     <div>
                                         <p className="text-sm text-gray-600">Bedrooms</p>
-                                        <p className="font-bold text-gray-900">{auction.property.bedrooms}</p>
+                                        <p className="font-bold text-gray-900">{auction.property?.bedrooms}</p>
                                     </div>
                                 </div>
 
@@ -420,7 +410,7 @@ export default function AuctionDetail() {
                                     </div>
                                     <div>
                                         <p className="text-sm text-gray-600">Bathrooms</p>
-                                        <p className="font-bold text-gray-900">{auction.property.bathrooms}</p>
+                                        <p className="font-bold text-gray-900">{auction.property?.bathrooms}</p>
                                     </div>
                                 </div>
                             </div>
@@ -429,13 +419,13 @@ export default function AuctionDetail() {
                             <div className="grid md:grid-cols-3 gap-4 text-sm">
                                 <div className="flex items-center gap-2 text-gray-600">
                                     <Eye className="w-4 h-4" />
-                                    <span>{auction.property.views} views</span>
+                                    <span>{auction.property?.views || 0} views</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-gray-600">
                                     <Calendar className="w-4 h-4" />
                                     <span>Posted {formatDate(auction.createdAt)}</span>
                                 </div>
-                                {auction.property.hasLegalDoc && (
+                                {auction.property?.hasLegalDoc && (
                                     <div className="flex items-center gap-2 text-green-600">
                                         <CheckCircle className="w-4 h-4" />
                                         <span>Legal Documents</span>
@@ -452,28 +442,6 @@ export default function AuctionDetail() {
                             </p>
                         </div>
 
-                        {/* Property Details */}
-                        <div className="bg-white rounded-2xl p-6 shadow-lg">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Property Details</h2>
-                            <div className="grid md:grid-cols-2 gap-4">
-                                {[
-                                    { label: 'Property Type', value: auction.property.type },
-                                    { label: 'Area', value: `${auction.property.area} m²` },
-                                    { label: 'Bedrooms', value: auction.property.bedrooms },
-                                    { label: 'Bathrooms', value: auction.property.bathrooms },
-                                    { label: 'Floors', value: auction.property.floors },
-                                    { label: 'Direction', value: auction.property.direction },
-                                    { label: 'Furnished', value: auction.property.isFurnished ? 'Yes' : 'No' },
-                                    { label: 'Legal Status', value: auction.property.hasLegalDoc ? 'Complete' : 'In Progress' },
-                                ].map((item, index) => (
-                                    <div key={index} className="flex justify-between py-3 border-b border-gray-100">
-                                        <span className="text-gray-600">{item.label}</span>
-                                        <span className="font-semibold text-gray-900">{item.value}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
                         {/* Auction Statistics */}
                         {statistics && (
                             <div className="bg-white rounded-2xl p-6 shadow-lg">
@@ -481,17 +449,17 @@ export default function AuctionDetail() {
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     <div className="text-center p-4 bg-blue-50 rounded-xl">
                                         <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                                        <p className="text-2xl font-bold text-gray-900">{statistics.totalParticipants}</p>
+                                        <p className="text-2xl font-bold text-gray-900">{statistics.totalParticipants || 0}</p>
                                         <p className="text-sm text-gray-600">Participants</p>
                                     </div>
                                     <div className="text-center p-4 bg-green-50 rounded-xl">
                                         <Gavel className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                                        <p className="text-2xl font-bold text-gray-900">{statistics.totalBids}</p>
+                                        <p className="text-2xl font-bold text-gray-900">{statistics.totalBids || 0}</p>
                                         <p className="text-sm text-gray-600">Total Bids</p>
                                     </div>
                                     <div className="text-center p-4 bg-purple-50 rounded-xl">
                                         <Trophy className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                                        <p className="text-2xl font-bold text-gray-900">{statistics.uniqueBidders}</p>
+                                        <p className="text-2xl font-bold text-gray-900">{statistics.uniqueBidders || 0}</p>
                                         <p className="text-sm text-gray-600">Unique Bidders</p>
                                     </div>
                                     <div className="text-center p-4 bg-orange-50 rounded-xl">
@@ -504,36 +472,6 @@ export default function AuctionDetail() {
                                 </div>
                             </div>
                         )}
-
-                        {/* Contact Organizer */}
-                        <div className="bg-white rounded-2xl p-6 shadow-lg">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Auction Organizer</h2>
-                            <div className="flex items-center gap-4">
-                                <img
-                                    src={auction.creator.avatar}
-                                    alt={auction.creator.fullName}
-                                    className="w-16 h-16 rounded-full object-cover"
-                                />
-                                <div className="flex-1">
-                                    <h3 className="font-bold text-gray-900 mb-1">{auction.creator.fullName}</h3>
-                                    <p className="text-sm text-gray-600">Verified Seller</p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <a
-                                        href={`tel:${auction.creator.phone}`}
-                                        className="px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-primary transition-colors"
-                                    >
-                                        Call
-                                    </a>
-                                    <a
-                                        href={`mailto:${auction.creator.email}`}
-                                        className="px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-primary transition-colors"
-                                    >
-                                        Email
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     {/* Right Column - Auction Info */}
@@ -633,16 +571,8 @@ export default function AuctionDetail() {
                             </div>
                         )}
 
-                        {/* Action Button */}
-                        {canJoinAuction && (
-                            <button
-                                onClick={handleJoinAuction}
-                                className="w-full py-4 bg-gradient-to-r from-primary to-primary-light text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
-                            >
-                                <Gavel className="w-6 h-6" />
-                                {auction.status === 'ONGOING' ? 'Join Auction Now' : 'Register for Auction'}
-                            </button>
-                        )}
+                        {/* Action Button - ✅ NOW RENDERED */}
+                        {renderActionButton()}
 
                         {/* Rules */}
                         <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">

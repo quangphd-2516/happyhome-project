@@ -77,7 +77,8 @@ export default function AuctionDeposit() {
         setLoading(true);
         try {
             const response = await auctionService.getById(id);
-            setAuction(response.data);
+            // Backend returns { data: auction } or auction directly
+            setAuction(response.data || response);
             setLoading(false);
         } catch (error) {
             console.error('Fetch auction error:', error);
@@ -89,10 +90,11 @@ export default function AuctionDeposit() {
     const checkDepositStatus = async () => {
         try {
             const response = await auctionService.checkDeposit(id);
-            setDepositStatus(response.data);
+            const depositData = response.data || response;
+            setDepositStatus(depositData);
 
-            // If already deposited, redirect to auction room
-            if (response.data?.depositPaid) {
+            // If already deposited, redirect to auction detail (user can go to room from there)
+            if (depositData?.depositPaid) {
                 navigate(`/auctions/${id}`);
             }
         } catch (error) {
@@ -209,25 +211,25 @@ export default function AuctionDeposit() {
                             {/* Property Card */}
                             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                                 <img
-                                    src={auction.property.thumbnail}
-                                    alt={auction.property.title}
+                                    src={auction?.property?.thumbnail}
+                                    alt={auction?.property?.title || auction?.title}
                                     className="w-full h-48 object-cover"
                                 />
                                 <div className="p-6">
-                                    <h3 className="font-bold text-gray-900 mb-2">{auction.title}</h3>
-                                    <p className="text-sm text-gray-600 mb-4">{auction.property.address}</p>
+                                    <h3 className="font-bold text-gray-900 mb-2">{auction?.title}</h3>
+                                    <p className="text-sm text-gray-600 mb-4">{auction?.property?.address}</p>
 
                                     <div className="space-y-3 text-sm">
                                         <div className="flex justify-between">
                                             <span className="text-gray-600">Starts:</span>
                                             <span className="font-semibold text-gray-900">
-                                                {formatDate(auction.startTime)}
+                                                {auction?.startTime ? formatDate(auction.startTime) : 'N/A'}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-gray-600">Status:</span>
                                             <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
-                                                {auction.status}
+                                                {auction?.status || 'N/A'}
                                             </span>
                                         </div>
                                     </div>
@@ -237,7 +239,7 @@ export default function AuctionDeposit() {
                             {/* Deposit Amount */}
                             <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 text-white shadow-xl">
                                 <p className="text-white/80 text-sm font-medium mb-2">Deposit Required</p>
-                                <p className="text-4xl font-bold mb-2">{formatPrice(auction.depositAmount)}</p>
+                                <p className="text-4xl font-bold mb-2">{formatPrice(auction?.depositAmount || 0)}</p>
                                 <p className="text-sm text-white/80">
                                     Refundable if you don't win
                                 </p>
@@ -323,7 +325,7 @@ export default function AuctionDeposit() {
                                         Processing...
                                     </span>
                                 ) : (
-                                    `Pay Deposit ${formatPrice(auction.depositAmount)}`
+                                    `Pay Deposit ${formatPrice(auction?.depositAmount || 0)}`
                                 )}
                             </button>
 

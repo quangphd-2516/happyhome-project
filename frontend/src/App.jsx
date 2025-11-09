@@ -60,9 +60,9 @@ function App() {
         {/* Auction Routes của USER */}
         <Route path="/auctions" element={<AuctionList />} />
         <Route path="/auctions/my-auctions" element={<MyAuctions />} />
-        <Route path="/auctions/:id" element={<AuctionRoom />} />
+        <Route path="/auctions/:id" element={<AuctionDetail />} />
+        <Route path="/auctions/:id/room" element={<AuctionRoom />} />
         <Route path="/auctions/:id/deposit" element={<AuctionDeposit />} />
-        <Route path="/auctions/:id/detail" element={<AuctionDetail />} />
 
         // Protected Admin Route
         <Route
