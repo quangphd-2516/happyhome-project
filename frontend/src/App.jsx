@@ -33,6 +33,8 @@ import CreateAuction from './pages/admin/CreateAuction';
 
 import ChatPage from './pages/chat/ChatPage';
 
+import VNPayReturn from './pages/payment/VNPayReturn';
+
 
 import { Navigate } from 'react-router-dom';
 function App() {
@@ -85,6 +87,9 @@ function App() {
 
         <Route path="/chats" element={<ChatPage />} />
         <Route path="/chats/:id" element={<ChatPage />} />
+
+        {/* Payment Routes */}
+        <Route path="/payments/vnpay-return" element={<VNPayReturn />} />
 
       </Routes>
     </BrowserRouter>

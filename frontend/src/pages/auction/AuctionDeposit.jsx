@@ -116,17 +116,28 @@ export default function AuctionDeposit() {
         setPaying(true);
         try {
             const response = await auctionService.payDeposit(id, selectedMethod);
+            const data = response.data || response;
 
-            // Redirect to payment gateway or show success
-            if (response.paymentUrl) {
-                window.location.href = response.paymentUrl;
-            } else {
+            // Case 1: Requires external payment (VNPAY, MOMO, BLOCKCHAIN)
+            if (data.requiresPayment && data.paymentUrl) {
+                // Redirect to payment gateway
+                window.location.href = data.paymentUrl;
+                return;
+            }
+
+            // Case 2: Direct payment success (WALLET)
+            if (data.success) {
                 alert('Deposit payment successful!');
                 navigate(`/auctions/${id}`);
+                return;
             }
+
+            // Case 3: Payment method not implemented
+            alert(data.message || 'Payment method not available');
+
         } catch (error) {
             console.error('Pay deposit error:', error);
-            alert('Payment failed. Please try again.');
+            alert(error.response?.data?.message || 'Payment failed. Please try again.');
         } finally {
             setPaying(false);
         }
