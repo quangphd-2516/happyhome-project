@@ -87,11 +87,71 @@ const payDeposit = catchAsync(async (req, res) => {
     const userId = req.user.id;
     const { paymentMethod } = req.body;
 
-    if (!['VNPAY', 'MOMO', 'BLOCKCHAIN'].includes(paymentMethod)) {
+    if (!['VNPAY', 'MOMO', 'BLOCKCHAIN', 'WALLET'].includes(paymentMethod)) {
         throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid payment method');
     }
 
     const result = await auctionService.payDeposit(auctionId, userId, paymentMethod);
+
+    // If requires external payment
+    if (result.requiresPayment) {
+        const ipAddr = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            '127.0.0.1';
+
+        // VNPay
+        if (paymentMethod === 'VNPAY') {
+            const { paymentService } = require('../services');
+
+            const paymentUrl = await paymentService.createVNPayPayment({
+                userId,
+                auctionId,
+                amount: parseFloat(result.amount),
+                orderId: result.transactionId,
+                orderInfo: `Deposit for auction ${auctionId}`,
+                ipAddr,
+            });
+
+            return res.send({
+                success: true,
+                requiresPayment: true,
+                paymentUrl,
+                transactionId: result.transactionId,
+            });
+        }
+
+        // MoMo - ✅ THÊM MỚI
+        if (paymentMethod === 'MOMO') {
+            const { paymentService } = require('../services');
+
+            const momoResult = await paymentService.createMoMoPayment({
+                userId,
+                auctionId,
+                amount: parseFloat(result.amount),
+                orderId: result.transactionId,
+                orderInfo: `Deposit for auction ${auctionId}`,
+                ipAddr,
+            });
+
+            return res.send({
+                success: true,
+                requiresPayment: true,
+                payUrl: momoResult.payUrl,
+                deeplink: momoResult.deeplink,
+                qrCodeUrl: momoResult.qrCodeUrl,
+                transactionId: result.transactionId,
+            });
+        }
+
+        // BLOCKCHAIN - chưa implement
+        return res.send({
+            success: false,
+            message: `${paymentMethod} payment not implemented yet`,
+        });
+    }
+
+    // Direct payment success (WALLET)
     res.send(result);
 });
 

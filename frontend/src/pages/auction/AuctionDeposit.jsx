@@ -45,24 +45,9 @@ export default function AuctionDeposit() {
             icon: Bitcoin,
             description: 'Pay with Bitcoin or Ethereum',
             color: 'from-orange-500 to-yellow-600',
-            available: true,
+            available: false, // Chưa implement
         },
     ];
-
-    // Mock auction data
-    const mockAuction = {
-        id: 1,
-        title: 'Luxury Villa Auction - Beverly Hills',
-        status: 'UPCOMING',
-        depositAmount: 200000,
-        startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        endTime: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
-        property: {
-            thumbnail: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
-            title: 'Modern Luxury Villa',
-            address: 'Beverly Hills, California',
-        },
-    };
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -77,12 +62,10 @@ export default function AuctionDeposit() {
         setLoading(true);
         try {
             const response = await auctionService.getById(id);
-            // Backend returns { data: auction } or auction directly
             setAuction(response.data || response);
             setLoading(false);
         } catch (error) {
             console.error('Fetch auction error:', error);
-            setAuction(mockAuction);
             setLoading(false);
         }
     };
@@ -93,7 +76,6 @@ export default function AuctionDeposit() {
             const depositData = response.data || response;
             setDepositStatus(depositData);
 
-            // If already deposited, redirect to auction detail (user can go to room from there)
             if (depositData?.depositPaid) {
                 navigate(`/auctions/${id}`);
             }
@@ -118,21 +100,42 @@ export default function AuctionDeposit() {
             const response = await auctionService.payDeposit(id, selectedMethod);
             const data = response.data || response;
 
-            // Case 1: Requires external payment (VNPAY, MOMO, BLOCKCHAIN)
+            console.log('💳 Payment response:', data);
+
+            // Case 1: VNPay - có paymentUrl
             if (data.requiresPayment && data.paymentUrl) {
-                // Redirect to payment gateway
+                console.log('🔄 Redirecting to VNPay:', data.paymentUrl);
                 window.location.href = data.paymentUrl;
                 return;
             }
 
-            // Case 2: Direct payment success (WALLET)
+            // Case 2: MoMo - có payUrl (hoặc deeplink, qrCodeUrl)
+            if (data.requiresPayment && data.payUrl) {
+                console.log('🔄 Redirecting to MoMo:', data.payUrl);
+
+                // Nếu có deeplink (cho mobile app)
+                if (data.deeplink) {
+                    console.log('📱 MoMo Deeplink:', data.deeplink);
+                }
+
+                // Nếu có QR code URL
+                if (data.qrCodeUrl) {
+                    console.log('📷 MoMo QR Code:', data.qrCodeUrl);
+                }
+
+                // Redirect to MoMo payment page
+                window.location.href = data.payUrl;
+                return;
+            }
+
+            // Case 3: Direct payment success (WALLET)
             if (data.success) {
                 alert('Deposit payment successful!');
                 navigate(`/auctions/${id}`);
                 return;
             }
 
-            // Case 3: Payment method not implemented
+            // Case 4: Payment method not implemented
             alert(data.message || 'Payment method not available');
 
         } catch (error) {
@@ -272,9 +275,10 @@ export default function AuctionDeposit() {
                                             onClick={() => setSelectedMethod(method.id)}
                                             disabled={!method.available}
                                             className={`w-full p-6 rounded-xl border-2 transition-all ${selectedMethod === method.id
-                                                ? 'border-primary bg-primary/5 shadow-lg'
-                                                : 'border-gray-200 hover:border-gray-300'
-                                                } ${!method.available ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                                    ? 'border-primary bg-primary/5 shadow-lg'
+                                                    : 'border-gray-200 hover:border-gray-300'
+                                                } ${!method.available ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                                                }`}
                                         >
                                             <div className="flex items-center gap-4">
                                                 <div className={`w-14 h-14 bg-gradient-to-br ${method.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
@@ -284,6 +288,11 @@ export default function AuctionDeposit() {
                                                 <div className="flex-1 text-left">
                                                     <h3 className="font-bold text-gray-900 mb-1">{method.name}</h3>
                                                     <p className="text-sm text-gray-600">{method.description}</p>
+                                                    {!method.available && (
+                                                        <span className="text-xs text-orange-600 font-medium mt-1 block">
+                                                            Coming soon
+                                                        </span>
+                                                    )}
                                                 </div>
 
                                                 {selectedMethod === method.id && (

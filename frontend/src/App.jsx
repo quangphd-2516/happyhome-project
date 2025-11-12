@@ -34,6 +34,7 @@ import CreateAuction from './pages/admin/CreateAuction';
 import ChatPage from './pages/chat/ChatPage';
 
 import VNPayReturn from './pages/payment/VNPayReturn';
+import MoMoReturn from './pages/payment/MoMoReturn';
 
 
 import { Navigate } from 'react-router-dom';
@@ -90,6 +91,8 @@ function App() {
 
         {/* Payment Routes */}
         <Route path="/payments/vnpay-return" element={<VNPayReturn />} />
+        <Route path="/payments/momo-return" element={<MoMoReturn />} />
+
 
       </Routes>
     </BrowserRouter>

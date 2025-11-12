@@ -270,6 +270,7 @@ const checkDepositStatus = async (auctionId, userId) => {
 
 /**
  * Pay deposit for auction
+ * Can be paid during UPCOMING or ONGOING status
  */
 const payDeposit = async (auctionId, userId, paymentMethod) => {
     const auction = await prisma.auction.findUnique({
@@ -280,8 +281,12 @@ const payDeposit = async (auctionId, userId, paymentMethod) => {
         throw new ApiError(StatusCodes.NOT_FOUND, 'Auction not found');
     }
 
+    // Allow deposit payment for UPCOMING or ONGOING auctions
     if (auction.status !== 'UPCOMING' && auction.status !== 'ONGOING') {
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'Cannot register for this auction');
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            'Deposit can only be paid for upcoming or ongoing auctions'
+        );
     }
 
     // Check if already paid
@@ -298,35 +303,54 @@ const payDeposit = async (auctionId, userId, paymentMethod) => {
         throw new ApiError(StatusCodes.BAD_REQUEST, 'Deposit already paid');
     }
 
-    // Create transaction record
-    const wallet = await prisma.wallet.findUnique({
+    // Check if auction has ended
+    const now = new Date();
+    if (auction.status === 'ONGOING' && new Date(auction.endTime) < now) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, 'Auction has already ended');
+    }
+
+    // Get or create wallet
+    let wallet = await prisma.wallet.findUnique({
         where: { userId },
     });
 
     if (!wallet) {
-        throw new ApiError(StatusCodes.NOT_FOUND, 'Wallet not found');
+        wallet = await prisma.wallet.create({
+            data: { userId, balance: 0 },
+        });
     }
 
-    // Check sufficient balance (for wallet payment)
-    if (paymentMethod === 'WALLET' && parseFloat(wallet.balance) < parseFloat(auction.depositAmount)) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'Insufficient balance');
-    }
+    // For VNPAY, MOMO, BLOCKCHAIN - return payment info to create payment URL
+    if (paymentMethod === 'VNPAY' || paymentMethod === 'MOMO' || paymentMethod === 'BLOCKCHAIN') {
+        // Create pending transaction
+        const transaction = await prisma.transaction.create({
+            data: {
+                walletId: wallet.id,
+                type: 'AUCTION_DEPOSIT',
+                amount: auction.depositAmount,
+                status: 'PENDING',
+                paymentMethod,
+                description: `Deposit for auction: ${auction.title}`,
+                metadata: { auctionId, userId },
+            },
+        });
 
-    const transaction = await prisma.transaction.create({
-        data: {
-            walletId: wallet.id,
-            type: 'AUCTION_DEPOSIT',
+        return {
+            success: false,
+            requiresPayment: true,
+            transactionId: transaction.id,
             amount: auction.depositAmount,
-            status: 'PENDING',
+            auctionId,
             paymentMethod,
-            description: `Deposit for auction: ${auction.title}`,
-            metadata: { auctionId },
-        },
-    });
+        };
+    }
 
-    // For external payment methods (VNPAY, MOMO, etc.), return payment URL
-    // For now, we'll simulate immediate payment
+    // For WALLET payment - direct deduction
     if (paymentMethod === 'WALLET') {
+        if (parseFloat(wallet.balance) < parseFloat(auction.depositAmount)) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, 'Insufficient balance');
+        }
+
         // Deduct from wallet
         await prisma.wallet.update({
             where: { userId },
@@ -337,10 +361,17 @@ const payDeposit = async (auctionId, userId, paymentMethod) => {
             },
         });
 
-        // Update transaction
-        await prisma.transaction.update({
-            where: { id: transaction.id },
-            data: { status: 'COMPLETED' },
+        // Create completed transaction
+        const transaction = await prisma.transaction.create({
+            data: {
+                walletId: wallet.id,
+                type: 'AUCTION_DEPOSIT',
+                amount: auction.depositAmount,
+                status: 'COMPLETED',
+                paymentMethod: 'WALLET',
+                description: `Deposit for auction: ${auction.title}`,
+                metadata: { auctionId, userId },
+            },
         });
 
         // Create or update participant
@@ -369,12 +400,7 @@ const payDeposit = async (auctionId, userId, paymentMethod) => {
         };
     }
 
-    // For VNPAY, MOMO, BLOCKCHAIN - return payment URL
-    return {
-        success: false,
-        paymentUrl: `${process.env.PAYMENT_GATEWAY_URL}?txId=${transaction.id}`,
-        transactionId: transaction.id,
-    };
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid payment method');
 };
 
 /**
@@ -388,6 +414,7 @@ const registerAuction = async (auctionId, userId) => {
 
 /**
  * Place a bid
+ * Only allowed during ONGOING status
  */
 const placeBid = async (auctionId, userId, amount, isAutoBid = false, maxAmount = null) => {
     const auction = await prisma.auction.findUnique({
@@ -403,14 +430,29 @@ const placeBid = async (auctionId, userId, amount, isAutoBid = false, maxAmount 
         throw new ApiError(StatusCodes.NOT_FOUND, 'Auction not found');
     }
 
+    // CRITICAL: Only allow bidding during ONGOING status
     if (auction.status !== 'ONGOING') {
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'Auction is not ongoing');
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            auction.status === 'UPCOMING'
+                ? 'Auction has not started yet'
+                : 'Auction has ended'
+        );
     }
 
     // Check if user has paid deposit
     const participant = auction.participants[0];
     if (!participant?.depositPaid) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'Deposit required to place bid');
+        throw new ApiError(
+            StatusCodes.PAYMENT_REQUIRED,
+            'Deposit payment required to place bid'
+        );
+    }
+
+    // Check auction hasn't ended
+    const now = new Date();
+    if (new Date(auction.endTime) < now) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, 'Auction time has expired');
     }
 
     // Validate bid amount

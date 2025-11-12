@@ -9,3 +9,6 @@ module.exports.chatService = require('./chat.service');
 module.exports.auctionService = require('./auction.service');
 module.exports.websocketService = require('./websocket.service');
 module.exports.auctionScheduler = require('./auctionScheduler');
+module.exports.paymentService = require('./payment.service');
+module.exports.vnpayService = require('./vnpay.service');
+module.exports.momoService = require('./momo.service');

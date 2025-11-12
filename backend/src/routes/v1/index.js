@@ -6,6 +6,7 @@ const kycRoute = require('./kyc.route');
 const adminRoute = require('./admin.route');
 const chatRoute = require('./chat.route');
 const auctionRoute = require('./auction.route');
+const paymentRoute = require('./payment.route');
 
 const router = express.Router();
 
@@ -37,6 +38,10 @@ const defaultRoutes = [
   {
     path: '/auctions',
     route: auctionRoute,
+  },
+  {
+    path: '/payments',
+    route: paymentRoute,
   }
 
 ];
