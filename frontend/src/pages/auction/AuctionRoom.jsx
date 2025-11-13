@@ -15,6 +15,7 @@ export default function AuctionRoom() {
     const { id } = useParams();
     const navigate = useNavigate();
     const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+
     const [auction, setAuction] = useState(null);
     const [bids, setBids] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,8 +23,8 @@ export default function AuctionRoom() {
     const [participants, setParticipants] = useState(0);
     const [auctionStatus, setAuctionStatus] = useState(null);
     const [waitingMode, setWaitingMode] = useState(false);
+    const [connectionStatus, setConnectionStatus] = useState('connecting'); // ✅ THÊM STATE NÀY
 
-    // ✅ SINGLE useEffect for access check and initialization
     useEffect(() => {
         const checkAccessAndJoin = async () => {
             if (!isAuthenticated) {
@@ -34,8 +35,9 @@ export default function AuctionRoom() {
 
             try {
                 setLoading(true);
+                setConnectionStatus('connecting');
 
-                // Step 1: Check deposit status first
+                // Step 1: Check deposit status
                 const depositResponse = await auctionService.checkDeposit(id);
                 const depositData = depositResponse.data || depositResponse;
 
@@ -55,7 +57,7 @@ export default function AuctionRoom() {
                     return;
                 }
 
-                // Step 3: Check if auction has ended
+                // Step 3: Check auction status
                 if (auctionData.status === 'COMPLETED' || auctionData.status === 'CANCELLED') {
                     alert('Auction has ended!');
                     navigate(`/auctions/${id}`);
@@ -67,13 +69,12 @@ export default function AuctionRoom() {
                 setBids(auctionData.bids || []);
                 setAuctionStatus(auctionData.status);
 
-                // Step 5: If UPCOMING, enable waiting mode
                 if (auctionData.status === 'UPCOMING') {
                     setWaitingMode(true);
                 }
 
-                // Step 6: Initialize Socket.IO
-                initializeSocket();
+                // Step 5: Initialize Socket.IO và đợi kết nối
+                await initializeSocket();
 
             } catch (error) {
                 console.error('Access check failed:', error);
@@ -86,35 +87,41 @@ export default function AuctionRoom() {
 
         checkAccessAndJoin();
 
-        // Cleanup on unmount
         return () => {
             websocketService.leaveAuction(id);
             removeSocketListeners();
         };
     }, [id, isAuthenticated, navigate]);
 
-    // ✅ Initialize Socket.IO using websocketService
-    const initializeSocket = () => {
+    // Khởi tạo socket và đợi kết nối hoàn tất
+    const initializeSocket = async () => {
         const token = localStorage.getItem('token');
-        if (!token) return;
-
-        // Ensure socket is connected
-        if (!websocketService.isConnected()) {
-            websocketService.connect(token);
+        if (!token) {
+            setConnectionStatus('error');
+            throw new Error('No authentication token');
         }
 
-        // Wait for connection before joining
-        setTimeout(() => {
-            websocketService.joinAuction(id);
-        }, 500);
+        try {
+            // Kết nối socket và đợi hoàn tất
+            await websocketService.connect(token);
+            console.log('✅ Socket connected successfully');
+            setConnectionStatus('connected');
 
-        // Setup all listeners
-        setupSocketListeners();
+            // Setup listeners trước khi join
+            setupSocketListeners();
+
+            // Join auction sau khi đã kết nối
+            await websocketService.joinAuction(id);
+            console.log('✅ Joined auction room');
+
+        } catch (error) {
+            console.error('❌ Socket initialization failed:', error);
+            setConnectionStatus('error');
+            alert('Failed to connect to auction. Please refresh the page.');
+        }
     };
 
-    // Setup all socket event listeners
     const setupSocketListeners = () => {
-        // Auction joined
         websocketService.onAuctionJoined((data) => {
             console.log('Joined auction:', data);
             setAuctionStatus(data.status);
@@ -129,14 +136,13 @@ export default function AuctionRoom() {
             }
         });
 
-        // Auction errors
         websocketService.onAuctionError((error) => {
             console.error('Auction error:', error);
 
-            if (error.code === 'DEPOSIT_REQUIRED') {
+            if (error.message?.includes('Deposit required')) {
                 alert('Deposit payment required');
                 navigate(`/auctions/${id}/deposit`);
-            } else if (error.code === 'AUCTION_ENDED') {
+            } else if (error.message?.includes('not ongoing')) {
                 alert('Auction has ended');
                 navigate(`/auctions/${id}`);
             } else {
@@ -144,51 +150,43 @@ export default function AuctionRoom() {
             }
         });
 
-        // New bid
         websocketService.onNewBid((data) => {
             console.log('New bid received:', data);
-
             setAuction(prev => ({
                 ...prev,
                 currentPrice: data.auction.currentPrice,
             }));
-
             setBids(prev => [data.bid, ...prev]);
         });
 
-        // Bid placed confirmation
         websocketService.onBidPlaced((data) => {
             console.log('Your bid placed:', data);
             setIsBidding(false);
             alert('Bid placed successfully!');
         });
 
-        // Bid error
         websocketService.onBidError((error) => {
             console.error('Bid error:', error);
             setIsBidding(false);
 
-            if (error.code === 'NOT_STARTED') {
+            if (error.message?.includes('not ongoing')) {
                 alert('Auction has not started yet. Please wait.');
-            } else if (error.code === 'BID_TOO_LOW') {
-                alert(`Minimum bid is ${formatPrice(error.minBid)}`);
+            } else if (error.message?.includes('Minimum bid')) {
+                alert(error.message);
             } else {
                 alert(error.message || 'Failed to place bid');
             }
         });
 
-        // User joined
         websocketService.onUserJoinedAuction((data) => {
             console.log('User joined:', data);
             setParticipants(data.participantCount || 0);
         });
 
-        // User left
         websocketService.onUserLeftAuction((data) => {
             console.log('User left:', data);
         });
 
-        // Auction started
         websocketService.onAuctionStarted((data) => {
             console.log('🎉 Auction started!', data);
             setWaitingMode(false);
@@ -196,14 +194,12 @@ export default function AuctionRoom() {
             alert('Auction has started! You can now place bids.');
         });
 
-        // Auction ended
         websocketService.onAuctionEnded((data) => {
             console.log('🏁 Auction ended!', data);
             alert(`Auction has ended! ${data.winner ? `Winner: ${data.winner.fullName}` : 'No winner'}`);
             navigate(`/auctions/${id}`);
         });
 
-        // Auction update
         websocketService.onAuctionUpdate((data) => {
             console.log('Auction update:', data);
             if (data.status) {
@@ -212,7 +208,6 @@ export default function AuctionRoom() {
         });
     };
 
-    // Remove all socket listeners
     const removeSocketListeners = () => {
         websocketService.off('auction_joined');
         websocketService.off('auction_error');
@@ -226,7 +221,6 @@ export default function AuctionRoom() {
         websocketService.off('auction_update');
     };
 
-    // ✅ Handle bid via websocketService
     const handlePlaceBid = async (amount) => {
         if (!websocketService.isConnected()) {
             alert('Not connected to auction. Please refresh the page.');
@@ -239,7 +233,13 @@ export default function AuctionRoom() {
         }
 
         setIsBidding(true);
-        websocketService.placeBid(id, amount);
+        try {
+            await websocketService.placeBid(id, amount);
+        } catch (error) {
+            console.error('Place bid error:', error);
+            setIsBidding(false);
+            alert('Failed to place bid. Please try again.');
+        }
     };
 
     const handleAuctionEnd = () => {
@@ -261,6 +261,9 @@ export default function AuctionRoom() {
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading auction...</p>
+                    {connectionStatus === 'connecting' && (
+                        <p className="text-sm text-gray-500 mt-2">Connecting to auction room...</p>
+                    )}
                 </div>
             </div>
         );

@@ -4,263 +4,226 @@ import { io } from 'socket.io-client';
 class WebSocketService {
     constructor() {
         this.socket = null;
-        this.listeners = new Map();
+        this.isSocketConnected = false;
+        this.connectionPromise = null;
     }
 
+    // Kết nối socket và trả về Promise
     connect(token) {
-        if (this.socket?.connected) return;
+        if (this.socket && this.isSocketConnected) {
+            return Promise.resolve();
+        }
 
-        this.socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000', {
-            auth: { token },
-            transports: ['websocket', 'polling'],
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionAttempts: 5,
+        if (this.connectionPromise) {
+            return this.connectionPromise;
+        }
+
+        this.connectionPromise = new Promise((resolve, reject) => {
+            // Ưu tiên VITE_SOCKET_URL, fallback về VITE_API_URL rồi xóa /api
+            const socketURL = import.meta.env.VITE_SOCKET_URL ||
+                (import.meta.env.VITE_API_URL || 'http://localhost:5000')
+                    .replace('/api/v1', '')
+                    .replace('/api', '');
+
+            console.log('🔌 Connecting to Socket.IO:', socketURL);
+
+            this.socket = io(socketURL, {
+                auth: { token },
+                path: '/socket.io',
+                transports: ['websocket', 'polling'],
+                reconnection: true,
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+            });
+
+            this.socket.on('connect', () => {
+                console.log('✅ Socket connected:', this.socket.id);
+                this.isSocketConnected = true;
+                this.connectionPromise = null;
+                resolve();
+            });
+
+            this.socket.on('connect_error', (error) => {
+                console.error('❌ Socket connection error:', error);
+                this.isSocketConnected = false;
+                this.connectionPromise = null;
+                reject(error);
+            });
+
+            this.socket.on('disconnect', (reason) => {
+                console.log('Socket disconnected:', reason);
+                this.isSocketConnected = false;
+            });
+
+            // Timeout sau 10 giây
+            setTimeout(() => {
+                if (!this.isSocketConnected) {
+                    this.connectionPromise = null;
+                    reject(new Error('Connection timeout'));
+                }
+            }, 10000);
         });
 
-        this.socket.on('connect', () => {
-            console.log('✅ WebSocket connected');
-        });
+        return this.connectionPromise;
+    }
 
-        this.socket.on('disconnect', () => {
-            console.log('❌ WebSocket disconnected');
-        });
-
-        this.socket.on('error', (error) => {
-            console.error('WebSocket error:', error);
-        });
+    isConnected() {
+        return this.socket && this.isSocketConnected;
     }
 
     disconnect() {
         if (this.socket) {
             this.socket.disconnect();
             this.socket = null;
-            this.listeners.clear();
+            this.isSocketConnected = false;
+            this.connectionPromise = null;
         }
     }
 
-    // ==================== CHAT METHODS ====================
-
-    // Join chat room
-    joinChat(chatId) {
-        if (this.socket && this.socket.connected) {
-            this.socket.emit('join_chat', { chatId });
+    // Đảm bảo socket đã kết nối trước khi emit
+    async ensureConnected() {
+        if (!this.isConnected()) {
+            throw new Error('Socket not connected. Please wait for connection.');
         }
     }
 
-    // Leave chat room
+    // ==================== AUCTION EVENTS ====================
+
+    async joinAuction(auctionId) {
+        await this.ensureConnected();
+        console.log('Joining auction:', auctionId);
+        this.socket.emit('join_auction', auctionId);
+    }
+
+    leaveAuction(auctionId) {
+        if (this.isConnected()) {
+            this.socket.emit('leave_auction', auctionId);
+        }
+    }
+
+    async placeBid(auctionId, amount) {
+        await this.ensureConnected();
+        this.socket.emit('place_bid', { auctionId, amount });
+    }
+
+    // ==================== AUCTION EVENT LISTENERS ====================
+
+    onAuctionJoined(callback) {
+        if (this.socket) this.socket.on('auction_joined', callback);
+    }
+
+    onAuctionError(callback) {
+        if (this.socket) this.socket.on('auction_error', callback);
+    }
+
+    onNewBid(callback) {
+        if (this.socket) this.socket.on('new_bid', callback);
+    }
+
+    onBidPlaced(callback) {
+        if (this.socket) this.socket.on('bid_placed', callback);
+    }
+
+    onBidError(callback) {
+        if (this.socket) this.socket.on('bid_error', callback);
+    }
+
+    onUserJoinedAuction(callback) {
+        if (this.socket) this.socket.on('user_joined_auction', callback);
+    }
+
+    onUserLeftAuction(callback) {
+        if (this.socket) this.socket.on('user_left_auction', callback);
+    }
+
+    onAuctionStarted(callback) {
+        if (this.socket) this.socket.on('auction_started', callback);
+    }
+
+    onAuctionEnded(callback) {
+        if (this.socket) this.socket.on('auction_ended', callback);
+    }
+
+    onAuctionUpdate(callback) {
+        if (this.socket) this.socket.on('auction_update', callback);
+    }
+
+    // ==================== CHAT EVENTS ====================
+
+    async joinChat(chatId) {
+        await this.ensureConnected();
+        console.log('Joining chat:', chatId);
+        this.socket.emit('join_chat', chatId);
+    }
+
     leaveChat(chatId) {
-        if (this.socket) {
+        if (this.isConnected()) {
             this.socket.emit('leave_chat', chatId);
         }
     }
 
-    // Send message
-    sendMessage(chatId, content) {
-        if (this.socket && this.socket.connected) {
-            this.socket.emit('send_message', {
-                chatId,
-                content
-            });
+    async sendMessage(chatId, content) {
+        await this.ensureConnected();
+        this.socket.emit('send_message', { chatId, content });
+    }
+
+    typing(chatId) {
+        if (this.isConnected()) {
+            this.socket.emit('typing', { chatId });
         }
     }
 
-    // Emit typing status
-    emitTyping(chatId, isTyping) {
-        if (this.socket) {
-            this.socket.emit('typing', { chatId, isTyping });
+    stopTyping(chatId) {
+        if (this.isConnected()) {
+            this.socket.emit('stop_typing', { chatId });
         }
     }
 
-    // Listen for message sent confirmation
-    onMessageSent(callback) {
-        if (this.socket) {
-            this.socket.on('message_sent', callback);
-            this.listeners.set('message_sent', callback);
-        }
-    }
+    // ==================== CHAT EVENT LISTENERS ====================
 
-    // Listen for new messages
-    onNewMessage(callback) {
-        if (this.socket) {
-            this.socket.on('new_message', callback);
-            this.listeners.set('new_message', callback);
-        }
-    }
-
-    // Listen for typing indicator
-    onUserTyping(callback) {
-        if (this.socket) {
-            this.socket.on('user_typing', callback);
-            this.listeners.set('user_typing', callback);
-        }
-    }
-
-    // Listen for message read
-    onMessageRead(callback) {
-        if (this.socket) {
-            this.socket.on('message_read', callback);
-            this.listeners.set('message_read', callback);
-        }
-    }
-
-    // Listen for chat joined
     onChatJoined(callback) {
-        if (this.socket) {
-            this.socket.on('chat_joined', callback);
-            this.listeners.set('chat_joined', callback);
-        }
+        if (this.socket) this.socket.on('chat_joined', callback);
     }
 
-    // ==================== AUCTION METHODS ====================
-
-    // Join auction room
-    joinAuction(auctionId) {
-        if (this.socket && this.socket.connected) {
-            console.log('Joining auction:', auctionId);
-            this.socket.emit('join_auction', { auctionId });
-        } else {
-            console.error('Socket not connected. Cannot join auction.');
-        }
+    onNewMessage(callback) {
+        if (this.socket) this.socket.on('new_message', callback);
     }
 
-    // Leave auction room
-    leaveAuction(auctionId) {
-        if (this.socket) {
-            this.socket.emit('leave_auction', { auctionId });
-        }
+    onMessageSent(callback) {
+        if (this.socket) this.socket.on('message_sent', callback);
     }
 
-    // Place bid via socket
-    placeBid(auctionId, amount) {
-        if (this.socket && this.socket.connected) {
-            this.socket.emit('place_bid', {
-                auctionId,
-                amount: parseFloat(amount)
-            });
-        } else {
-            console.error('Socket not connected. Cannot place bid.');
-        }
+    onMessageError(callback) {
+        if (this.socket) this.socket.on('message_error', callback);
     }
 
-    // Listen for auction joined confirmation
-    onAuctionJoined(callback) {
-        if (this.socket) {
-            this.socket.on('auction_joined', callback);
-            this.listeners.set('auction_joined', callback);
-        }
+    onUserTyping(callback) {
+        if (this.socket) this.socket.on('user_typing', callback);
     }
 
-    // Listen for auction errors
-    onAuctionError(callback) {
-        if (this.socket) {
-            this.socket.on('auction_error', callback);
-            this.listeners.set('auction_error', callback);
-        }
+    onUserStopTyping(callback) {
+        if (this.socket) this.socket.on('user_stop_typing', callback);
     }
 
-    // Listen for new bids
-    onNewBid(callback) {
-        if (this.socket) {
-            this.socket.on('new_bid', callback);
-            this.listeners.set('new_bid', callback);
-        }
-    }
+    // ==================== NOTIFICATION EVENTS ====================
 
-    // Listen for bid placed confirmation
-    onBidPlaced(callback) {
-        if (this.socket) {
-            this.socket.on('bid_placed', callback);
-            this.listeners.set('bid_placed', callback);
-        }
-    }
-
-    // Listen for bid errors
-    onBidError(callback) {
-        if (this.socket) {
-            this.socket.on('bid_error', callback);
-            this.listeners.set('bid_error', callback);
-        }
-    }
-
-    // Listen for user joined auction
-    onUserJoinedAuction(callback) {
-        if (this.socket) {
-            this.socket.on('user_joined_auction', callback);
-            this.listeners.set('user_joined_auction', callback);
-        }
-    }
-
-    // Listen for user left auction
-    onUserLeftAuction(callback) {
-        if (this.socket) {
-            this.socket.on('user_left_auction', callback);
-            this.listeners.set('user_left_auction', callback);
-        }
-    }
-
-    // Listen for auction started
-    onAuctionStarted(callback) {
-        if (this.socket) {
-            this.socket.on('auction_started', callback);
-            this.listeners.set('auction_started', callback);
-        }
-    }
-
-    // Listen for auction ended
-    onAuctionEnded(callback) {
-        if (this.socket) {
-            this.socket.on('auction_ended', callback);
-            this.listeners.set('auction_ended', callback);
-        }
-    }
-
-    // Listen for auction updates (status changes, etc.)
-    onAuctionUpdate(callback) {
-        if (this.socket) {
-            this.socket.on('auction_update', callback);
-            this.listeners.set('auction_update', callback);
-        }
-    }
-
-    // ==================== NOTIFICATION METHODS ====================
-
-    // Listen for new notifications
     onNewNotification(callback) {
-        if (this.socket) {
-            this.socket.on('new_notification', callback);
-            this.listeners.set('new_notification', callback);
-        }
+        if (this.socket) this.socket.on('new_notification', callback);
     }
 
-    // ==================== UTILITY METHODS ====================
+    // ==================== REMOVE LISTENERS ====================
 
-    // Remove specific listener
-    off(event) {
-        if (this.socket && this.listeners.has(event)) {
-            this.socket.off(event, this.listeners.get(event));
-            this.listeners.delete(event);
+    off(eventName) {
+        if (this.socket) {
+            this.socket.off(eventName);
         }
     }
 
     // Remove all listeners
     removeAllListeners() {
         if (this.socket) {
-            this.listeners.forEach((callback, event) => {
-                this.socket.off(event, callback);
-            });
-            this.listeners.clear();
+            this.socket.removeAllListeners();
         }
-    }
-
-    // Check connection status
-    isConnected() {
-        return this.socket?.connected || false;
-    }
-
-    // Get socket instance (for direct access if needed)
-    getSocket() {
-        return this.socket;
     }
 }
 
