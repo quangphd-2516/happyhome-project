@@ -4,6 +4,7 @@ const prisma = require('../client');
 const ApiError = require('../utils/ApiError');
 const vnpayService = require('./vnpay.service');
 const momoService = require('./momo.service');
+const { sendDepositSuccessEmail } = require('./email.service'); // ✅ THÊM IMPORT
 
 /**
  * Create VNPay payment URL for auction deposit
@@ -50,8 +51,6 @@ const createVNPayPayment = async (paymentData) => {
         });
     }
 
-    // ✅ CRITICAL: Amount must NOT be multiplied here
-    // vnpayService.createPaymentUrl will multiply by 100
     const depositAmount = parseFloat(amount);
 
     console.log('💰 Deposit amount:', depositAmount, 'VND (will be sent to VNPay as-is)');
@@ -61,7 +60,7 @@ const createVNPayPayment = async (paymentData) => {
         data: {
             walletId: wallet.id,
             type: 'AUCTION_DEPOSIT',
-            amount: depositAmount, // ✅ Store original amount
+            amount: depositAmount,
             status: 'PENDING',
             paymentMethod: 'VNPAY',
             paymentRef: orderId,
@@ -75,10 +74,10 @@ const createVNPayPayment = async (paymentData) => {
 
     console.log('📝 Transaction created:', transaction.id);
 
-    // ✅ Generate VNPay payment URL with ORIGINAL amount
+    // Generate VNPay payment URL
     const paymentUrl = vnpayService.createPaymentUrl({
-        amount: depositAmount, // ✅ Original amount (not multiplied)
-        orderId: transaction.id, // Use transaction ID
+        amount: depositAmount,
+        orderId: transaction.id,
         orderInfo: orderInfo || `Deposit for auction ${auctionId}`,
         ipAddr,
     });
@@ -104,7 +103,7 @@ const handleVNPayReturn = async (vnp_Params) => {
 
     console.log('✅ Signature verified');
 
-    // Get transaction by ID (orderId is transaction.id)
+    // Get transaction by ID
     const transactionId = verifyResult.data.orderId;
     const transaction = await prisma.transaction.findUnique({
         where: { id: transactionId },
@@ -164,6 +163,12 @@ const handleVNPayReturn = async (vnp_Params) => {
     const auctionId = transaction.metadata.auctionId;
     const userId = transaction.metadata.userId;
 
+    // Get auction info for email
+    const auction = await prisma.auction.findUnique({
+        where: { id: auctionId },
+        select: { title: true },
+    });
+
     await prisma.auctionParticipant.upsert({
         where: {
             auctionId_userId: {
@@ -198,6 +203,23 @@ const handleVNPayReturn = async (vnp_Params) => {
 
     console.log('✅ Notification sent');
 
+    // ✅ GỬI EMAIL THÔNG BÁO THANH TOÁN THÀNH CÔNG
+    try {
+        await sendDepositSuccessEmail(transaction.wallet.user.email, {
+            fullName: transaction.wallet.user.fullName,
+            auctionTitle: auction.title,
+            amount: transaction.amount,
+            paymentMethod: 'VNPAY',
+            transactionId: transaction.id,
+            auctionId,
+            paymentDate: new Date(),
+        });
+        console.log('✅ Deposit success email sent to:', transaction.wallet.user.email);
+    } catch (emailError) {
+        console.error('⚠️ Failed to send email:', emailError.message);
+        // Don't throw error, just log it
+    }
+
     return {
         success: true,
         message: 'Payment successful',
@@ -213,9 +235,9 @@ const handleVNPayReturn = async (vnp_Params) => {
  * Handle VNPay IPN (backend notification)
  */
 const handleVNPayIPN = async (vnp_Params) => {
-    // Same logic as handleVNPayReturn but for backend notification
     return handleVNPayReturn(vnp_Params);
 };
+
 /**
  * Create MoMo payment URL for auction deposit
  */
@@ -321,7 +343,7 @@ const handleMoMoReturn = async (momoParams) => {
 
     console.log('✅ Signature verified');
 
-    // Get transaction by ID (orderId is transaction.id)
+    // Get transaction by ID
     const transactionId = verifyResult.data.orderId;
     const transaction = await prisma.transaction.findUnique({
         where: { id: transactionId },
@@ -380,6 +402,12 @@ const handleMoMoReturn = async (momoParams) => {
     const auctionId = transaction.metadata.auctionId;
     const userId = transaction.metadata.userId;
 
+    // Get auction info for email
+    const auction = await prisma.auction.findUnique({
+        where: { id: auctionId },
+        select: { title: true },
+    });
+
     await prisma.auctionParticipant.upsert({
         where: {
             auctionId_userId: {
@@ -414,6 +442,23 @@ const handleMoMoReturn = async (momoParams) => {
 
     console.log('✅ Notification sent');
 
+    // ✅ GỬI EMAIL THÔNG BÁO THANH TOÁN THÀNH CÔNG
+    try {
+        await sendDepositSuccessEmail(transaction.wallet.user.email, {
+            fullName: transaction.wallet.user.fullName,
+            auctionTitle: auction.title,
+            amount: transaction.amount,
+            paymentMethod: 'MOMO',
+            transactionId: transaction.id,
+            auctionId,
+            paymentDate: new Date(),
+        });
+        console.log('✅ Deposit success email sent to:', transaction.wallet.user.email);
+    } catch (emailError) {
+        console.error('⚠️ Failed to send email:', emailError.message);
+        // Don't throw error, just log it
+    }
+
     return {
         success: true,
         message: 'Payment successful',
@@ -429,7 +474,6 @@ const handleMoMoReturn = async (momoParams) => {
  * Handle MoMo IPN (backend notification)
  */
 const handleMoMoIPN = async (momoParams) => {
-    // Same logic as handleMoMoReturn but for backend notification
     return handleMoMoReturn(momoParams);
 };
 

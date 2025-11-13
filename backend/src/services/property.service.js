@@ -433,6 +433,7 @@ const searchProperties = async (query) => {
             area: true,
             thumbnail: true,
             type: true,
+            images: true,
         },
     });
 

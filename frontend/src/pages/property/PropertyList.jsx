@@ -88,9 +88,20 @@ export default function PropertyList() {
         // TODO: Apply filters
     };
 
-    const handleSearch = (query) => {
-        console.log('Searching for:', query);
-        // TODO: Search properties
+    const handleSearch = async (query) => {
+        setLoading(true);
+        try {
+            if (!query || query.trim() === "") {
+                await fetchProperties(); // Hiện tất cả nếu xóa tìm kiếm
+                return;
+            }
+            const response = await propertyService.search(query);
+            setProperties(response.data);
+        } catch (error) {
+            setProperties([]);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSort = (sortOption) => {
