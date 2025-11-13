@@ -171,7 +171,7 @@ export default function MyProperties() {
                                     {/* Image */}
                                     <div className="md:w-64 h-48 md:h-auto">
                                         <img
-                                            src={property.thumbnail}
+                                            src={property.thumbnail || (Array.isArray(property.images) ? property.images[0] : undefined) || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'}
                                             alt={property.title}
                                             className="w-full h-full object-cover"
                                         />

@@ -2,6 +2,7 @@
 const { StatusCodes } = require('http-status-codes');
 const catchAsync = require('../utils/catchAsync');
 const { propertyService } = require('../services');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Get all properties with filters
@@ -160,6 +161,23 @@ const removeFromFavorites = catchAsync(async (req, res) => {
     });
 });
 
+// === UPLOAD PROPERTY IMAGES ===
+const uploadPropertyImages = catchAsync(async (req, res) => {
+    if (!req.files || req.files.length === 0) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, 'No file uploaded');
+    }
+    const urls = req.files.map(file => ({
+        url: file.path,
+        publicId: file.filename,
+        originalName: file.originalname
+    }));
+    res.status(StatusCodes.OK).json({
+        success: true,
+        images: urls,
+    });
+});
+// --- ở cuối file, thêm vào module.exports ---
+
 module.exports = {
     getAllProperties,
     getPropertyById,
@@ -172,4 +190,5 @@ module.exports = {
     getFavorites,
     addToFavorites,
     removeFromFavorites,
+    uploadPropertyImages,
 };

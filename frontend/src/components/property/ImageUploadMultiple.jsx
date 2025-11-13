@@ -1,38 +1,43 @@
 // src/components/property/ImageUploadMultiple.jsx
 import { useState } from 'react';
 import { Upload, X, Image as ImageIcon, Star } from 'lucide-react';
+import api from '../../services/api';
 
 export default function ImageUploadMultiple({ images = [], onChange, maxImages = 10 }) {
     const [previews, setPreviews] = useState(images);
     const [mainImageIndex, setMainImageIndex] = useState(0);
 
-    const handleFileSelect = (e) => {
+    const handleFileSelect = async (e) => {
         const files = Array.from(e.target.files);
-
         if (previews.length + files.length > maxImages) {
             alert(`Maximum ${maxImages} images allowed`);
             return;
         }
-
-        files.forEach(file => {
+        for (let file of files) {
             if (!file.type.startsWith('image/')) {
                 alert('Please select only image files');
-                return;
+                continue;
             }
-
             if (file.size > 5 * 1024 * 1024) {
                 alert('Each file must be less than 5MB');
-                return;
+                continue;
             }
-
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const newPreviews = [...previews, { file, preview: reader.result }];
-                setPreviews(newPreviews);
-                onChange(newPreviews);
-            };
-            reader.readAsDataURL(file);
-        });
+            const formData = new FormData();
+            formData.append('images', file);
+            try {
+                const res = await api.post('/properties/upload', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
+                const uploaded = res.data.images?.[0]?.url;
+                if (uploaded) {
+                    const newPreviews = [...previews, uploaded];
+                    setPreviews(newPreviews);
+                    onChange(newPreviews);
+                }
+            } catch (err) {
+                alert('Failed to upload image.');
+            }
+        }
     };
 
     const handleRemove = (index) => {
@@ -84,12 +89,12 @@ export default function ImageUploadMultiple({ images = [], onChange, maxImages =
                         Uploaded Images ({previews.length}/{maxImages})
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {previews.map((item, index) => (
+                        {previews.map((url, index) => (
                             <div key={index} className="relative group">
                                 <div className={`relative rounded-xl overflow-hidden border-2 ${index === mainImageIndex ? 'border-yellow-400 ring-2 ring-yellow-400' : 'border-gray-200'
                                     }`}>
                                     <img
-                                        src={item.preview}
+                                        src={url}
                                         alt={`Preview ${index + 1}`}
                                         className="w-full h-32 object-cover"
                                     />

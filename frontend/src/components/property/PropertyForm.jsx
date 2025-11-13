@@ -142,9 +142,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
             const data = {
                 ...formData,
                 ...formData.location,
-                images: formData.images
-                    .map(img => typeof img === 'string' ? img : img.preview)
-                    .filter(img => img && img.trim() !== ''), // 👈 loại bỏ null, undefined, chuỗi rỗng
+                images: formData.images.filter(img => typeof img === 'string' && img.trim() !== ''),
             };
 
             console.log("📦 Submit data:", data);
