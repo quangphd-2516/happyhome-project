@@ -155,7 +155,7 @@ export default function ChatList({ onSelectChat, selectedChatId }) {
         <div className="h-full flex flex-col bg-white">
             {/* Header */}
             <div className="p-4 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Messages</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Tin nhắn</h2>
 
                 {/* Search */}
                 <div className="relative">
@@ -164,7 +164,7 @@ export default function ChatList({ onSelectChat, selectedChatId }) {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
-                        placeholder="Search conversations..."
+                        placeholder="Tìm kiếm cuộc trò chuyện..."
                         className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                     />
                 </div>
@@ -175,9 +175,9 @@ export default function ChatList({ onSelectChat, selectedChatId }) {
                 {chats.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center px-4">
                         <MessageCircle className="w-16 h-16 text-gray-300 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">No conversations yet</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Chưa có cuộc trò chuyện nào</h3>
                         <p className="text-sm text-gray-500">
-                            Start chatting with property owners and sellers
+                            Bắt đầu trò chuyện với chủ nhà hoặc người bán
                         </p>
                     </div>
                 ) : (
@@ -247,7 +247,7 @@ export default function ChatList({ onSelectChat, selectedChatId }) {
                                                 className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
                                             >
                                                 <Trash2 className="w-4 h-4" />
-                                                Delete
+                                                Xóa
                                             </button>
                                         </div>
                                     )}

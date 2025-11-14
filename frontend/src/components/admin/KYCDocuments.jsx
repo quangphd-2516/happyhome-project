@@ -20,18 +20,18 @@ const KYCDocuments = ({ documents }) => {
     const documentTypes = [
         {
             key: 'idCardFront',
-            label: 'ID Card - Front',
-            description: 'Front side of identification card'
+            label: 'CMND/CCCD (Mặt trước)',
+            description: 'Ảnh mặt trước chứng minh nhân dân/căn cước công dân'
         },
         {
             key: 'idCardBack',
-            label: 'ID Card - Back',
-            description: 'Back side of identification card'
+            label: 'CMND/CCCD (Mặt sau)',
+            description: 'Ảnh mặt sau chứng minh nhân dân/căn cước công dân'
         },
         {
             key: 'selfieWithId',
-            label: 'Selfie with ID',
-            description: 'Photo holding identification card'
+            label: 'Ảnh selfie kèm CMND/CCCD',
+            description: 'Ảnh chụp khuôn mặt kèm giấy tờ định danh'
         }
     ];
 
@@ -101,10 +101,10 @@ const KYCDocuments = ({ documents }) => {
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h3 className="text-xl font-semibold text-gray-900">
-                            KYC Documents
+                            Tài liệu KYC
                         </h3>
                         <p className="text-sm text-gray-600 mt-1">
-                            Review submitted identification documents
+                            Kiểm tra các tài liệu định danh được nộp
                         </p>
                     </div>
                     <FileImage className="w-8 h-8 text-blue-600" />
@@ -134,14 +134,14 @@ const KYCDocuments = ({ documents }) => {
                                                 <button
                                                     onClick={() => openModal(imageUrl, docType.label)}
                                                     className="p-3 bg-white rounded-full hover:bg-blue-600 hover:text-white transition-all duration-200 shadow-lg"
-                                                    title="View full size"
+                                                    title="Xem kích thước đầy đủ"
                                                 >
                                                     <Maximize2 className="w-5 h-5" />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDownload(imageUrl, `${docType.key}.jpg`)}
                                                     className="p-3 bg-white rounded-full hover:bg-blue-600 hover:text-white transition-all duration-200 shadow-lg"
-                                                    title="Download"
+                                                    title="Tải xuống"
                                                 >
                                                     <Download className="w-5 h-5" />
                                                 </button>
@@ -151,7 +151,7 @@ const KYCDocuments = ({ documents }) => {
                                         <div className="w-full h-full flex items-center justify-center">
                                             <div className="text-center text-gray-400">
                                                 <FileImage className="w-12 h-12 mx-auto mb-2" />
-                                                <p className="text-sm">No image uploaded</p>
+                                                <p className="text-sm">Chưa có ảnh nào</p>
                                             </div>
                                         </div>
                                     )}
@@ -174,29 +174,14 @@ const KYCDocuments = ({ documents }) => {
                 {/* Document Guidelines */}
                 <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <h4 className="font-semibold text-blue-900 mb-2">
-                        Document Verification Checklist
+                        Checklist xác thực giấy tờ
                     </h4>
                     <ul className="space-y-1 text-sm text-blue-800">
-                        <li className="flex items-start gap-2">
-                            <span className="text-blue-600 mt-0.5">•</span>
-                            <span>All text on ID card must be clearly readable</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-blue-600 mt-0.5">•</span>
-                            <span>Photo on ID card must match the selfie</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-blue-600 mt-0.5">•</span>
-                            <span>ID card must not be expired</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-blue-600 mt-0.5">•</span>
-                            <span>Selfie must show full face and ID card clearly</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-blue-600 mt-0.5">•</span>
-                            <span>No signs of tampering or photo editing</span>
-                        </li>
+                        <li className="flex items-start gap-2"><span className="text-blue-600 mt-0.5">•</span><span>Mọi thông tin trên giấy tờ phải rõ ràng, không bị mờ hoặc che lấp</span></li>
+                        <li className="flex items-start gap-2"><span className="text-blue-600 mt-0.5">•</span><span>Ảnh trên giấy tờ phải khớp với ảnh selfie</span></li>
+                        <li className="flex items-start gap-2"><span className="text-blue-600 mt-0.5">•</span><span>Giấy tờ chưa quá hạn sử dụng</span></li>
+                        <li className="flex items-start gap-2"><span className="text-blue-600 mt-0.5">•</span><span>Selfie chụp rõ khuôn mặt và giấy tờ</span></li>
+                        <li className="flex items-start gap-2"><span className="text-blue-600 mt-0.5">•</span><span>Không dấu hiệu chỉnh sửa/làm giả ảnh</span></li>
                     </ul>
                 </div>
             </div>

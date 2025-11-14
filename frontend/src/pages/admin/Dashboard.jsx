@@ -53,8 +53,8 @@ export default function Dashboard() {
         {
             id: 1,
             type: 'USER_REGISTERED',
-            title: 'New User Registration',
-            description: 'John Smith registered a new account',
+            title: 'Đăng ký người dùng mới',
+            description: 'John Smith vừa tạo tài khoản mới',
             createdAt: new Date(Date.now() - 5 * 60 * 1000),
             user: {
                 fullName: 'John Smith',
@@ -64,8 +64,8 @@ export default function Dashboard() {
         {
             id: 2,
             type: 'PROPERTY_CREATED',
-            title: 'New Property Listed',
-            description: 'Luxury Villa in Beverly Hills has been listed',
+            title: 'Tin bất động sản mới',
+            description: 'Biệt thự hạng sang tại Beverly Hills đã được đăng bán',
             createdAt: new Date(Date.now() - 15 * 60 * 1000),
             user: {
                 fullName: 'Sarah Johnson',
@@ -75,8 +75,8 @@ export default function Dashboard() {
         {
             id: 3,
             type: 'BID_PLACED',
-            title: 'New Bid Placed',
-            description: '$2,500,000 bid on Modern Penthouse auction',
+            title: 'Có lượt trả giá mới',
+            description: 'Giá $2,500,000 cho phiên đấu giá căn Penthouse hiện đại',
             createdAt: new Date(Date.now() - 30 * 60 * 1000),
             user: {
                 fullName: 'Mike Chen',
@@ -86,8 +86,8 @@ export default function Dashboard() {
         {
             id: 4,
             type: 'KYC_APPROVED',
-            title: 'KYC Approved',
-            description: 'Emma Wilson\'s identity verification has been approved',
+            title: 'Phê duyệt KYC',
+            description: 'Hồ sơ xác thực của Emma Wilson đã được chấp nhận',
             createdAt: new Date(Date.now() - 60 * 60 * 1000),
             user: {
                 fullName: 'Emma Wilson',
@@ -97,8 +97,8 @@ export default function Dashboard() {
         {
             id: 5,
             type: 'AUCTION_CREATED',
-            title: 'New Auction Created',
-            description: 'Downtown Luxury Condo auction scheduled',
+            title: 'Tạo phiên đấu giá mới',
+            description: 'Phiên đấu giá căn hộ trung tâm sắp được tổ chức',
             createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
             user: {
                 fullName: 'Admin',
@@ -108,8 +108,8 @@ export default function Dashboard() {
         {
             id: 6,
             type: 'PROPERTY_APPROVED',
-            title: 'Property Approved',
-            description: 'Beachfront Estate listing has been approved',
+            title: 'Tin đăng được phê duyệt',
+            description: 'Biệt thự biển đã được duyệt đăng',
             createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
             user: {
                 fullName: 'Admin',
@@ -151,9 +151,9 @@ export default function Dashboard() {
     };
 
     const formatCurrency = (value) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
         }).format(value);
@@ -175,15 +175,15 @@ export default function Dashboard() {
                 {/* Page Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
-                        <p className="text-gray-600">Welcome back! Here's what's happening today.</p>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Tổng quan hệ thống</h1>
+                        <p className="text-gray-600">Chào mừng bạn quay lại! Cùng xem hôm nay có gì mới.</p>
                     </div>
                     <div className="flex items-center gap-3">
                         <select className="px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                            <option>Last 7 days</option>
-                            <option>Last 30 days</option>
-                            <option>Last 3 months</option>
-                            <option>Last year</option>
+                            <option>7 ngày gần nhất</option>
+                            <option>30 ngày gần nhất</option>
+                            <option>3 tháng gần đây</option>
+                            <option>Năm vừa qua</option>
                         </select>
                     </div>
                 </div>
@@ -191,28 +191,28 @@ export default function Dashboard() {
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <StatsCard
-                        title="Total Users"
+                        title="Tổng người dùng"
                         value={stats?.users?.total?.toLocaleString() ?? "0"}
                         change={stats?.usersChange}
                         icon={Users}
                         color="blue"
                     />
                     <StatsCard
-                        title="Total Properties"
+                        title="Tổng bất động sản"
                         value={stats?.properties?.total?.toLocaleString() ?? "0"}
                         change={stats?.propertiesChange}
                         icon={Home}
                         color="green"
                     />
                     <StatsCard
-                        title="Active Auctions"
+                        title="Phiên đấu giá đang hoạt động"
                         value={stats?.auctions?.total ?? 0}
                         change={stats?.auctionsChange}
                         icon={Gavel}
                         color="purple"
                     />
                     <StatsCard
-                        title="Total Revenue"
+                        title="Doanh thu"
                         value={formatCurrency(stats?.transactions?.net ?? 0)}
                         change={stats?.revenueChange}
                         icon={DollarSign}
@@ -232,38 +232,38 @@ export default function Dashboard() {
                     {/* Quick Actions */}
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-2xl shadow-lg p-6">
-                            <h3 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-6">Thao tác nhanh</h3>
 
                             <div className="space-y-3">
                                 <button className="w-full flex items-center gap-3 p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:shadow-lg transition-all">
                                     <Gavel className="w-5 h-5" />
                                     <div className="text-left">
-                                        <p className="font-semibold text-sm">Create Auction</p>
-                                        <p className="text-xs opacity-90">Schedule new property auction</p>
+                                        <p className="font-semibold text-sm">Tạo phiên đấu giá</p>
+                                        <p className="text-xs opacity-90">Lên lịch đấu giá cho bất động sản mới</p>
                                     </div>
                                 </button>
 
                                 <button className="w-full flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 text-blue-900 rounded-xl transition-all">
                                     <Users className="w-5 h-5" />
                                     <div className="text-left">
-                                        <p className="font-semibold text-sm">Manage Users</p>
-                                        <p className="text-xs opacity-75">View all registered users</p>
+                                        <p className="font-semibold text-sm">Quản lý người dùng</p>
+                                        <p className="text-xs opacity-75">Xem danh sách người dùng đã đăng ký</p>
                                     </div>
                                 </button>
 
                                 <button className="w-full flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 text-green-900 rounded-xl transition-all">
                                     <Home className="w-5 h-5" />
                                     <div className="text-left">
-                                        <p className="font-semibold text-sm">Review Properties</p>
-                                        <p className="text-xs opacity-75">Approve pending listings</p>
+                                        <p className="font-semibold text-sm">Duyệt bất động sản</p>
+                                        <p className="text-xs opacity-75">Phê duyệt các tin đăng chờ duyệt</p>
                                     </div>
                                 </button>
 
                                 <button className="w-full flex items-center gap-3 p-4 bg-orange-50 hover:bg-orange-100 text-orange-900 rounded-xl transition-all">
                                     <Clock className="w-5 h-5" />
                                     <div className="text-left">
-                                        <p className="font-semibold text-sm">Pending KYC</p>
-                                        <p className="text-xs opacity-75">{stats?.kyc?.pending ?? 0} verifications waiting</p>
+                                        <p className="font-semibold text-sm">KYC đang chờ</p>
+                                        <p className="text-xs opacity-75">{stats?.kyc?.pending ?? 0} hồ sơ đang chờ xác thực</p>
                                     </div>
                                 </button>
                             </div>
@@ -271,7 +271,7 @@ export default function Dashboard() {
 
                         {/* Pending Items */}
                         <div className="bg-white rounded-2xl shadow-lg p-6 mt-6">
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">Pending Items</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Đang chờ xử lý</h3>
 
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
@@ -280,8 +280,8 @@ export default function Dashboard() {
                                             <Clock className="w-5 h-5 text-white" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-semibold text-gray-900">KYC Requests</p>
-                                            <p className="text-xs text-gray-600">Awaiting verification</p>
+                                            <p className="text-sm font-semibold text-gray-900">Hồ sơ KYC</p>
+                                            <p className="text-xs text-gray-600">Đang chờ xác minh</p>
                                         </div>
                                     </div>
                                     <span className="text-2xl font-bold text-orange-600">{stats?.kycs?.pending ?? 0}</span>
@@ -293,8 +293,8 @@ export default function Dashboard() {
                                             <Home className="w-5 h-5 text-white" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-semibold text-gray-900">Properties</p>
-                                            <p className="text-xs text-gray-600">Pending approval</p>
+                                            <p className="text-sm font-semibold text-gray-900">Tin bất động sản</p>
+                                            <p className="text-xs text-gray-600">Đang đợi phê duyệt</p>
                                         </div>
                                     </div>
                                     <span className="text-2xl font-bold text-blue-600">{stats?.properties?.pending ?? 0}</span>
@@ -313,35 +313,35 @@ export default function Dashboard() {
                 <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white shadow-xl">
                     <div className="flex items-center justify-between mb-6">
                         <div>
-                            <h3 className="text-2xl font-bold mb-2">System Performance</h3>
-                            <p className="text-purple-100">Real-time metrics and statistics</p>
+                            <h3 className="text-2xl font-bold mb-2">Hiệu suất hệ thống</h3>
+                            <p className="text-purple-100">Số liệu thống kê theo thời gian thực</p>
                         </div>
                         <TrendingUp className="w-12 h-12 opacity-50" />
                     </div>
 
                     <div className="grid md:grid-cols-4 gap-6">
                         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                            <p className="text-purple-100 text-sm mb-2">Active Users Today</p>
+                            <p className="text-purple-100 text-sm mb-2">Người dùng hoạt động hôm nay</p>
                             <p className="text-3xl font-bold">892</p>
-                            <p className="text-xs text-purple-200 mt-1">↑ 12% from yesterday</p>
+                            <p className="text-xs text-purple-200 mt-1">↑ 12% so với hôm qua</p>
                         </div>
 
                         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                            <p className="text-purple-100 text-sm mb-2">Properties Listed Today</p>
+                            <p className="text-purple-100 text-sm mb-2">Bất động sản đăng mới</p>
                             <p className="text-3xl font-bold">23</p>
-                            <p className="text-xs text-purple-200 mt-1">↑ 8% from yesterday</p>
+                            <p className="text-xs text-purple-200 mt-1">↑ 8% so với hôm qua</p>
                         </div>
 
                         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                            <p className="text-purple-100 text-sm mb-2">Bids Placed Today</p>
+                            <p className="text-purple-100 text-sm mb-2">Lượt trả giá hôm nay</p>
                             <p className="text-3xl font-bold">156</p>
-                            <p className="text-xs text-purple-200 mt-1">↑ 23% from yesterday</p>
+                            <p className="text-xs text-purple-200 mt-1">↑ 23% so với hôm qua</p>
                         </div>
 
                         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                            <p className="text-purple-100 text-sm mb-2">Revenue Today</p>
+                            <p className="text-purple-100 text-sm mb-2">Doanh thu hôm nay</p>
                             <p className="text-3xl font-bold">$1.2M</p>
-                            <p className="text-xs text-purple-200 mt-1">↑ 18% from yesterday</p>
+                            <p className="text-xs text-purple-200 mt-1">↑ 18% so với hôm qua</p>
                         </div>
                     </div>
                 </div>

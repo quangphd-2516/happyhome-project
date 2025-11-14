@@ -59,10 +59,10 @@ export default function VNPayReturn() {
                             <>
                                 <Loader className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-spin" />
                                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                    Processing Payment
+                                    Đang xử lý thanh toán
                                 </h2>
                                 <p className="text-gray-600">
-                                    Please wait while we verify your payment...
+                                    Vui lòng đợi trong khi chúng tôi xác minh thanh toán của bạn...
                                 </p>
                             </>
                         )}
@@ -71,14 +71,14 @@ export default function VNPayReturn() {
                             <>
                                 <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
                                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                    Payment Successful!
+                                    Thanh toán thành công!
                                 </h2>
                                 <p className="text-gray-600 mb-6">{message}</p>
                                 <button
                                     onClick={() => navigate(`/auctions/${auctionId}`)}
                                     className="px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors"
                                 >
-                                    Go to Auction
+                                    Đến phiên đấu giá
                                 </button>
                             </>
                         )}
@@ -87,7 +87,7 @@ export default function VNPayReturn() {
                             <>
                                 <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                    Payment Failed
+                                    Thanh toán thất bại
                                 </h2>
                                 <p className="text-gray-600 mb-6">{message}</p>
                                 <div className="flex gap-3">
@@ -95,13 +95,13 @@ export default function VNPayReturn() {
                                         onClick={() => navigate('/auctions')}
                                         className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors"
                                     >
-                                        Back to Auctions
+                                        Quay lại danh sách phiên đấu giá
                                     </button>
                                     <button
                                         onClick={() => window.location.reload()}
                                         className="flex-1 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors"
                                     >
-                                        Try Again
+                                        Thử lại
                                     </button>
                                 </div>
                             </>

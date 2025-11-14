@@ -10,7 +10,7 @@ export default function MoMoReturn() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const [status, setStatus] = useState('processing'); // processing, success, failed
-    const [message, setMessage] = useState('Processing MoMo payment...');
+    const [message, setMessage] = useState('Đang xử lý thanh toán MoMo...');
     const [auctionId, setAuctionId] = useState(null);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function MoMoReturn() {
 
             if (response.data.success) {
                 setStatus('success');
-                setMessage('MoMo payment successful! Redirecting...');
+                setMessage('Thanh toán MoMo thành công! Đang chuyển hướng...');
                 setAuctionId(response.data.data.auctionId);
 
                 console.log('🎉 Payment successful! Auction ID:', response.data.data.auctionId);
@@ -52,12 +52,12 @@ export default function MoMoReturn() {
             } else {
                 console.error('❌ Payment failed:', response.data.message);
                 setStatus('failed');
-                setMessage(response.data.message || 'MoMo payment failed');
+                setMessage(response.data.message || 'Thanh toán MoMo thất bại');
             }
         } catch (error) {
             console.error('❌ Payment return error:', error);
             setStatus('failed');
-            setMessage(error.response?.data?.message || 'Payment verification failed');
+            setMessage(error.response?.data?.message || 'Xác thực thanh toán thất bại');
         }
     };
 
@@ -72,10 +72,10 @@ export default function MoMoReturn() {
                             <>
                                 <Loader className="w-16 h-16 text-pink-500 mx-auto mb-4 animate-spin" />
                                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                    Processing MoMo Payment
+                                    Đang xử lý thanh toán MoMo
                                 </h2>
                                 <p className="text-gray-600">
-                                    Please wait while we verify your payment...
+                                    Vui lòng đợi trong khi chúng tôi xác thực thanh toán của bạn...
                                 </p>
                             </>
                         )}
@@ -84,7 +84,7 @@ export default function MoMoReturn() {
                             <>
                                 <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
                                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                    Payment Successful!
+                                    Thanh toán thành công!
                                 </h2>
                                 <p className="text-gray-600 mb-6">{message}</p>
                                 {auctionId && (
@@ -92,7 +92,7 @@ export default function MoMoReturn() {
                                         onClick={() => navigate(`/auctions/${auctionId}`)}
                                         className="px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors"
                                     >
-                                        Go to Auction
+                                        Đến phiên đấu giá
                                     </button>
                                 )}
                             </>
@@ -102,7 +102,7 @@ export default function MoMoReturn() {
                             <>
                                 <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                    Payment Failed
+                                    Thanh toán thất bại
                                 </h2>
                                 <p className="text-gray-600 mb-6">{message}</p>
                                 <div className="flex gap-3">
@@ -110,13 +110,13 @@ export default function MoMoReturn() {
                                         onClick={() => navigate('/auctions')}
                                         className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors"
                                     >
-                                        Back to Auctions
+                                        Quay lại danh sách
                                     </button>
                                     <button
                                         onClick={() => window.location.reload()}
                                         className="flex-1 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors"
                                     >
-                                        Try Again
+                                        Thử lại
                                     </button>
                                 </div>
                             </>

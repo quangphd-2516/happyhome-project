@@ -39,27 +39,13 @@ export default function UserTable({ users, onViewDetail, onBlockUser, onUnblockU
                 <table className="w-full">
                     <thead className="bg-gray-50 border-b border-gray-200">
                         <tr>
-                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                User
-                            </th>
-                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Contact
-                            </th>
-                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Role
-                            </th>
-                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                KYC Status
-                            </th>
-                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Status
-                            </th>
-                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Joined Date
-                            </th>
-                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Actions
-                            </th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Người dùng</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Liên hệ</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vai trò</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Trạng thái KYC</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Trạng thái</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ngày tham gia</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -119,7 +105,7 @@ export default function UserTable({ users, onViewDetail, onBlockUser, onUnblockU
                                     {user.isVerified && (
                                         <div className="flex items-center gap-1 text-xs text-green-600 mt-1">
                                             <CheckCircle className="w-3 h-3" />
-                                            <span>Email Verified</span>
+                                            <span>Đã xác thực email</span>
                                         </div>
                                     )}
                                 </td>
@@ -151,7 +137,7 @@ export default function UserTable({ users, onViewDetail, onBlockUser, onUnblockU
                                                     className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors flex items-center gap-2"
                                                 >
                                                     <Eye className="w-4 h-4" />
-                                                    View Details
+                                                    Xem chi tiết
                                                 </button>
 
                                                 {user.isBlocked ? (
@@ -160,7 +146,7 @@ export default function UserTable({ users, onViewDetail, onBlockUser, onUnblockU
                                                         className="w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-green-50 transition-colors flex items-center gap-2"
                                                     >
                                                         <CheckCircle className="w-4 h-4" />
-                                                        Unblock User
+                                                        Bỏ chặn
                                                     </button>
                                                 ) : (
                                                     <button
@@ -168,7 +154,7 @@ export default function UserTable({ users, onViewDetail, onBlockUser, onUnblockU
                                                         className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
                                                     >
                                                         <Ban className="w-4 h-4" />
-                                                        Block User
+                                                        Chặn người dùng
                                                     </button>
                                                 )}
                                             </div>

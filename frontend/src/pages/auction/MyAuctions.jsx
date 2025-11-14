@@ -71,9 +71,9 @@ export default function MyAuctions() {
     };
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
         }).format(price);
     };
@@ -99,8 +99,8 @@ export default function MyAuctions() {
             <main className="container mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2">My Auctions</h1>
-                    <p className="text-gray-600">Track your bids and auction participation</p>
+                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Phiên đấu giá của tôi</h1>
+                    <p className="text-gray-600">Theo dõi các phiên đã tham gia và tình trạng trả giá của bạn</p>
                 </div>
 
                 {/* Stats */}
@@ -110,7 +110,7 @@ export default function MyAuctions() {
                             <Gavel className="w-8 h-8" />
                             <span className="text-3xl font-bold">{stats.total}</span>
                         </div>
-                        <p className="font-medium">Total Participated</p>
+                        <p className="font-medium">Tổng số phiên đã tham gia</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white">
@@ -118,7 +118,7 @@ export default function MyAuctions() {
                             <Trophy className="w-8 h-8" />
                             <span className="text-3xl font-bold">{stats.winning}</span>
                         </div>
-                        <p className="font-medium">Currently Winning</p>
+                        <p className="font-medium">Đang dẫn đầu</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
@@ -126,7 +126,7 @@ export default function MyAuctions() {
                             <Clock className="w-8 h-8" />
                             <span className="text-3xl font-bold">{stats.ongoing}</span>
                         </div>
-                        <p className="font-medium">Ongoing</p>
+                        <p className="font-medium">Đang diễn ra</p>
                     </div>
                 </div>
 
@@ -134,10 +134,10 @@ export default function MyAuctions() {
                 <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
                     <div className="flex gap-2 overflow-x-auto">
                         {[
-                            { key: 'all', label: 'All' },
-                            { key: 'winning', label: 'Winning' },
-                            { key: 'ongoing', label: 'Ongoing' },
-                            { key: 'lost', label: 'Lost' },
+                            { key: 'all', label: 'Tất cả' },
+                            { key: 'winning', label: 'Đang dẫn đầu' },
+                            { key: 'ongoing', label: 'Đang diễn ra' },
+                            { key: 'lost', label: 'Đã thua' },
                         ].map(({ key, label }) => (
                             <button
                                 key={key}
@@ -162,12 +162,12 @@ export default function MyAuctions() {
                     <div className="text-center py-20 bg-white rounded-2xl shadow-lg">
                         <Gavel className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                         <h3 className="text-2xl font-bold text-gray-900 mb-2">No Auctions Found</h3>
-                        <p className="text-gray-600 mb-6">Start bidding on auctions to see them here</p>
+                        <p className="text-gray-600 mb-6">Hãy tham gia đấu giá để thấy lịch sử tại đây</p>
                         <button
                             onClick={() => navigate('/auctions')}
                             className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium"
                         >
-                            Browse Auctions
+                            Xem các phiên đấu giá
                         </button>
                     </div>
                 ) : (
@@ -197,12 +197,12 @@ export default function MyAuctions() {
                                                         {auction.isWinning ? (
                                                             <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-semibold rounded-full flex items-center gap-1">
                                                                 <Trophy className="w-4 h-4" />
-                                                                Winning
+                                                                Đang dẫn đầu
                                                             </span>
                                                         ) : (
                                                             <span className="px-3 py-1 bg-red-100 text-red-700 text-sm font-semibold rounded-full flex items-center gap-1">
                                                                 <XCircle className="w-4 h-4" />
-                                                                Outbid
+                                                                Bị vượt giá
                                                             </span>
                                                         )}
                                                     </div>
@@ -212,7 +212,7 @@ export default function MyAuctions() {
                                                         ? 'bg-yellow-100 text-yellow-700'
                                                         : 'bg-gray-100 text-gray-700'
                                                         } text-sm font-semibold rounded-full`}>
-                                                        {auction.isWinning ? 'Won' : 'Lost'}
+                                                        {auction.isWinning ? 'Thắng phiên' : 'Đã thua'}
                                                     </span>
                                                 )}
                                             </div>
@@ -220,15 +220,15 @@ export default function MyAuctions() {
 
                                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                             <div>
-                                                <p className="text-xs text-gray-500">Your Bid</p>
+                                                <p className="text-xs text-gray-500">Giá của bạn</p>
                                                 <p className="text-lg font-bold text-primary">{formatPrice(auction.myBid)}</p>
                                             </div>
                                             <div>
-                                                <p className="text-xs text-gray-500">Current Bid</p>
+                                                <p className="text-xs text-gray-500">Giá hiện tại</p>
                                                 <p className="text-lg font-bold text-gray-900">{formatPrice(auction.currentBid)}</p>
                                             </div>
                                             <div>
-                                                <p className="text-xs text-gray-500">Status</p>
+                                                <p className="text-xs text-gray-500">Trạng thái</p>
                                                 <p className="text-lg font-semibold text-gray-900">{auction.status}</p>
                                             </div>
                                         </div>
@@ -238,7 +238,7 @@ export default function MyAuctions() {
                                                 onClick={() => navigate(`/auctions/${auction.id}`)}
                                                 className="flex-1 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-light transition-colors font-medium"
                                             >
-                                                {auction.status === 'ONGOING' ? 'Place Bid' : 'View Details'}
+                                                {auction.status === 'ONGOING' ? 'Trả giá ngay' : 'Xem chi tiết'}
                                             </button>
                                         </div>
                                     </div>

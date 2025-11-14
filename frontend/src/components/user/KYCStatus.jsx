@@ -8,7 +8,7 @@ export default function KYCStatus({ status }) {
     const statusConfig = {
         APPROVED: {
             icon: CheckCircle,
-            text: 'KYC Verified',
+            text: 'Đã xác thực KYC',
             color: 'text-green-600',
             bgColor: 'bg-green-50',
             borderColor: 'border-green-200',
@@ -16,7 +16,7 @@ export default function KYCStatus({ status }) {
         },
         PENDING: {
             icon: Clock,
-            text: 'KYC Pending Review',
+            text: 'Đang chờ duyệt KYC',
             color: 'text-yellow-600',
             bgColor: 'bg-yellow-50',
             borderColor: 'border-yellow-200',
@@ -24,21 +24,21 @@ export default function KYCStatus({ status }) {
         },
         REJECTED: {
             icon: XCircle,
-            text: 'KYC Rejected',
+            text: 'KYC bị từ chối',
             color: 'text-red-600',
             bgColor: 'bg-red-50',
             borderColor: 'border-red-200',
             showButton: true,
-            buttonText: 'Resubmit KYC'
+            buttonText: 'Gửi lại KYC'
         },
         NOT_VERIFIED: {
             icon: AlertCircle,
-            text: 'KYC Not Verified',
+            text: 'Chưa xác thực KYC',
             color: 'text-gray-600',
             bgColor: 'bg-gray-50',
             borderColor: 'border-gray-200',
             showButton: true,
-            buttonText: 'Verify Now'
+            buttonText: 'Xác thực ngay'
         }
     };
 
@@ -53,7 +53,7 @@ export default function KYCStatus({ status }) {
                         <Icon className={`w-8 h-8 ${config.color}`} />
                     </div>
                     <div>
-                        <h3 className="text-lg font-bold text-gray-900">Identity Verification</h3>
+                        <h3 className="text-lg font-bold text-gray-900">Xác thực danh tính</h3>
                         <div className="flex items-center gap-2 mt-1">
                             <span className={`text-sm font-semibold ${config.color}`}>
                                 {config.text}
@@ -85,13 +85,13 @@ export default function KYCStatus({ status }) {
 
             {status === 'PENDING' && (
                 <p className="text-sm text-gray-600 mt-4">
-                    Your KYC documents are being reviewed. This usually takes 24-48 hours.
+                    Hồ sơ KYC của bạn đang được duyệt. Thời gian xử lý từ 24-48 giờ.
                 </p>
             )}
 
             {status === 'REJECTED' && (
                 <p className="text-sm text-red-600 mt-4">
-                    Your KYC was rejected. Please resubmit with correct documents.
+                    Hồ sơ KYC bị từ chối. Vui lòng gửi lại giấy tờ chính xác.
                 </p>
             )}
         </div>

@@ -8,15 +8,15 @@ export default function Footer() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
                     {/* Brand */}
                     <div className="lg:col-span-2">
-                        <h3 className="text-2xl font-bold text-primary mb-4">Dwello</h3>
+                        <h3 className="text-2xl font-bold text-primary mb-4">HappyHome</h3>
                         <p className="text-gray-600 max-w-sm">
-                            Discover your dream home. Where you will live with us. Click it one time.
+                            Khám phá ngôi nhà mơ ước của bạn cùng HappyHome. Nơi bạn xây dựng tổ ấm với chúng tôi. Chỉ cần một cú nhấp chuột.
                         </p>
                     </div>
 
                     {/* About Links */}
                     <div>
-                        <h4 className="font-bold text-primary mb-4">About</h4>
+                        <h4 className="font-bold text-primary mb-4">Về chúng tôi</h4>
                         <ul className="space-y-3">
                             {FOOTER_LINKS.about.map((link) => (
                                 <li key={link.label}>
@@ -30,7 +30,7 @@ export default function Footer() {
 
                     {/* Support Links */}
                     <div>
-                        <h4 className="font-bold text-primary mb-4">Support</h4>
+                        <h4 className="font-bold text-primary mb-4">Hỗ trợ</h4>
                         <ul className="space-y-3">
                             {FOOTER_LINKS.support.map((link) => (
                                 <li key={link.label}>
@@ -44,7 +44,7 @@ export default function Footer() {
 
                     {/* Find Us Links */}
                     <div>
-                        <h4 className="font-bold text-primary mb-4">Find Us</h4>
+                        <h4 className="font-bold text-primary mb-4">Liên hệ</h4>
                         <ul className="space-y-3">
                             {FOOTER_LINKS.findUs.map((link) => (
                                 <li key={link.label}>
@@ -61,10 +61,10 @@ export default function Footer() {
                 <div className="border-t border-gray-300 pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <p className="text-gray-600 text-sm">
-                            © 2025 Dwello. All rights reserved.
+                            © 2025 HappyHome. Đã đăng ký bản quyền.
                         </p>
                         <div className="flex items-center gap-4">
-                            <span className="text-sm font-medium text-primary">Our Social</span>
+                            <span className="text-sm font-medium text-primary">Kết nối mạng xã hội</span>
                             <div className="flex gap-3">
                                 <a href="#" className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center hover:bg-primary-light transition-colors">
                                     <Instagram className="w-5 h-5 text-white" />

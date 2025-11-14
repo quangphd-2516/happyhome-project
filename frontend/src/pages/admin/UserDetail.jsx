@@ -39,20 +39,21 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
     if (!userDetail) return null;
 
     const formatDate = (date) => {
-        return new Intl.DateTimeFormat('en-US', {
+        return new Intl.DateTimeFormat('vi-VN', {
+            year: 'numeric',
             month: 'long',
             day: 'numeric',
-            year: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
+            hour12: false
         }).format(new Date(date));
     };
 
     const stats = [
-        { icon: Home, label: 'Properties', value: userDetail._count?.properties || 0, color: 'text-blue-600' },
-        { icon: Gavel, label: 'Auctions', value: userDetail._count?.auctions || 0, color: 'text-purple-600' },
-        { icon: Heart, label: 'Favorites', value: userDetail._count?.favorites || 0, color: 'text-red-600' },
-        { icon: Eye, label: 'Reviews', value: userDetail._count?.reviews || 0, color: 'text-green-600' },
+        { icon: Home, label: 'Bất động sản', value: userDetail._count?.properties || 0, color: 'text-blue-600' },
+        { icon: Gavel, label: 'Phiên đấu giá', value: userDetail._count?.auctions || 0, color: 'text-purple-600' },
+        { icon: Heart, label: 'Yêu thích', value: userDetail._count?.favorites || 0, color: 'text-red-600' },
+        { icon: Eye, label: 'Đánh giá', value: userDetail._count?.reviews || 0, color: 'text-green-600' },
     ];
 
     return (
@@ -68,7 +69,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                 <div className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                     {/* Header */}
                     <div className="sticky top-0 bg-gradient-to-r from-purple-500 to-pink-500 p-6 flex items-center justify-between z-10">
-                        <h2 className="text-2xl font-bold text-white">User Details</h2>
+                        <h2 className="text-2xl font-bold text-white">Chi tiết người dùng</h2>
                         <button
                             onClick={onClose}
                             className="p-2 hover:bg-white/20 rounded-lg transition-colors"
@@ -81,7 +82,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                     {loading ? (
                         <div className="p-20 text-center">
                             <Loader2 className="w-12 h-12 text-purple-500 animate-spin mx-auto mb-4" />
-                            <p className="text-gray-600 font-medium">Loading user details...</p>
+                            <p className="text-gray-600 font-medium">Đang tải thông tin người dùng...</p>
                         </div>
                     ) : (
                         <>
@@ -110,20 +111,20 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                             {userDetail.isVerified && (
                                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
                                                     <CheckCircle className="w-3.5 h-3.5" />
-                                                    Email Verified
+                                                    Email đã xác thực
                                                 </span>
                                             )}
                                         </div>
 
                                         <p className="text-sm text-gray-500">
-                                            <span className="font-semibold">User ID:</span> {userDetail.id}
+                                            <span className="font-semibold">Mã người dùng:</span> {userDetail.id}
                                         </p>
                                     </div>
                                 </div>
 
                                 {/* Contact Information */}
                                 <div className="bg-gray-50 rounded-xl p-6">
-                                    <h4 className="text-lg font-bold text-gray-900 mb-4">Contact Information</h4>
+                                    <h4 className="text-lg font-bold text-gray-900 mb-4">Thông tin liên hệ</h4>
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -141,7 +142,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                                     <Phone className="w-5 h-5 text-green-600" />
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs text-gray-500">Phone</p>
+                                                    <p className="text-xs text-gray-500">Số điện thoại</p>
                                                     <p className="text-sm font-semibold text-gray-900">{userDetail.phone}</p>
                                                 </div>
                                             </div>
@@ -152,7 +153,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                                 <Calendar className="w-5 h-5 text-purple-600" />
                                             </div>
                                             <div>
-                                                <p className="text-xs text-gray-500">Joined</p>
+                                                <p className="text-xs text-gray-500">Ngày tham gia</p>
                                                 <p className="text-sm font-semibold text-gray-900">{formatDate(userDetail.createdAt)}</p>
                                             </div>
                                         </div>
@@ -162,7 +163,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                                 <Shield className="w-5 h-5 text-orange-600" />
                                             </div>
                                             <div>
-                                                <p className="text-xs text-gray-500">Last Updated</p>
+                                                <p className="text-xs text-gray-500">Cập nhật lần cuối</p>
                                                 <p className="text-sm font-semibold text-gray-900">{formatDate(userDetail.updatedAt)}</p>
                                             </div>
                                         </div>
@@ -171,7 +172,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
 
                                 {/* Statistics */}
                                 <div>
-                                    <h4 className="text-lg font-bold text-gray-900 mb-4">Activity Statistics</h4>
+                                    <h4 className="text-lg font-bold text-gray-900 mb-4">Thống kê hoạt động</h4>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         {stats.map((stat, index) => (
                                             <div key={index} className="bg-white border-2 border-gray-200 rounded-xl p-4 text-center hover:border-purple-500 transition-colors">
@@ -186,25 +187,25 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                 {/* KYC Information */}
                                 {userDetail.kycData && (
                                     <div className="bg-blue-50 rounded-xl p-6">
-                                        <h4 className="text-lg font-bold text-gray-900 mb-4">KYC Information</h4>
+                                        <h4 className="text-lg font-bold text-gray-900 mb-4">Thông tin KYC</h4>
                                         <div className="grid md:grid-cols-2 gap-4 text-sm">
                                             <div>
-                                                <p className="text-gray-600">ID Card Number</p>
+                                                <p className="text-gray-600">Số CMND/CCCD</p>
                                                 <p className="font-semibold text-gray-900">{userDetail.kycData.idCardNumber}</p>
                                             </div>
                                             <div>
-                                                <p className="text-gray-600">Date of Birth</p>
+                                                <p className="text-gray-600">Ngày sinh</p>
                                                 <p className="font-semibold text-gray-900">
                                                     {new Date(userDetail.kycData.dateOfBirth).toLocaleDateString('vi-VN')}
                                                 </p>
                                             </div>
                                             <div className="md:col-span-2">
-                                                <p className="text-gray-600">Address</p>
+                                                <p className="text-gray-600">Địa chỉ</p>
                                                 <p className="font-semibold text-gray-900">{userDetail.kycData.address}</p>
                                             </div>
                                             {userDetail.kycData.status === 'APPROVED' && userDetail.kycData.verifiedAt && (
                                                 <div className="md:col-span-2">
-                                                    <p className="text-gray-600">Verified At</p>
+                                                    <p className="text-gray-600">Thời gian phê duyệt</p>
                                                     <p className="font-semibold text-gray-900">
                                                         {formatDate(userDetail.kycData.verifiedAt)}
                                                     </p>
@@ -217,16 +218,16 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                 {/* Wallet Information */}
                                 {userDetail.wallet && (
                                     <div className="bg-green-50 rounded-xl p-6">
-                                        <h4 className="text-lg font-bold text-gray-900 mb-4">Wallet Information</h4>
+                                        <h4 className="text-lg font-bold text-gray-900 mb-4">Ví điện tử</h4>
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <p className="text-sm text-gray-600">Current Balance</p>
+                                                <p className="text-sm text-gray-600">Số dư hiện tại</p>
                                                 <p className="text-3xl font-bold text-green-600">
                                                     {parseFloat(userDetail.wallet.balance).toLocaleString('vi-VN')} VND
                                                 </p>
                                             </div>
                                             <div className="text-right text-sm text-gray-600">
-                                                <p>Total Transactions</p>
+                                                <p>Tổng giao dịch</p>
                                                 <p className="text-2xl font-bold text-gray-900">
                                                     {userDetail.wallet._count?.transactions || 0}
                                                 </p>
@@ -243,7 +244,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                             className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
                                         >
                                             <CheckCircle className="w-5 h-5" />
-                                            Unblock User
+                                            Bỏ chặn người dùng
                                         </button>
                                     ) : (
                                         <button
@@ -251,7 +252,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                             className="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
                                         >
                                             <Ban className="w-5 h-5" />
-                                            Block User
+                                            Chặn người dùng
                                         </button>
                                     )}
 
@@ -259,7 +260,7 @@ export default function UserDetail({ user, onClose, onBlockUser, onUnblockUser }
                                         onClick={onClose}
                                         className="px-8 py-3 border-2 border-gray-200 hover:border-gray-300 rounded-xl font-semibold transition-colors"
                                     >
-                                        Close
+                                        Đóng
                                     </button>
                                 </div>
                             </div>

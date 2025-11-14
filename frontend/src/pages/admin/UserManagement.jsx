@@ -352,7 +352,7 @@ export default function UserManagement() {
             }
         } catch (error) {
             console.error('Error fetching users:', error);
-            alert('Error loading users. Please try again.');
+            alert('Lỗi khi tải danh sách người dùng. Vui lòng thử lại.');
         } finally {
             setLoading(false);
         }
@@ -382,7 +382,7 @@ export default function UserManagement() {
     };
 
     const handleBlockUser = async (userId) => {
-        if (!window.confirm('Are you sure you want to block this user?')) return;
+        if (!window.confirm('Bạn có chắc chắn muốn chặn người dùng này không?')) return;
 
         try {
             if (USE_MOCK_DATA) {
@@ -395,7 +395,7 @@ export default function UserManagement() {
                     MOCK_USERS[userIndex].isBlocked = true;
                 }
 
-                alert('User blocked successfully!');
+                alert('Chặn người dùng thành công!');
                 fetchUsers();
                 if (selectedUser?.id === userId) {
                     setSelectedUser({ ...selectedUser, isBlocked: true });
@@ -403,7 +403,7 @@ export default function UserManagement() {
             } else {
                 // ========== USE REAL API ==========
                 await adminService.blockUser(userId);
-                alert('User blocked successfully!');
+                alert('Chặn người dùng thành công!');
                 fetchUsers();
                 if (selectedUser?.id === userId) {
                     setSelectedUser(null);
@@ -411,12 +411,12 @@ export default function UserManagement() {
             }
         } catch (error) {
             console.error('Error blocking user:', error);
-            alert('Failed to block user. Please try again.');
+            alert('Không thể chặn người dùng. Vui lòng thử lại.');
         }
     };
 
     const handleUnblockUser = async (userId) => {
-        if (!window.confirm('Are you sure you want to unblock this user?')) return;
+        if (!window.confirm('Bạn có chắc chắn muốn bỏ chặn người dùng này không?')) return;
 
         try {
             if (USE_MOCK_DATA) {
@@ -429,7 +429,7 @@ export default function UserManagement() {
                     MOCK_USERS[userIndex].isBlocked = false;
                 }
 
-                alert('User unblocked successfully!');
+                alert('Bỏ chặn người dùng thành công!');
                 fetchUsers();
                 if (selectedUser?.id === userId) {
                     setSelectedUser({ ...selectedUser, isBlocked: false });
@@ -437,7 +437,7 @@ export default function UserManagement() {
             } else {
                 // ========== USE REAL API ==========
                 await adminService.unblockUser(userId);
-                alert('User unblocked successfully!');
+                alert('Bỏ chặn người dùng thành công!');
                 fetchUsers();
                 if (selectedUser?.id === userId) {
                     setSelectedUser(null);
@@ -445,7 +445,7 @@ export default function UserManagement() {
             }
         } catch (error) {
             console.error('Error unblocking user:', error);
-            alert('Failed to unblock user. Please try again.');
+            alert('Không thể bỏ chặn người dùng. Vui lòng thử lại.');
         }
     };
 
@@ -456,7 +456,7 @@ export default function UserManagement() {
     const handleExport = async () => {
         try {
             // Implement export functionality
-            alert('Export feature coming soon!');
+            alert('Tính năng xuất file sẽ sớm ra mắt!');
         } catch (error) {
             console.error('Error exporting users:', error);
         }
@@ -490,10 +490,10 @@ export default function UserManagement() {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                            User Management
+                            Quản lý người dùng
                         </h1>
                         <p className="text-gray-600">
-                            Manage and monitor all users in the system
+                            Theo dõi và quản lý toàn bộ người dùng trong hệ thống
                         </p>
                     </div>
                     <div className="flex gap-3">
@@ -503,14 +503,14 @@ export default function UserManagement() {
                             className="px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl hover:border-purple-500 transition-all flex items-center gap-2 font-medium"
                         >
                             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-                            Refresh
+                            Làm mới
                         </button>
                         <button
                             onClick={handleExport}
                             className="px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl hover:border-purple-500 transition-all flex items-center gap-2 font-medium"
                         >
                             <Download className="w-5 h-5" />
-                            Export
+                            Xuất dữ liệu
                         </button>
                     </div>
                 </div>
@@ -519,7 +519,7 @@ export default function UserManagement() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <StatCard
                         icon={Users}
-                        label="Total Users"
+                        label="Tổng người dùng"
                         value={stats.total}
                         color="text-blue-600"
                         bgColor="bg-blue-100"
@@ -527,7 +527,7 @@ export default function UserManagement() {
                     />
                     <StatCard
                         icon={UserCheck}
-                        label="Active Users"
+                        label="Đang hoạt động"
                         value={stats.active}
                         color="text-green-600"
                         bgColor="bg-green-100"
@@ -535,14 +535,14 @@ export default function UserManagement() {
                     />
                     <StatCard
                         icon={UserX}
-                        label="Blocked Users"
+                        label="Đã chặn"
                         value={stats.blocked}
                         color="text-red-600"
                         bgColor="bg-red-100"
                     />
                     <StatCard
                         icon={Shield}
-                        label="Verified Users"
+                        label="Đã xác thực"
                         value={stats.verified}
                         color="text-purple-600"
                         bgColor="bg-purple-100"
@@ -560,24 +560,24 @@ export default function UserManagement() {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-2xl font-bold text-gray-900">
-                            All Users ({pagination.total})
+                            Danh sách người dùng ({pagination.total})
                         </h2>
                         <div className="text-sm text-gray-600">
-                            Showing {((pagination.page - 1) * pagination.limit) + 1} - {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total}
+                            Hiển thị {((pagination.page - 1) * pagination.limit) + 1} - {Math.min(pagination.page * pagination.limit, pagination.total)} trong {pagination.total}
                         </div>
                     </div>
 
                     {loading ? (
                         <div className="bg-white rounded-2xl shadow-lg p-20 text-center">
                             <RefreshCw className="w-12 h-12 text-purple-500 animate-spin mx-auto mb-4" />
-                            <p className="text-gray-600 font-medium">Loading users...</p>
+                            <p className="text-gray-600 font-medium">Đang tải danh sách người dùng...</p>
                         </div>
                     ) : users.length === 0 ? (
                         <div className="bg-white rounded-2xl shadow-lg p-20 text-center">
                             <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">No Users Found</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Không tìm thấy người dùng</h3>
                             <p className="text-gray-600 mb-6">
-                                There are no users matching your filters. Try adjusting your search criteria.
+                                Không có người dùng nào khớp với bộ lọc hiện tại. Hãy thử thay đổi điều kiện tìm kiếm.
                             </p>
                             <button
                                 onClick={() => {
@@ -591,7 +591,7 @@ export default function UserManagement() {
                                 }}
                                 className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:shadow-lg transition-all font-medium"
                             >
-                                Clear Filters
+                                Xóa bộ lọc
                             </button>
                         </div>
                     ) : (
@@ -608,7 +608,7 @@ export default function UserManagement() {
                         <div className="bg-white rounded-2xl shadow-lg p-6">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm text-gray-600">
-                                    Page {pagination.page} of {pagination.totalPages}
+                                    Trang {pagination.page} / {pagination.totalPages}
                                 </div>
 
                                 <div className="flex gap-2">
@@ -617,14 +617,14 @@ export default function UserManagement() {
                                         disabled={pagination.page === 1}
                                         className="px-4 py-2 border-2 border-gray-200 rounded-xl hover:border-purple-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                                     >
-                                        First
+                                        Đầu tiên
                                     </button>
                                     <button
                                         onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
                                         disabled={pagination.page === 1}
                                         className="px-4 py-2 border-2 border-gray-200 rounded-xl hover:border-purple-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                                     >
-                                        Previous
+                                        Trước
                                     </button>
 
                                     {/* Page Numbers */}
@@ -661,20 +661,20 @@ export default function UserManagement() {
                                         disabled={pagination.page === pagination.totalPages}
                                         className="px-4 py-2 border-2 border-gray-200 rounded-xl hover:border-purple-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                                     >
-                                        Next
+                                        Tiếp
                                     </button>
                                     <button
                                         onClick={() => setPagination(prev => ({ ...prev, page: pagination.totalPages }))}
                                         disabled={pagination.page === pagination.totalPages}
                                         className="px-4 py-2 border-2 border-gray-200 rounded-xl hover:border-purple-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                                     >
-                                        Last
+                                        Cuối
                                     </button>
                                 </div>
 
                                 <div className="flex items-center gap-2">
                                     <label className="text-sm text-gray-600 font-medium">
-                                        Per page:
+                                        Mỗi trang:
                                     </label>
                                     <select
                                         value={pagination.limit}

@@ -192,7 +192,7 @@ export default function PropertiesSection() {
                 {/* Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
-                        Our Popular Residences
+                        Những sản phẩm nổi bật
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto">
                         Khám phá những bất động sản được yêu thích nhất

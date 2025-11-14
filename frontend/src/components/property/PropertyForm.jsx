@@ -181,8 +181,8 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                         <FileText className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">Basic Information</h2>
-                        <p className="text-sm text-gray-500">Enter property details</p>
+                        <h2 className="text-xl font-bold text-gray-900">Thông tin cơ bản</h2>
+                        <p className="text-sm text-gray-500">Nhập thông tin chi tiết về bất động sản</p>
                     </div>
                 </div>
 
@@ -190,13 +190,13 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                     {/* Title */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Property Title <span className="text-red-500">*</span>
+                            Tiêu đề bất động sản <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
                             value={formData.title}
                             onChange={(e) => handleChange('title', e.target.value)}
-                            placeholder="e.g. Modern 3-Bedroom Villa with Pool"
+                            placeholder="VD: Biệt thự 3 phòng ngủ hiện đại có hồ bơi"
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                             required
                         />
@@ -205,17 +205,17 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                     {/* Description */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Description <span className="text-red-500">*</span>
+                            Mô tả <span className="text-red-500">*</span>
                         </label>
                         <textarea
                             value={formData.description}
                             onChange={(e) => handleChange('description', e.target.value)}
-                            placeholder="Describe your property in detail..."
+                            placeholder="Mô tả chi tiết về bất động sản..."
                             rows={5}
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none"
                             required
                         />
-                        <p className="text-xs text-gray-500 mt-1">{formData.description.length} characters</p>
+                        <p className="text-xs text-gray-500 mt-1">{formData.description.length} ký tự</p>
                     </div>
 
                     {/* Type & Price */}
@@ -223,7 +223,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <Home className="w-4 h-4" />
-                                Property Type <span className="text-red-500">*</span>
+                                Loại bất động sản <span className="text-red-500">*</span>
                             </label>
                             <select
                                 value={formData.type}
@@ -231,7 +231,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                                 required
                             >
-                                <option value="">Select Type</option>
+                                <option value="">Chọn loại</option>
                                 {propertyTypes.map(type => (
                                     <option key={type} value={type}>{type}</option>
                                 ))}
@@ -241,7 +241,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <DollarSign className="w-4 h-4" />
-                                Price (USD) <span className="text-red-500">*</span>
+                                Giá trị (VNĐ) <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="number"
@@ -263,8 +263,8 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                         <Home className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">Property Details</h2>
-                        <p className="text-sm text-gray-500">Specifications and features</p>
+                        <h2 className="text-xl font-bold text-gray-900">Chi tiết bất động sản</h2>
+                        <p className="text-sm text-gray-500">Thông số và tiện ích</p>
                     </div>
                 </div>
 
@@ -272,7 +272,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                             <Maximize2 className="w-4 h-4" />
-                            Area (m²) <span className="text-red-500">*</span>
+                             Diện tích (m²) <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="number"
@@ -287,7 +287,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                             <Bed className="w-4 h-4" />
-                            Bedrooms
+                             Phòng ngủ
                         </label>
                         <input
                             type="number"
@@ -301,7 +301,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                             <Bath className="w-4 h-4" />
-                            Bathrooms
+                             Phòng tắm
                         </label>
                         <input
                             type="number"
@@ -314,7 +314,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
 
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Floors
+                            Số tầng
                         </label>
                         <input
                             type="number"
@@ -328,14 +328,14 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                             <Compass className="w-4 h-4" />
-                            Direction
+                            Hướng
                         </label>
                         <select
                             value={formData.direction}
                             onChange={(e) => handleChange('direction', e.target.value)}
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                         >
-                            <option value="">Select Direction</option>
+                            <option value="">Chọn hướng</option>
                             {directions.map(dir => (
                                 <option key={dir} value={dir}>{dir}</option>
                             ))}
@@ -350,7 +350,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                                 onChange={(e) => handleChange('hasLegalDoc', e.target.checked)}
                                 className="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary"
                             />
-                            <span className="text-sm font-medium text-gray-900">Has Legal Documents</span>
+                            <span className="text-sm font-medium text-gray-900">Có giấy tờ pháp lý</span>
                         </label>
 
                         <label className="flex items-center gap-3 cursor-pointer">
@@ -360,7 +360,7 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                                 onChange={(e) => handleChange('isFurnished', e.target.checked)}
                                 className="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary"
                             />
-                            <span className="text-sm font-medium text-gray-900">Fully Furnished</span>
+                            <span className="text-sm font-medium text-gray-900">Đầy đủ nội thất</span>
                         </label>
                     </div>
                 </div>
@@ -373,8 +373,8 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                         <MapPin className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">Location</h2>
-                        <p className="text-sm text-gray-500">Where is your property located?</p>
+                        <h2 className="text-xl font-bold text-gray-900">Vị trí</h2>
+                        <p className="text-sm text-gray-500">Bất động sản nằm ở đâu?</p>
                     </div>
                 </div>
 
@@ -388,8 +388,8 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                         <ImageIcon className="w-6 h-6 text-pink-600" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">Property Images</h2>
-                        <p className="text-sm text-gray-500">Upload high-quality photos</p>
+                        <h2 className="text-xl font-bold text-gray-900">Hình ảnh bất động sản</h2>
+                        <p className="text-sm text-gray-500">Tải lên ảnh chất lượng cao</p>
                     </div>
                 </div>
 
@@ -407,14 +407,14 @@ export default function PropertyForm({ initialData = null, mode = 'create' }) {
                     disabled={isSubmitting}
                     className="flex-1 px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
                 >
-                    Cancel
+                    Hủy
                 </button>
                 <button
                     type="submit"
                     disabled={isSubmitting}
                     className="flex-1 px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
                 >
-                    {isSubmitting ? 'Saving...' : mode === 'edit' ? 'Update Property' : 'Create Property'}
+                    {isSubmitting ? 'Đang lưu...' : mode === 'edit' ? 'Cập nhật bất động sản' : 'Tạo mới bất động sản'}
                 </button>
             </div>
         </form>

@@ -16,9 +16,9 @@ export default function ChatMessage({ message, isOwn, sender }) {
         yesterday.setDate(yesterday.getDate() - 1);
 
         if (messageDate.toDateString() === today.toDateString()) {
-            return 'Today';
+            return 'Hôm nay';
         } else if (messageDate.toDateString() === yesterday.toDateString()) {
-            return 'Yesterday';
+            return 'Hôm qua';
         } else {
             return messageDate.toLocaleDateString('en-US', {
                 month: 'short',

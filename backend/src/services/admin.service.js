@@ -815,6 +815,7 @@ const getAllAuctions = async (options) => {
                             address: true,
                             thumbnail: true,
                             type: true,
+                            images: true,
                         },
                     },
                     creator: {

@@ -15,10 +15,10 @@ export default function FeaturesSection() {
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
-                        Why Choose Us
+                        Vì sao chọn chúng tôi
                     </h2>
                     <p className="text-gray-600 text-lg">
-                        Elevating Your Home Buying Experience with Expertise, Integrity, and Unmatched Personalized Service
+                        Nâng tầm trải nghiệm mua nhà của bạn với sự tận tâm, chuyên nghiệp và dịch vụ cá nhân hóa vượt trội
                     </p>
                 </div>
 

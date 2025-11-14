@@ -53,11 +53,11 @@ export default function Header() {
                                         </button>
                                         {isServicesOpen && (
                                             <div className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 border border-gray-200 z-50">
-                                                <button onClick={() => { navigate('/properties'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Properties</button>
-                                                <button onClick={() => { navigate('/auctions'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Auction</button>
+                                                <button onClick={() => { navigate('/properties'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Bất động sản</button>
+                                                <button onClick={() => { navigate('/auctions'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Đấu giá</button>
                                                 <div className="my-1 h-px bg-gray-200" />
-                                                <button onClick={() => { navigate('/properties/my-properties'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">My Properties</button>
-                                                <button onClick={() => { navigate('/auctions/my-auctions'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">My Auction</button>
+                                                <button onClick={() => { navigate('/properties/my-properties'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Tài sản của tôi</button>
+                                                <button onClick={() => { navigate('/auctions/my-auctions'); setIsServicesOpen(false); }} className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">Phiên của tôi</button>
                                             </div>
                                         )}
                                     </div>
@@ -72,7 +72,7 @@ export default function Header() {
                                         className="px-4 py-2 rounded-lg text-black font-semibold transition-colors"
                                         style={{ backgroundColor: '#92B9E3' }}
                                     >
-                                        Auction
+                                        Đấu giá
                                     </button>
                                 );
                             }
@@ -138,7 +138,7 @@ export default function Header() {
                                             className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3"
                                         >
                                             <User className="w-4 h-4" />
-                                            Profile
+                                            Hồ sơ cá nhân
                                         </button>
 
                                         <button
@@ -149,7 +149,7 @@ export default function Header() {
                                             className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3"
                                         >
                                             <Settings className="w-4 h-4" />
-                                            Settings
+                                            Cài đặt
                                         </button>
 
                                         <hr className="my-2" />
@@ -159,7 +159,7 @@ export default function Header() {
                                             className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
                                         >
                                             <LogOut className="w-4 h-4" />
-                                            Logout
+                                            Đăng xuất
                                         </button>
                                     </div>
                                 )}
@@ -171,13 +171,13 @@ export default function Header() {
                                     onClick={() => navigate('/login')}
                                     className="bg-white text-primary border-2 border-primary px-6 py-2.5 rounded-lg hover:bg-beige-100 transition-colors font-medium"
                                 >
-                                    Login
+                                    Đăng nhập
                                 </button>
                                 <button
                                     onClick={() => navigate('/register')}
                                     className="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-light transition-colors font-medium"
                                 >
-                                    Sign up
+                                    Đăng ký
                                 </button>
                             </>
                         )}
@@ -209,7 +209,7 @@ export default function Header() {
                                             className="px-3 py-2 rounded-lg text-white font-semibold text-left"
                                             style={{ backgroundColor: '#92B9E3' }}
                                         >
-                                            Auction
+                                            Đấu giá
                                         </button>
                                     );
                                 }
@@ -237,13 +237,13 @@ export default function Header() {
                                         }}
                                         className="w-full text-left px-2 py-2 text-gray-700 hover:text-primary transition-colors"
                                     >
-                                        Profile
+                                        Hồ sơ cá nhân
                                     </button>
                                     <button
                                         onClick={handleLogout}
                                         className="w-full text-left px-2 py-2 text-red-600 hover:text-red-700 transition-colors"
                                     >
-                                        Logout
+                                        Đăng xuất
                                     </button>
                                 </div>
                             ) : (
@@ -252,13 +252,13 @@ export default function Header() {
                                         onClick={() => navigate('/login')}
                                         className="flex-1 bg-white text-primary border-2 border-primary px-6 py-2.5 rounded-lg hover:bg-beige-100 transition-colors font-medium"
                                     >
-                                        Login
+                                        Đăng nhập
                                     </button>
                                     <button
                                         onClick={() => navigate('/register')}
                                         className="flex-1 bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-primary-light transition-colors font-medium"
                                     >
-                                        Sign up
+                                        Đăng ký
                                     </button>
                                 </div>
                             )}

@@ -29,10 +29,10 @@ export default function CreateProperty() {
                             <PlusCircle className="w-10 h-10 text-white" />
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                            List Your Property
+                            Đăng bán bất động sản
                         </h1>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            Fill in the details below to create your property listing. All fields marked with * are required.
+                            Điền thông tin bên dưới để tạo tin đăng bất động sản. Các trường có dấu * là bắt buộc.
                         </p>
                     </div>
 

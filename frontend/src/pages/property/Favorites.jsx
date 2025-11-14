@@ -87,27 +87,27 @@ export default function Favorites() {
     };
 
     const handleRemove = async (id) => {
-        if (!confirm('Remove this property from favorites?')) return;
+        if (!confirm('Bạn có muốn xóa bất động sản này khỏi danh sách yêu thích không?')) return;
 
         try {
             await propertyService.removeFromFavorites(id);
             setFavorites(favorites.filter(f => f.id !== id));
         } catch (error) {
             console.error('Remove favorite error:', error);
-            alert('Failed to remove from favorites');
+            alert('Không thể xóa khỏi danh sách yêu thích');
         }
     };
 
     const handleClearAll = async () => {
-        if (!confirm('Remove all properties from favorites?')) return;
+        if (!confirm('Bạn có muốn xóa tất cả khỏi danh sách yêu thích không?')) return;
 
         try {
             await propertyService.clearFavorites();
             setFavorites([]);
-            alert('All favorites cleared');
+            alert('Đã xóa tất cả khỏi danh sách yêu thích');
         } catch (error) {
             console.error('Clear favorites error:', error);
-            alert('Failed to clear favorites');
+            alert('Không thể xóa danh sách yêu thích');
         }
     };
 
@@ -124,10 +124,10 @@ export default function Favorites() {
                                 <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-600 rounded-xl flex items-center justify-center">
                                     <Heart className="w-6 h-6 text-white fill-white" />
                                 </div>
-                                <h1 className="text-4xl font-bold text-gray-900">My Favorites</h1>
+                                <h1 className="text-4xl font-bold text-gray-900">Yêu thích của tôi</h1>
                             </div>
                             <p className="text-gray-600 ml-15">
-                                {favorites.length} saved {favorites.length === 1 ? 'property' : 'properties'}
+                                Đã lưu {favorites.length} {favorites.length === 1 ? 'bất động sản' : 'bất động sản'}
                             </p>
                         </div>
 
@@ -137,7 +137,7 @@ export default function Favorites() {
                                 className="px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
                             >
                                 <Trash2 className="w-5 h-5" />
-                                Clear All
+                                Xóa tất cả
                             </button>
                         )}
                     </div>
@@ -153,15 +153,15 @@ export default function Favorites() {
                         <div className="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
                             <Heart className="w-10 h-10 text-pink-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">No Favorites Yet</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Chưa có yêu thích nào</h2>
                         <p className="text-gray-600 mb-6">
-                            Start exploring properties and save your favorites here
+                            Bắt đầu khám phá các bất động sản và lưu lại những mục yêu thích tại đây
                         </p>
                         <button
                             onClick={() => navigate('/properties')}
                             className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium inline-flex items-center gap-2"
                         >
-                            Browse Properties
+                            Xem danh sách bất động sản
                         </button>
                     </div>
                 ) : (
@@ -169,7 +169,7 @@ export default function Favorites() {
                         {/* Saved Date Info */}
                         <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
                             <p className="text-sm text-blue-800">
-                                <strong>Tip:</strong> Properties are sorted by the date you saved them. Most recent saves appear first.
+                                <strong>Gợi ý:</strong> Danh sách được sắp xếp theo ngày bạn lưu. Mục lưu gần nhất sẽ hiển thị đầu tiên.
                             </p>
                         </div>
 
@@ -186,7 +186,7 @@ export default function Favorites() {
                                             handleRemove(property.id);
                                         }}
                                         className="absolute top-4 right-4 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg z-10"
-                                        title="Remove from favorites"
+                                        title="Xóa khỏi yêu thích"
                                     >
                                         <Trash2 className="w-5 h-5" />
                                     </button>
@@ -194,7 +194,7 @@ export default function Favorites() {
                                     {/* Saved Date */}
                                     <div className="absolute bottom-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full">
                                         <p className="text-xs text-gray-600">
-                                            Saved: {new Date(property.savedAt).toLocaleDateString()}
+                                            Đã lưu: {new Date(property.savedAt).toLocaleDateString('vi-VN')}
                                         </p>
                                     </div>
                                 </div>

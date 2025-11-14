@@ -28,8 +28,8 @@ const mockAuctionDetail = {
     propertyId: 'prop_001',
     property: {
         id: 'prop_001',
-        title: 'Modern Villa in District 2',
-        address: '123 Nguyen Van Huong, Thao Dien, District 2, HCMC',
+        title: 'Biệt thự hiện đại tại Quận 2',
+        address: '123 Nguyễn Văn Hưởng, Thảo Điền, Quận 2, TP.HCM',
         thumbnail: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
         type: 'VILLA',
         area: 450,
@@ -40,11 +40,11 @@ const mockAuctionDetail = {
     createdBy: 'admin_001',
     creator: {
         id: 'admin_001',
-        fullName: 'Admin User',
+        fullName: 'Quản trị viên',
         email: 'admin@example.com'
     },
-    title: 'Luxury Villa Auction - District 2',
-    description: 'Premium villa in prime location with modern amenities and beautiful garden',
+    title: 'Đấu giá biệt thự cao cấp Quận 2',
+    description: 'Biệt thự cao cấp tại vị trí đắc địa, tiện nghi hiện đại cùng khu vườn tuyệt đẹp',
     startPrice: 15000000000,
     bidStep: 500000000,
     depositAmount: 1500000000,
@@ -137,18 +137,18 @@ export default function AdminAuctionDetail() {
 
     const handleCancelAuction = async () => {
         if (!cancelReason.trim()) {
-            alert('Please provide a cancellation reason');
+            alert('Vui lòng nhập lý do hủy phiên');
             return;
         }
 
         try {
             await adminService.cancelAuction(id, cancelReason);
-            alert('Auction cancelled successfully!');
+            alert('Hủy phiên đấu giá thành công!');
             fetchAuctionDetail();
             setShowCancelModal(false);
         } catch (error) {
             console.error('Error cancelling auction:', error);
-            alert('Failed to cancel auction');
+            alert('Hủy phiên đấu giá thất bại');
         }
     };
 
@@ -171,10 +171,10 @@ export default function AdminAuctionDetail() {
 
     const getStatusConfig = (status) => {
         const configs = {
-            UPCOMING: { bg: 'bg-purple-100', text: 'text-purple-800', icon: Calendar },
-            ONGOING: { bg: 'bg-blue-100', text: 'text-blue-800', icon: Clock },
-            COMPLETED: { bg: 'bg-green-100', text: 'text-green-800', icon: CheckCircle },
-            CANCELLED: { bg: 'bg-red-100', text: 'text-red-800', icon: Ban }
+            UPCOMING: { bg: 'bg-purple-100', text: 'text-purple-800', icon: Calendar, label: 'Sắp diễn ra' },
+            ONGOING: { bg: 'bg-blue-100', text: 'text-blue-800', icon: Clock, label: 'Đang diễn ra' },
+            COMPLETED: { bg: 'bg-green-100', text: 'text-green-800', icon: CheckCircle, label: 'Đã kết thúc' },
+            CANCELLED: { bg: 'bg-red-100', text: 'text-red-800', icon: Ban, label: 'Đã hủy' }
         };
         return configs[status] || configs.UPCOMING;
     };
@@ -186,19 +186,20 @@ export default function AdminAuctionDetail() {
         const now = new Date();
         const diff = end - now;
 
-        if (diff <= 0) return 'Ending soon';
+        if (diff <= 0) return 'Sắp kết thúc';
 
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-        return `${days}d ${hours}h ${minutes}m remaining`;
+        return `Còn ${days}d ${hours}h ${minutes}m`;
     };
 
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
                 <RefreshCw className="w-12 h-12 text-indigo-600 animate-spin" />
+                <p className="text-gray-600">Đang tải thông tin phiên đấu giá...</p>
             </div>
         );
     }
@@ -208,12 +209,12 @@ export default function AdminAuctionDetail() {
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
                 <div className="text-center">
                     <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Auction Not Found</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy phiên đấu giá</h2>
                     <button
                         onClick={() => navigate('/admin/auctions')}
                         className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                     >
-                        Back to Auctions
+                        Quay lại danh sách
                     </button>
                 </div>
             </div>
@@ -236,7 +237,7 @@ export default function AdminAuctionDetail() {
                         className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
-                        <span className="font-medium">Back to Auctions</span>
+                        <span className="font-medium">Quay lại danh sách</span>
                     </button>
 
                     {auction.status !== 'COMPLETED' && auction.status !== 'CANCELLED' && (
@@ -245,7 +246,7 @@ export default function AdminAuctionDetail() {
                             className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors"
                         >
                             <Ban className="w-5 h-5" />
-                            Cancel Auction
+                            Hủy phiên đấu giá
                         </button>
                     )}
                 </div>
@@ -261,7 +262,7 @@ export default function AdminAuctionDetail() {
                         </div>
                         <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${statusConfig.bg} ${statusConfig.text}`}>
                             <StatusIcon className="w-4 h-4" />
-                            {auction.status}
+                            {statusConfig.label}
                         </span>
                     </div>
 
@@ -270,7 +271,7 @@ export default function AdminAuctionDetail() {
                             <div className="flex items-center gap-3">
                                 <Clock className="w-6 h-6 text-blue-600" />
                                 <div>
-                                    <p className="font-semibold text-blue-900">Live Auction</p>
+                                    <p className="font-semibold text-blue-900">Phiên đang diễn ra</p>
                                     <p className="text-sm text-blue-700">{calculateTimeRemaining()}</p>
                                 </div>
                             </div>
@@ -303,15 +304,15 @@ export default function AdminAuctionDetail() {
 
                                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
                                     <div>
-                                        <p className="text-sm text-gray-600">Type</p>
+                                        <p className="text-sm text-gray-600">Loại hình</p>
                                         <p className="font-semibold text-gray-900">{auction.property.type}</p>
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Area</p>
+                                        <p className="text-sm text-gray-600">Diện tích</p>
                                         <p className="font-semibold text-gray-900">{auction.property.area}m²</p>
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Listed Price</p>
+                                        <p className="text-sm text-gray-600">Giá bán công khai</p>
                                         <p className="font-semibold text-green-600">
                                             {formatCurrency(auction.property.price)}
                                         </p>
@@ -322,22 +323,22 @@ export default function AdminAuctionDetail() {
 
                         {/* Auction Details */}
                         <div className="bg-white rounded-2xl shadow-xl p-6">
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">Auction Parameters</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Thông số phiên đấu giá</h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Start Price</p>
+                                    <p className="text-sm text-gray-600 mb-1">Giá khởi điểm</p>
                                     <p className="text-lg font-bold text-gray-900">
                                         {formatCurrency(auction.startPrice)}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Current Price</p>
+                                    <p className="text-sm text-gray-600 mb-1">Giá hiện tại</p>
                                     <p className="text-lg font-bold text-green-600">
                                         {formatCurrency(auction.currentPrice)}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Increase</p>
+                                    <p className="text-sm text-gray-600 mb-1">Mức tăng</p>
                                     <div className="flex items-center gap-2">
                                         <TrendingUp className="w-5 h-5 text-green-600" />
                                         <p className="text-lg font-bold text-green-600">
@@ -346,19 +347,19 @@ export default function AdminAuctionDetail() {
                                     </div>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Bid Step</p>
+                                    <p className="text-sm text-gray-600 mb-1">Bước giá</p>
                                     <p className="text-lg font-bold text-gray-900">
                                         {formatCurrency(auction.bidStep)}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Deposit Required</p>
+                                    <p className="text-sm text-gray-600 mb-1">Tiền đặt cọc</p>
                                     <p className="text-lg font-bold text-gray-900">
                                         {formatCurrency(auction.depositAmount)}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Deposit %</p>
+                                    <p className="text-sm text-gray-600 mb-1">Tỷ lệ đặt cọc</p>
                                     <p className="text-lg font-bold text-gray-900">
                                         {((auction.depositAmount / auction.startPrice) * 100).toFixed(1)}%
                                     </p>
@@ -367,11 +368,11 @@ export default function AdminAuctionDetail() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200">
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">Start Time</p>
+                                    <p className="text-sm text-gray-600 mb-1">Thời gian bắt đầu</p>
                                     <p className="font-semibold text-gray-900">{formatDate(auction.startTime)}</p>
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 mb-1">End Time</p>
+                                    <p className="text-sm text-gray-600 mb-1">Thời gian kết thúc</p>
                                     <p className="font-semibold text-gray-900">{formatDate(auction.endTime)}</p>
                                 </div>
                             </div>
@@ -380,11 +381,11 @@ export default function AdminAuctionDetail() {
                         {/* Bid History */}
                         <div className="bg-white rounded-2xl shadow-xl p-6">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Bid History ({totalBids})</h3>
+                                <h3 className="text-xl font-bold text-gray-900">Lịch sử trả giá ({totalBids})</h3>
                                 {currentBid && (
                                     <span className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
                                         <Trophy className="w-4 h-4" />
-                                        Current Leader
+                                        Đang dẫn đầu
                                     </span>
                                 )}
                             </div>
@@ -392,7 +393,7 @@ export default function AdminAuctionDetail() {
                             {totalBids === 0 ? (
                                 <div className="text-center py-12">
                                     <Gavel className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                                    <p className="text-gray-600">No bids yet</p>
+                                    <p className="text-gray-600">Chưa có lượt trả giá</p>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
@@ -422,7 +423,7 @@ export default function AdminAuctionDetail() {
                                                     <p className="text-xs text-gray-600">{formatDate(bid.createdAt)}</p>
                                                     {bid.isAutoBid && (
                                                         <span className="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">
-                                                            Auto Bid
+                                                            Tự động trả giá
                                                         </span>
                                                     )}
                                                 </div>
@@ -438,26 +439,26 @@ export default function AdminAuctionDetail() {
                     <div className="space-y-6">
                         {/* Stats */}
                         <div className="bg-white rounded-2xl shadow-xl p-6">
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">Statistics</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Thống kê</h3>
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
                                     <div className="flex items-center gap-3">
                                         <Gavel className="w-6 h-6 text-blue-600" />
-                                        <span className="font-medium text-gray-900">Total Bids</span>
+                                        <span className="font-medium text-gray-900">Tổng lượt trả giá</span>
                                     </div>
                                     <span className="text-2xl font-bold text-blue-600">{totalBids}</span>
                                 </div>
                                 <div className="flex items-center justify-between p-4 bg-purple-50 rounded-xl">
                                     <div className="flex items-center gap-3">
                                         <Users className="w-6 h-6 text-purple-600" />
-                                        <span className="font-medium text-gray-900">Participants</span>
+                                        <span className="font-medium text-gray-900">Người tham gia</span>
                                     </div>
                                     <span className="text-2xl font-bold text-purple-600">{totalParticipants}</span>
                                 </div>
                                 <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl">
                                     <div className="flex items-center gap-3">
                                         <Shield className="w-6 h-6 text-green-600" />
-                                        <span className="font-medium text-gray-900">Deposits Paid</span>
+                                        <span className="font-medium text-gray-900">Đã nộp đặt cọc</span>
                                     </div>
                                     <span className="text-2xl font-bold text-green-600">
                                         {auction.participants?.filter(p => p.depositPaid).length || 0}
@@ -471,7 +472,7 @@ export default function AdminAuctionDetail() {
                             <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl shadow-xl p-6 text-white">
                                 <div className="flex items-center gap-3 mb-4">
                                     <Award className="w-8 h-8" />
-                                    <h3 className="text-xl font-bold">Auction Winner</h3>
+                                    <h3 className="text-xl font-bold">Người thắng cuộc</h3>
                                 </div>
                                 <div className="bg-white/20 rounded-xl p-4">
                                     <p className="font-semibold mb-1">{currentBid?.user.fullName}</p>
@@ -483,9 +484,9 @@ export default function AdminAuctionDetail() {
 
                         {/* Participants List */}
                         <div className="bg-white rounded-2xl shadow-xl p-6">
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">Participants</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Danh sách người tham gia</h3>
                             {totalParticipants === 0 ? (
-                                <p className="text-gray-600 text-center py-4">No participants yet</p>
+                                <p className="text-gray-600 text-center py-4">Chưa có người tham gia</p>
                             ) : (
                                 <div className="space-y-3">
                                     {auction.participants.map((participant) => (
@@ -496,12 +497,12 @@ export default function AdminAuctionDetail() {
                                                 {participant.depositPaid ? (
                                                     <span className="flex items-center gap-1 text-xs text-green-600">
                                                         <CheckCircle className="w-3 h-3" />
-                                                        Deposit Paid
+                                                        Đã nộp cọc
                                                     </span>
                                                 ) : (
                                                     <span className="flex items-center gap-1 text-xs text-yellow-600">
                                                         <Clock className="w-3 h-3" />
-                                                        Pending Deposit
+                                                        Chưa nộp cọc
                                                     </span>
                                                 )}
                                             </div>
@@ -522,17 +523,17 @@ export default function AdminAuctionDetail() {
                             <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
                                 <Ban className="w-6 h-6 text-red-600" />
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900">Cancel Auction</h3>
+                            <h3 className="text-xl font-bold text-gray-900">Hủy phiên đấu giá</h3>
                         </div>
 
                         <p className="text-gray-600 mb-4">
-                            Please provide a reason for cancelling this auction. All participants will be notified.
+                            Vui lòng nhập lý do hủy phiên. Tất cả người tham gia sẽ nhận được thông báo.
                         </p>
 
                         <textarea
                             value={cancelReason}
                             onChange={(e) => setCancelReason(e.target.value)}
-                            placeholder="Enter cancellation reason..."
+                            placeholder="Nhập lý do hủy phiên..."
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 mb-4 resize-none"
                             rows="4"
                         />
@@ -542,14 +543,14 @@ export default function AdminAuctionDetail() {
                                 onClick={() => setShowCancelModal(false)}
                                 className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium"
                             >
-                                Keep Auction
+                                Giữ phiên
                             </button>
                             <button
                                 onClick={handleCancelAuction}
                                 disabled={!cancelReason.trim()}
                                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                             >
-                                Confirm Cancel
+                                Xác nhận hủy
                             </button>
                         </div>
                     </div>

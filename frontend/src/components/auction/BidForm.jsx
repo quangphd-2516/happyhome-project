@@ -36,7 +36,7 @@ export default function BidForm({ currentBid, bidStep, minBid, onBid, isLoading 
         <form onSubmit={handleSubmit} className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white">
             <div className="mb-6">
                 <label className="block text-white/80 text-sm font-medium mb-2">
-                    Your Bid Amount
+                    Số tiền bạn muốn trả giá
                 </label>
 
                 {/* Bid Amount Display */}
@@ -46,7 +46,7 @@ export default function BidForm({ currentBid, bidStep, minBid, onBid, isLoading 
                             {formatPrice(bidAmount)}
                         </p>
                         <p className="text-white/70 text-sm">
-                            Minimum bid: {formatPrice(minBid)}
+                            Giá tối thiểu: {formatPrice(minBid)}
                         </p>
                     </div>
                 </div>
@@ -97,10 +97,10 @@ export default function BidForm({ currentBid, bidStep, minBid, onBid, isLoading 
                 disabled={isLoading}
                 className="w-full py-3 bg-white text-blue-600 font-bold rounded-xl hover:bg-gray-100 transition-all disabled:opacity-50"
             >
-                {isLoading ? 'Placing Bid...' : (
+                {isLoading ? 'Đang gửi giá...' : (
                     <>
                         <Gavel className="inline-block mr-2 w-5 h-5" />
-                        Place Bid
+                        Đặt giá
                     </>
                 )}
             </button>

@@ -103,14 +103,14 @@ export default function PropertyDetail() {
             }
         } else {
             navigator.clipboard.writeText(window.location.href);
-            alert('Link copied!');
+            alert('Đã sao chép liên kết!');
         }
     };
 
     const handleChatNow = async () => {
         // Check if user is authenticated
         if (!isAuthenticated) {
-            alert('Please login to chat with the owner');
+            alert('Vui lòng đăng nhập để trò chuyện với chủ nhà');
             navigate('/login');
             return;
         }
@@ -124,7 +124,7 @@ export default function PropertyDetail() {
             navigate(`/chats/${response.data.id}`);
         } catch (error) {
             console.error('Create chat error:', error);
-            alert('Failed to start chat. Please try again.');
+            alert('Không thể tạo cuộc trò chuyện. Vui lòng thử lại.');
         } finally {
             setCreatingChat(false);
         }
@@ -144,13 +144,13 @@ export default function PropertyDetail() {
                 <Header />
                 <div className="container mx-auto px-4 py-20 text-center">
                     <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Property Not Found</h2>
-                    <p className="text-gray-600 mb-6">The property you're looking for doesn't exist.</p>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy bất động sản</h2>
+                    <p className="text-gray-600 mb-6">Bất động sản bạn đang tìm không tồn tại.</p>
                     <button
                         onClick={() => navigate('/properties')}
                         className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light"
                     >
-                        Back to Properties
+                        Quay lại danh sách
                     </button>
                 </div>
                 <Footer />
@@ -169,7 +169,7 @@ export default function PropertyDetail() {
                     className="flex items-center gap-2 text-gray-600 hover:text-primary mb-6"
                 >
                     <ArrowLeft className="w-5 h-5" />
-                    <span className="font-medium">Back to listings</span>
+                    <span className="font-medium">Quay lại danh sách</span>
                 </button>
 
                 {/* Title & Actions */}
@@ -178,7 +178,7 @@ export default function PropertyDetail() {
                         <div className="flex items-center gap-3 mb-2">
                             {property.isPremium && (
                                 <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
-                                    PREMIUM
+                                    NỔI BẬT
                                 </span>
                             )}
                             <span className="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
@@ -195,11 +195,11 @@ export default function PropertyDetail() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <Eye className="w-5 h-5" />
-                                <span>{property.views} views</span>
+                                <span>{property.views} lượt xem</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Calendar className="w-5 h-5" />
-                                <span>Posted {new Date(property.createdAt).toLocaleDateString()}</span>
+                                <span>Đăng ngày {new Date(property.createdAt).toLocaleDateString('vi-VN')}</span>
                             </div>
                         </div>
                     </div>
@@ -237,7 +237,7 @@ export default function PropertyDetail() {
                         <div className="sticky top-8 space-y-6">
                             {/* Owner Card */}
                             <div className="bg-white rounded-2xl shadow-lg p-6">
-                                <h3 className="text-xl font-bold text-gray-900 mb-4">Contact Owner</h3>
+                                <h3 className="text-xl font-bold text-gray-900 mb-4">Liên hệ chủ nhà</h3>
 
                                 <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-200">
                                     <img
@@ -247,7 +247,7 @@ export default function PropertyDetail() {
                                     />
                                     <div>
                                         <h4 className="font-bold text-gray-900">{property.owner.name}</h4>
-                                        <p className="text-sm text-gray-600">Property Agent</p>
+                                        <p className="text-sm text-gray-600">Môi giới bất động sản</p>
                                     </div>
                                 </div>
 
@@ -261,12 +261,12 @@ export default function PropertyDetail() {
                                         {creatingChat ? (
                                             <>
                                                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                                <span>Opening Chat...</span>
+                                                <span>Đang mở cuộc trò chuyện...</span>
                                             </>
                                         ) : (
                                             <>
                                                 <MessageCircle className="w-5 h-5" />
-                                                <span>Chat Now</span>
+                                                <span>Trò chuyện ngay</span>
                                             </>
                                         )}
                                     </button>
@@ -277,7 +277,7 @@ export default function PropertyDetail() {
                                         className="w-full py-3 border-2 border-gray-200 rounded-xl hover:border-primary transition-colors font-medium flex items-center justify-center gap-2"
                                     >
                                         <Phone className="w-5 h-5" />
-                                        Call Now
+                                        Gọi ngay
                                     </a>
 
                                     {/* Email Button */}
@@ -286,7 +286,7 @@ export default function PropertyDetail() {
                                         className="w-full py-3 border-2 border-gray-200 rounded-xl hover:border-primary transition-colors font-medium flex items-center justify-center gap-2"
                                     >
                                         <Mail className="w-5 h-5" />
-                                        Send Email
+                                        Gửi email
                                     </a>
 
                                     {/* Message Form Toggle */}
@@ -295,7 +295,7 @@ export default function PropertyDetail() {
                                         className="w-full py-3 border-2 border-gray-200 rounded-xl hover:border-primary transition-colors font-medium flex items-center justify-center gap-2"
                                     >
                                         <Mail className="w-5 h-5" />
-                                        Send Message
+                                        Gửi tin nhắn
                                     </button>
                                 </div>
 
@@ -304,21 +304,21 @@ export default function PropertyDetail() {
                                     <form className="mt-6 pt-6 border-t border-gray-200 space-y-4">
                                         <input
                                             type="text"
-                                            placeholder="Your Name"
+                                            placeholder="Họ và tên"
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                                         />
                                         <input
                                             type="email"
-                                            placeholder="Your Email"
+                                            placeholder="Email của bạn"
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                                         />
                                         <input
                                             type="tel"
-                                            placeholder="Your Phone"
+                                            placeholder="Số điện thoại"
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                                         />
                                         <textarea
-                                            placeholder="Your Message"
+                                            placeholder="Nội dung tin nhắn"
                                             rows={4}
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none"
                                         ></textarea>
@@ -326,7 +326,7 @@ export default function PropertyDetail() {
                                             type="submit"
                                             className="w-full py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium"
                                         >
-                                            Send Message
+                                            Gửi tin nhắn
                                         </button>
                                     </form>
                                 )}
@@ -334,19 +334,19 @@ export default function PropertyDetail() {
 
                             {/* Quick Stats */}
                             <div className="bg-gradient-to-br from-primary to-primary-light rounded-2xl p-6 text-white">
-                                <h4 className="font-bold mb-4">Quick Facts</h4>
+                                <h4 className="font-bold mb-4">Thông tin nhanh</h4>
                                 <div className="space-y-3 text-sm">
                                     <div className="flex justify-between">
-                                        <span className="opacity-90">Property ID:</span>
+                                        <span className="opacity-90">Mã bất động sản:</span>
                                         <span className="font-semibold">#{property.id}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="opacity-90">Type:</span>
+                                        <span className="opacity-90">Loại hình:</span>
                                         <span className="font-semibold">{property.type}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="opacity-90">Status:</span>
-                                        <span className="font-semibold">Available</span>
+                                        <span className="opacity-90">Trạng thái:</span>
+                                        <span className="font-semibold">Còn trống</span>
                                     </div>
                                 </div>
                             </div>

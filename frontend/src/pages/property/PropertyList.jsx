@@ -117,10 +117,10 @@ export default function PropertyList() {
                 {/* Page Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                        Find Your Dream Property
+                        Tìm kiếm bất động sản mơ ước của bạn
                     </h1>
                     <p className="text-gray-600">
-                        Browse through {properties.length} available properties
+                        Có {properties.length} bất động sản đang chờ bạn khám phá
                     </p>
                 </div>
 
@@ -162,17 +162,17 @@ export default function PropertyList() {
 
                     {/* Sort */}
                     <div className="flex items-center gap-3">
-                        <span className="text-sm text-gray-600 font-medium">Sort by:</span>
+                        <span className="text-sm text-gray-600 font-medium">Sắp xếp:</span>
                         <select
                             value={sortBy}
                             onChange={(e) => handleSort(e.target.value)}
                             className="px-4 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                         >
-                            <option value="newest">Newest First</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="area">Area</option>
-                            <option value="popular">Most Popular</option>
+                            <option value="newest">Mới nhất</option>
+                            <option value="price-low">Giá: Thấp đến cao</option>
+                            <option value="price-high">Giá: Cao đến thấp</option>
+                            <option value="area">Diện tích</option>
+                            <option value="popular">Phổ biến nhất</option>
                         </select>
                     </div>
                 </div>
@@ -199,8 +199,8 @@ export default function PropertyList() {
                 {/* No Results */}
                 {!loading && properties.length === 0 && (
                     <div className="text-center py-20">
-                        <p className="text-xl text-gray-600">No properties found</p>
-                        <p className="text-gray-500 mt-2">Try adjusting your filters</p>
+                        <p className="text-xl text-gray-600">Không tìm thấy bất động sản nào</p>
+                        <p className="text-gray-500 mt-2">Hãy thử đổi các bộ lọc</p>
                     </div>
                 )}
 
@@ -209,7 +209,7 @@ export default function PropertyList() {
                     <div className="flex justify-center mt-12">
                         <div className="flex gap-2">
                             <button className="px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-primary transition-colors">
-                                Previous
+                                Trước
                             </button>
                             <button className="px-4 py-2 bg-primary text-white rounded-lg">1</button>
                             <button className="px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-primary transition-colors">
@@ -219,7 +219,7 @@ export default function PropertyList() {
                                 3
                             </button>
                             <button className="px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-primary transition-colors">
-                                Next
+                                Tiếp
                             </button>
                         </div>
                     </div>

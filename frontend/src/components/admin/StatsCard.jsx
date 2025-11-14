@@ -35,7 +35,7 @@ export default function StatsCard({ title, value, change, icon: Icon, color }) {
                         <span className="text-sm font-semibold">{change}%</span>
                     </div>
                 )}
-                <span className="text-sm text-gray-500">vs last month</span>
+                <span className="text-sm text-gray-500">so với tháng trước</span>
             </div>
         </div>
     );

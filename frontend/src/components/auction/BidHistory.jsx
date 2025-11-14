@@ -21,7 +21,7 @@ export default function BidHistory({ bids = [] }) {
         return (
             <div className="text-center py-12">
                 <TrendingUp className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600">No bids yet. Be the first to bid!</p>
+                <p className="text-gray-600">Chưa có ai trả giá. Hãy là người đầu tiên!</p>
             </div>
         );
     }
@@ -68,7 +68,7 @@ export default function BidHistory({ bids = [] }) {
                             {formatPrice(bid.amount)}
                         </p>
                         {index === 0 && (
-                            <p className="text-xs text-yellow-700 font-semibold">Highest Bid</p>
+                            <p className={`text-xs text-yellow-700 font-semibold`}>Giá cao nhất</p>
                         )}
                     </div>
                 </div>

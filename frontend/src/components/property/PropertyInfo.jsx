@@ -6,9 +6,9 @@ import {
 
 export default function PropertyInfo({ property }) {
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
         }).format(price);
     };
@@ -22,19 +22,19 @@ export default function PropertyInfo({ property }) {
     };
 
     const features = [
-        { icon: Bed, label: 'Bedrooms', value: property.bedrooms || 'N/A' },
-        { icon: Bath, label: 'Bathrooms', value: property.bathrooms || 'N/A' },
-        { icon: Maximize2, label: 'Area', value: `${property.area} m²` },
-        { icon: DoorOpen, label: 'Floors', value: property.floors || 'N/A' },
+        { icon: Bed, label: 'Phòng ngủ', value: property.bedrooms || 'Không rõ' },
+        { icon: Bath, label: 'Phòng tắm', value: property.bathrooms || 'Không rõ' },
+        { icon: Maximize2, label: 'Diện tích', value: `${property.area} m²` },
+        { icon: DoorOpen, label: 'Số tầng', value: property.floors || 'Không rõ' },
     ];
 
     const details = [
-        { label: 'Property Type', value: property.type, icon: Home },
-        { label: 'Property ID', value: `#${property.id}`, icon: Building },
-        { label: 'Location', value: property.address, icon: MapPin },
-        { label: 'Direction', value: property.direction || 'N/A', icon: Compass },
-        { label: 'Legal Status', value: property.legalStatus || 'Full ownership', icon: Building },
-        { label: 'Posted Date', value: formatDate(property.createdAt || new Date()), icon: Calendar },
+        { label: 'Loại bất động sản', value: property.type, icon: Home },
+        { label: 'Mã BĐS', value: `#${property.id}`, icon: Building },
+        { label: 'Vị trí', value: property.address, icon: MapPin },
+        { label: 'Hướng', value: property.direction || 'Không rõ', icon: Compass },
+        { label: 'Tình trạng pháp lý', value: property.legalStatus || 'Sổ hồng đầy đủ', icon: Building },
+        { label: 'Ngày đăng', value: formatDate(property.createdAt || new Date()), icon: Calendar },
     ];
 
     const amenities = property.amenities || [
@@ -52,7 +52,7 @@ export default function PropertyInfo({ property }) {
         <div className="space-y-6">
             {/* Price Section */}
             <div className="bg-gradient-to-r from-primary to-primary-light rounded-2xl p-6 text-white">
-                <p className="text-sm font-medium mb-2 opacity-90">Property Price</p>
+                <p className="text-sm font-medium mb-2 opacity-90">Giá bất động sản</p>
                 <div className="flex items-baseline gap-3">
                     <h2 className="text-4xl font-bold">{formatPrice(property.price)}</h2>
                     <span className="text-lg opacity-90">
@@ -63,7 +63,7 @@ export default function PropertyInfo({ property }) {
 
             {/* Key Features */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Key Features</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Các thông tin nổi bật</h3>
                 <div className="grid grid-cols-2 gap-4">
                     {features.map((feature, index) => (
                         <div
@@ -84,16 +84,15 @@ export default function PropertyInfo({ property }) {
 
             {/* Description */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Description</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Mô tả</h3>
                 <p className="text-gray-700 leading-relaxed">
-                    {property.description ||
-                        'This stunning property offers exceptional living spaces with modern amenities and elegant design. Located in a prime area, it provides easy access to shopping, dining, and entertainment options. The property features high-quality finishes throughout, spacious rooms, and abundant natural light. Perfect for those seeking comfort and luxury in a convenient location.'}
+                    {property.description || 'Bất động sản này nổi bật với không gian sống tiện nghi, sang trọng, vị trí thuận lợi, dễ dàng tiếp cận các tiện ích. Thiết kế đẹp, hiện đại, ánh sáng tự nhiên, lý tưởng cho những ai tìm kiếm cuộc sống tiện nghi tại vị trí hoàn hảo.'}
                 </p>
             </div>
 
             {/* Property Details */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Property Details</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Chi tiết bất động sản</h3>
                 <div className="space-y-4">
                     {details.map((detail, index) => (
                         <div
@@ -112,7 +111,7 @@ export default function PropertyInfo({ property }) {
 
             {/* Amenities */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Amenities</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Tiện ích</h3>
                 <div className="grid grid-cols-2 gap-3">
                     {amenities.map((amenity, index) => (
                         <div
@@ -128,11 +127,11 @@ export default function PropertyInfo({ property }) {
 
             {/* Location Map Placeholder */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Location</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Vị trí</h3>
                 <div className="aspect-video bg-gray-200 rounded-xl flex items-center justify-center">
                     <div className="text-center">
                         <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
-                        <p className="text-gray-600">Map View</p>
+                        <p className="text-gray-600">Xem bản đồ</p>
                         <p className="text-sm text-gray-500 mt-1">{property.address}</p>
                     </div>
                 </div>

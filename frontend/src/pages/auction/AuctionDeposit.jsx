@@ -27,7 +27,7 @@ export default function AuctionDeposit() {
             id: 'VNPAY',
             name: 'VNPay',
             icon: CreditCard,
-            description: 'Pay with VNPay e-wallet',
+            description: 'Thanh toán qua ví VNPay',
             color: 'from-blue-500 to-blue-600',
             available: true,
         },
@@ -35,17 +35,17 @@ export default function AuctionDeposit() {
             id: 'MOMO',
             name: 'MoMo',
             icon: Wallet,
-            description: 'Pay with MoMo wallet',
+            description: 'Thanh toán qua ví MoMo',
             color: 'from-pink-500 to-pink-600',
             available: true,
         },
         {
             id: 'BLOCKCHAIN',
-            name: 'Cryptocurrency',
+            name: 'Tiền mã hóa',
             icon: Bitcoin,
-            description: 'Pay with Bitcoin or Ethereum',
+            description: 'Thanh toán bằng Bitcoin hoặc Ethereum',
             color: 'from-orange-500 to-yellow-600',
-            available: false, // Chưa implement
+            available: false,
         },
     ];
 
@@ -86,12 +86,12 @@ export default function AuctionDeposit() {
 
     const handlePayDeposit = async () => {
         if (!selectedMethod) {
-            alert('Please select a payment method');
+            alert('Vui lòng chọn phương thức thanh toán');
             return;
         }
 
         if (!agreed) {
-            alert('Please agree to the terms and conditions');
+            alert('Vui lòng đồng ý với điều khoản & điều kiện');
             return;
         }
 
@@ -130,37 +130,38 @@ export default function AuctionDeposit() {
 
             // Case 3: Direct payment success (WALLET)
             if (data.success) {
-                alert('Deposit payment successful!');
+                alert('Thanh toán đặt cọc thành công!');
                 navigate(`/auctions/${id}`);
                 return;
             }
 
             // Case 4: Payment method not implemented
-            alert(data.message || 'Payment method not available');
+            alert(data.message || 'Phương thức thanh toán chưa khả dụng');
 
         } catch (error) {
             console.error('Pay deposit error:', error);
-            alert(error.response?.data?.message || 'Payment failed. Please try again.');
+            alert(error.response?.data?.message || 'Thanh toán thất bại. Vui lòng thử lại.');
         } finally {
             setPaying(false);
         }
     };
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
         }).format(price);
     };
 
     const formatDate = (date) => {
-        return new Intl.DateTimeFormat('en-US', {
+        return new Intl.DateTimeFormat('vi-VN', {
+            year: 'numeric',
             month: 'long',
             day: 'numeric',
-            year: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
+            hour12: false,
         }).format(new Date(date));
     };
 
@@ -178,12 +179,12 @@ export default function AuctionDeposit() {
                 <Header />
                 <div className="container mx-auto px-4 py-20 text-center">
                     <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Auction Not Found</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy phiên đấu giá</h2>
                     <button
                         onClick={() => navigate('/auctions')}
                         className="mt-4 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light"
                     >
-                        Back to Auctions
+                        Quay lại danh sách đấu giá
                     </button>
                 </div>
                 <Footer />
@@ -202,7 +203,7 @@ export default function AuctionDeposit() {
                     className="flex items-center gap-2 text-gray-600 hover:text-primary mb-6 transition-colors"
                 >
                     <ArrowLeft className="w-5 h-5" />
-                    <span className="font-medium">Back to Auction</span>
+                    <span className="font-medium">Quay lại phiên đấu giá</span>
                 </button>
 
                 <div className="max-w-4xl mx-auto">
@@ -212,10 +213,10 @@ export default function AuctionDeposit() {
                             <Shield className="w-10 h-10 text-white" />
                         </div>
                         <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                            Auction Deposit
+                            Nộp tiền đặt cọc
                         </h1>
                         <p className="text-gray-600">
-                            Pay deposit to participate in this auction
+                            Thanh toán tiền đặt cọc để tham gia phiên đấu giá này
                         </p>
                     </div>
 
@@ -235,13 +236,13 @@ export default function AuctionDeposit() {
 
                                     <div className="space-y-3 text-sm">
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Starts:</span>
+                                            <span className="text-gray-600">Bắt đầu:</span>
                                             <span className="font-semibold text-gray-900">
                                                 {auction?.startTime ? formatDate(auction.startTime) : 'N/A'}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-gray-600">Status:</span>
+                                            <span className="text-gray-600">Trạng thái:</span>
                                             <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
                                                 {auction?.status || 'N/A'}
                                             </span>
@@ -252,10 +253,10 @@ export default function AuctionDeposit() {
 
                             {/* Deposit Amount */}
                             <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 text-white shadow-xl">
-                                <p className="text-white/80 text-sm font-medium mb-2">Deposit Required</p>
+                                <p className="text-white/80 text-sm font-medium mb-2">Số tiền đặt cọc</p>
                                 <p className="text-4xl font-bold mb-2">{formatPrice(auction?.depositAmount || 0)}</p>
                                 <p className="text-sm text-white/80">
-                                    Refundable if you don't win
+                                    Hoàn tiền nếu bạn không thắng phiên đấu giá
                                 </p>
                             </div>
                         </div>
@@ -265,7 +266,7 @@ export default function AuctionDeposit() {
                             {/* Payment Methods */}
                             <div className="bg-white rounded-2xl shadow-lg p-6">
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                                    Select Payment Method
+                                    Chọn phương thức thanh toán
                                 </h2>
 
                                 <div className="space-y-4">
@@ -275,8 +276,8 @@ export default function AuctionDeposit() {
                                             onClick={() => setSelectedMethod(method.id)}
                                             disabled={!method.available}
                                             className={`w-full p-6 rounded-xl border-2 transition-all ${selectedMethod === method.id
-                                                    ? 'border-primary bg-primary/5 shadow-lg'
-                                                    : 'border-gray-200 hover:border-gray-300'
+                                                ? 'border-primary bg-primary/5 shadow-lg'
+                                                : 'border-gray-200 hover:border-gray-300'
                                                 } ${!method.available ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                                                 }`}
                                         >
@@ -290,7 +291,7 @@ export default function AuctionDeposit() {
                                                     <p className="text-sm text-gray-600">{method.description}</p>
                                                     {!method.available && (
                                                         <span className="text-xs text-orange-600 font-medium mt-1 block">
-                                                            Coming soon
+                                                            Sắp ra mắt
                                                         </span>
                                                     )}
                                                 </div>
@@ -309,13 +310,13 @@ export default function AuctionDeposit() {
                                 <div className="flex items-start gap-3 mb-4">
                                     <Info className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                                     <div>
-                                        <h3 className="font-bold text-blue-900 mb-2">Important Information</h3>
+                                        <h3 className="font-bold text-blue-900 mb-2">Thông tin quan trọng</h3>
                                         <ul className="space-y-2 text-sm text-blue-800">
-                                            <li>• Deposit is required to participate in the auction</li>
-                                            <li>• Deposit will be refunded if you don't win within 24 hours</li>
-                                            <li>• Winner must pay remaining amount within 24 hours</li>
-                                            <li>• Deposit is non-refundable if you win and don't complete payment</li>
-                                            <li>• By paying deposit, you agree to auction terms and conditions</li>
+                                            <li>• Cần nộp tiền đặt cọc để tham gia phiên</li>
+                                            <li>• Đặt cọc sẽ được hoàn trả trong 24 giờ nếu bạn không thắng</li>
+                                            <li>• Người thắng cuộc phải thanh toán phần còn lại trong vòng 24 giờ</li>
+                                            <li>• Nếu thắng nhưng không thanh toán, tiền đặt cọc sẽ không được hoàn lại</li>
+                                            <li>• Khi thanh toán đặt cọc, bạn đồng ý với mọi điều khoản đấu giá</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -328,7 +329,7 @@ export default function AuctionDeposit() {
                                         className="mt-1 w-5 h-5 text-primary border-2 border-blue-300 rounded focus:ring-2 focus:ring-primary"
                                     />
                                     <span className="text-sm text-blue-900 font-medium">
-                                        I have read and agree to the terms and conditions
+                                        Tôi đã đọc và đồng ý với điều khoản & điều kiện của phiên đấu giá
                                     </span>
                                 </label>
                             </div>
@@ -342,17 +343,17 @@ export default function AuctionDeposit() {
                                 {paying ? (
                                     <span className="flex items-center justify-center gap-2">
                                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                        Processing...
+                                        Đang xử lý...
                                     </span>
                                 ) : (
-                                    `Pay Deposit ${formatPrice(auction?.depositAmount || 0)}`
+                                    `Thanh toán đặt cọc ${formatPrice(auction?.depositAmount || 0)}`
                                 )}
                             </button>
 
                             {/* Security Note */}
                             <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                                 <Shield className="w-4 h-4" />
-                                <span>Secured payment powered by SSL encryption</span>
+                                <span>Thanh toán an toàn được bảo vệ bởi mã hóa SSL</span>
                             </div>
                         </div>
                     </div>

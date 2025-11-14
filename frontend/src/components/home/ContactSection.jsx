@@ -8,10 +8,10 @@ export default function ContactSection() {
                     {/* Header */}
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
-                            Do You Have Any Questions?
+                            Bạn có câu hỏi gì không?
                         </h2>
                         <h3 className="text-2xl md:text-3xl font-bold text-primary">
-                            Get Help From Us
+                            Hãy liên hệ với chúng tôi
                         </h3>
                     </div>
 
@@ -19,11 +19,11 @@ export default function ContactSection() {
                     <div className="grid md:grid-cols-2 gap-6 mb-8">
                         <button className="flex items-center justify-center gap-3 p-4 border-2 border-gray-300 rounded-xl hover:border-primary transition-colors">
                             <MessageCircle className="w-6 h-6 text-primary" />
-                            <span className="font-medium text-gray-700">Chat live with our support team</span>
+                            <span className="font-medium text-gray-700">Trò chuyện trực tiếp với đội ngũ hỗ trợ</span>
                         </button>
                         <button className="flex items-center justify-center gap-3 p-4 border-2 border-gray-300 rounded-xl hover:border-primary transition-colors">
                             <FileQuestion className="w-6 h-6 text-primary" />
-                            <span className="font-medium text-gray-700">Browse our FAQ</span>
+                            <span className="font-medium text-gray-700">Xem câu hỏi thường gặp</span>
                         </button>
                     </div>
 
@@ -31,11 +31,11 @@ export default function ContactSection() {
                     <div className="flex gap-4">
                         <input
                             type="email"
-                            placeholder="Enter your email address..."
+                            placeholder="Nhập địa chỉ email của bạn..."
                             className="flex-1 px-6 py-4 bg-accent-light border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent"
                         />
                         <button className="bg-primary text-white px-8 py-4 rounded-xl hover:bg-primary-light transition-colors font-medium">
-                            Submit
+                            Gửi
                         </button>
                     </div>
                 </div>

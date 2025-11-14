@@ -39,7 +39,7 @@ export default function CountdownTimer({ endTime, onEnd }) {
         return (
             <div className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold">
                 <Clock className="w-5 h-5" />
-                <span>Auction Ended</span>
+                <span>Phiên đã kết thúc</span>
             </div>
         );
     }
@@ -53,26 +53,26 @@ export default function CountdownTimer({ endTime, onEnd }) {
                         <div className="px-3 py-2 bg-primary text-white rounded-lg font-bold text-lg">
                             {String(timeLeft.days).padStart(2, '0')}
                         </div>
-                        <div className="text-xs text-gray-600 mt-1">Days</div>
+                        <div className="text-xs text-gray-600 mt-1">Ngày</div>
                     </div>
                 )}
                 <div className="text-center">
                     <div className="px-3 py-2 bg-primary text-white rounded-lg font-bold text-lg">
                         {String(timeLeft.hours).padStart(2, '0')}
                     </div>
-                    <div className="text-xs text-gray-600 mt-1">Hours</div>
+                    <div className="text-xs text-gray-600 mt-1">Giờ</div>
                 </div>
                 <div className="text-center">
                     <div className="px-3 py-2 bg-primary text-white rounded-lg font-bold text-lg">
                         {String(timeLeft.minutes).padStart(2, '0')}
                     </div>
-                    <div className="text-xs text-gray-600 mt-1">Mins</div>
+                    <div className="text-xs text-gray-600 mt-1">Phút</div>
                 </div>
                 <div className="text-center">
                     <div className="px-3 py-2 bg-red-500 text-white rounded-lg font-bold text-lg animate-pulse">
                         {String(timeLeft.seconds).padStart(2, '0')}
                     </div>
-                    <div className="text-xs text-gray-600 mt-1">Secs</div>
+                    <div className="text-xs text-gray-600 mt-1">Giây</div>
                 </div>
             </div>
         </div>

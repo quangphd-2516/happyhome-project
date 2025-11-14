@@ -5,8 +5,8 @@ export default function UserGrowthChart({ data }) {
     return (
         <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">User Growth</h3>
-                <p className="text-sm text-gray-600">New users and KYC verifications</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Tăng trưởng người dùng</h3>
+                <p className="text-sm text-gray-600">Người dùng mới và xác thực KYC</p>
             </div>
 
             <ResponsiveContainer width="100%" height={300}>
@@ -33,14 +33,14 @@ export default function UserGrowthChart({ data }) {
                     <Bar
                         dataKey="newUsers"
                         fill="#3b82f6"
-                        radius={[8, 8, 0, 0]}
-                        name="New Users"
+                        radius={[8,8,0,0]}
+                        name="Người dùng mới"
                     />
                     <Bar
                         dataKey="verified"
                         fill="#10b981"
-                        radius={[8, 8, 0, 0]}
-                        name="KYC Verified"
+                        radius={[8,8,0,0]}
+                        name="Xác thực KYC"
                     />
                 </BarChart>
             </ResponsiveContainer>

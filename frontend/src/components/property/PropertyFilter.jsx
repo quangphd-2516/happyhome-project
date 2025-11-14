@@ -57,7 +57,7 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search by location, property name..."
+                        placeholder="Tìm theo vị trí, tên bất động sản..."
                         className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                     />
                 </div>
@@ -65,7 +65,7 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                     type="submit"
                     className="px-6 py-3.5 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium"
                 >
-                    Search
+                    Tìm kiếm
                 </button>
                 <button
                     type="button"
@@ -73,7 +73,7 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                     className="relative px-6 py-3.5 border-2 border-gray-200 rounded-xl hover:border-primary transition-colors flex items-center gap-2"
                 >
                     <SlidersHorizontal className="w-5 h-5" />
-                    <span className="font-medium">Filters</span>
+                    <span className="font-medium">Bộ lọc</span>
                     {activeFiltersCount > 0 && (
                         <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                             {activeFiltersCount}
@@ -86,14 +86,14 @@ export default function PropertyFilter({ onFilter, onSearch }) {
             {showFilters && (
                 <div className="space-y-6 pt-6 border-t border-gray-200 animate-in slide-in-from-top">
                     <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-gray-900">Advanced Filters</h3>
+                        <h3 className="text-lg font-bold text-gray-900">Bộ lọc nâng cao</h3>
                         {activeFiltersCount > 0 && (
                             <button
                                 onClick={clearFilters}
                                 className="text-sm text-red-500 hover:text-red-600 font-medium flex items-center gap-1"
                             >
                                 <X className="w-4 h-4" />
-                                Clear All
+                                Xóa tất cả
                             </button>
                         )}
                     </div>
@@ -103,14 +103,14 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <Home className="w-4 h-4" />
-                                Property Type
+                                Loại bất động sản
                             </label>
                             <select
                                 value={filters.type}
                                 onChange={(e) => handleFilterChange('type', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                             >
-                                <option value="">All Types</option>
+                                <option value="">Tất cả loại</option>
                                 {propertyTypes.map(type => (
                                     <option key={type} value={type}>{type}</option>
                                 ))}
@@ -121,14 +121,14 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <MapPin className="w-4 h-4" />
-                                City
+                                Thành phố
                             </label>
                             <select
                                 value={filters.city}
                                 onChange={(e) => handleFilterChange('city', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                             >
-                                <option value="">All Cities</option>
+                                <option value="">Tất cả thành phố</option>
                                 {cities.map(city => (
                                     <option key={city} value={city}>{city}</option>
                                 ))}
@@ -138,14 +138,14 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         {/* Bedrooms */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Bedrooms
+                                Phòng ngủ
                             </label>
                             <select
                                 value={filters.bedrooms}
                                 onChange={(e) => handleFilterChange('bedrooms', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                             >
-                                <option value="">Any</option>
+                                <option value="">Bất kỳ</option>
                                 {[1, 2, 3, 4, 5].map(num => (
                                     <option key={num} value={num}>{num}+</option>
                                 ))}
@@ -155,14 +155,14 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         {/* Bathrooms */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Bathrooms
+                                Phòng tắm
                             </label>
                             <select
                                 value={filters.bathrooms}
                                 onChange={(e) => handleFilterChange('bathrooms', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                             >
-                                <option value="">Any</option>
+                                <option value="">Bất kỳ</option>
                                 {[1, 2, 3, 4].map(num => (
                                     <option key={num} value={num}>{num}+</option>
                                 ))}
@@ -173,7 +173,7 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <DollarSign className="w-4 h-4" />
-                                Min Price ($)
+                                Giá tối thiểu ($)
                             </label>
                             <input
                                 type="number"
@@ -187,13 +187,13 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         {/* Max Price */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Max Price ($)
+                                Giá tối đa ($)
                             </label>
                             <input
                                 type="number"
                                 value={filters.maxPrice}
                                 onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                                placeholder="Any"
+                                placeholder="Bất kỳ"
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                             />
                         </div>
@@ -201,7 +201,7 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         {/* Min Area */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Min Area (m²)
+                                Diện tích tối thiểu (m²)
                             </label>
                             <input
                                 type="number"
@@ -215,13 +215,13 @@ export default function PropertyFilter({ onFilter, onSearch }) {
                         {/* Max Area */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Max Area (m²)
+                                Diện tích tối đa (m²)
                             </label>
                             <input
                                 type="number"
                                 value={filters.maxArea}
                                 onChange={(e) => handleFilterChange('maxArea', e.target.value)}
-                                placeholder="Any"
+                                placeholder="Bất kỳ"
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                             />
                         </div>

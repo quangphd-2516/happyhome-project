@@ -29,43 +29,43 @@ export default function Profile() {
     const quickActions = [
         {
             icon: Wallet,
-            label: 'My Wallet',
-            description: 'Manage your balance',
+            label: 'Ví của tôi',
+            description: 'Quản lý số dư',
             color: 'bg-blue-500',
             onClick: () => navigate('/wallet')
         },
         {
             icon: Package,
-            label: 'My Properties',
-            description: 'View your listings',
+            label: 'Bất động sản của tôi',
+            description: 'Xem tin đăng của bạn',
             color: 'bg-green-500',
             onClick: () => navigate('/properties/my-properties')
         },
         {
             icon: Gavel,
-            label: 'My Auctions',
-            description: 'Active bids',
+            label: 'Phiên đấu giá của tôi',
+            description: 'Các lượt đấu giá đang hoạt động',
             color: 'bg-purple-500',
             onClick: () => navigate('/auctions/my-auctions')
         },
         {
             icon: Heart,
-            label: 'Favorites',
-            description: 'Saved properties',
+            label: 'Yêu thích',
+            description: 'Bất động sản đã lưu',
             color: 'bg-pink-500',
             onClick: () => navigate('/favorites')
         },
         {
             icon: Settings,
-            label: 'Settings',
-            description: 'Account settings',
+            label: 'Cài đặt',
+            description: 'Cài đặt tài khoản',
             color: 'bg-gray-500',
             onClick: () => navigate('/settings')
         },
         {
             icon: Shield,
-            label: 'Security',
-            description: 'Change password',
+            label: 'Bảo mật',
+            description: 'Đổi mật khẩu',
             color: 'bg-orange-500',
             onClick: () => navigate('/change-password')
         }
@@ -85,7 +85,7 @@ export default function Profile() {
 
                     {/* Quick Actions Grid */}
                     <div className="bg-white rounded-2xl shadow-lg p-8">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Thao tác nhanh</h2>
                         <div className="grid md:grid-cols-3 gap-4">
                             {quickActions.map((action) => {
                                 const Icon = action.icon;
@@ -118,7 +118,7 @@ export default function Profile() {
                                 <Package className="w-8 h-8" />
                                 <span className="text-3xl font-bold">0</span>
                             </div>
-                            <p className="text-blue-100">Active Properties</p>
+                            <p className="text-blue-100">Bất động sản đang hoạt động</p>
                         </div>
 
                         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white">
@@ -126,7 +126,7 @@ export default function Profile() {
                                 <Gavel className="w-8 h-8" />
                                 <span className="text-3xl font-bold">0</span>
                             </div>
-                            <p className="text-purple-100">Active Bids</p>
+                            <p className="text-purple-100">Lượt đấu giá đang hoạt động</p>
                         </div>
 
                         <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl p-6 text-white">
@@ -134,7 +134,7 @@ export default function Profile() {
                                 <Heart className="w-8 h-8" />
                                 <span className="text-3xl font-bold">0</span>
                             </div>
-                            <p className="text-pink-100">Saved Items</p>
+                            <p className="text-pink-100">Mục đã lưu</p>
                         </div>
                     </div>
                 </div>

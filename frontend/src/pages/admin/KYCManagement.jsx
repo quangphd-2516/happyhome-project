@@ -23,7 +23,7 @@ const mockKYCList = [
         userId: 'user_001',
         user: {
             id: 'user_001',
-            fullName: 'Nguyen Van A',
+            fullName: 'Nguyễn Văn A',
             email: 'nguyenvana@example.com',
             phone: '0123456789'
         },
@@ -31,9 +31,9 @@ const mockKYCList = [
         idCardFront: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         idCardBack: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         selfieWithId: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
-        fullName: 'Nguyen Van A',
+        fullName: 'Nguyễn Văn A',
         dateOfBirth: '1990-05-15T00:00:00Z',
-        address: '123 Nguyen Trai, Thanh Xuan, Ha Noi',
+        address: '123 Nguyễn Trãi, Thanh Xuân, Hà Nội',
         status: 'PENDING',
         rejectionReason: null,
         verifiedBy: null,
@@ -46,7 +46,7 @@ const mockKYCList = [
         userId: 'user_002',
         user: {
             id: 'user_002',
-            fullName: 'Tran Thi B',
+            fullName: 'Trần Thị B',
             email: 'tranthib@example.com',
             phone: '0987654321'
         },
@@ -54,9 +54,9 @@ const mockKYCList = [
         idCardFront: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         idCardBack: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         selfieWithId: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
-        fullName: 'Tran Thi B',
+        fullName: 'Trần Thị B',
         dateOfBirth: '1992-08-20T00:00:00Z',
-        address: '456 Tran Phu, Ba Dinh, Ha Noi',
+        address: '456 Trần Phú, Ba Đình, Hà Nội',
         status: 'APPROVED',
         rejectionReason: null,
         verifiedBy: 'admin_001',
@@ -69,7 +69,7 @@ const mockKYCList = [
         userId: 'user_003',
         user: {
             id: 'user_003',
-            fullName: 'Le Van C',
+            fullName: 'Lê Văn C',
             email: 'levanc@example.com',
             phone: '0912345678'
         },
@@ -77,11 +77,11 @@ const mockKYCList = [
         idCardFront: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         idCardBack: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         selfieWithId: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
-        fullName: 'Le Van C',
+        fullName: 'Lê Văn C',
         dateOfBirth: '1988-12-05T00:00:00Z',
-        address: '789 Le Loi, Hoan Kiem, Ha Noi',
+        address: '789 Lê Lợi, Hoàn Kiếm, Hà Nội',
         status: 'REJECTED',
-        rejectionReason: 'ID card image is blurry and unreadable',
+        rejectionReason: 'Ảnh CMND/CCCD bị mờ, không đọc được',
         verifiedBy: 'admin_001',
         verifiedAt: '2024-03-12T11:20:00Z',
         createdAt: '2024-03-11T15:00:00Z',
@@ -92,7 +92,7 @@ const mockKYCList = [
         userId: 'user_004',
         user: {
             id: 'user_004',
-            fullName: 'Pham Thi D',
+            fullName: 'Phạm Thị D',
             email: 'phamthid@example.com',
             phone: '0945678901'
         },
@@ -100,9 +100,9 @@ const mockKYCList = [
         idCardFront: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         idCardBack: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         selfieWithId: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
-        fullName: 'Pham Thi D',
+        fullName: 'Phạm Thị D',
         dateOfBirth: '1995-03-18T00:00:00Z',
-        address: '321 Hai Ba Trung, Dong Da, Ha Noi',
+        address: '321 Hà Bạc Trung, Đống Đa, Hà Nội',
         status: 'PENDING',
         rejectionReason: null,
         verifiedBy: null,
@@ -115,7 +115,7 @@ const mockKYCList = [
         userId: 'user_005',
         user: {
             id: 'user_005',
-            fullName: 'Hoang Van E',
+            fullName: 'Hoàng Văn E',
             email: 'hoangvane@example.com',
             phone: '0923456789'
         },
@@ -123,9 +123,9 @@ const mockKYCList = [
         idCardFront: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         idCardBack: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         selfieWithId: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
-        fullName: 'Hoang Van E',
+        fullName: 'Hoàng Văn E',
         dateOfBirth: '1993-07-22T00:00:00Z',
-        address: '654 Giai Phong, Hai Ba Trung, Ha Noi',
+        address: '654 Giải Phóng, Hà Bắc Trung, Hà Nội',
         status: 'APPROVED',
         rejectionReason: null,
         verifiedBy: 'admin_002',
@@ -138,7 +138,7 @@ const mockKYCList = [
         userId: 'user_006',
         user: {
             id: 'user_006',
-            fullName: 'Vu Thi F',
+            fullName: 'Vũ Thị F',
             email: 'vuthif@example.com',
             phone: '0934567890'
         },
@@ -146,9 +146,9 @@ const mockKYCList = [
         idCardFront: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         idCardBack: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
         selfieWithId: 'https://images.unsplash.com/photo-1633409361618-c73427e4e206?w=800',
-        fullName: 'Vu Thi F',
+        fullName: 'Vũ Thị F',
         dateOfBirth: '1991-10-30T00:00:00Z',
-        address: '987 Cau Giay, Cau Giay, Ha Noi',
+        address: '987 Cầu Giấy, Cầu Giấy, Hà Nội',
         status: 'PENDING',
         rejectionReason: null,
         verifiedBy: null,
@@ -250,7 +250,7 @@ const KYCManagement = () => {
                     <p className="text-3xl font-bold text-gray-900">{value}</p>
                     <div className="flex items-center mt-2 text-xs text-gray-500">
                         <TrendingUp className="w-3 h-3 mr-1" />
-                        <span>Last 30 days</span>
+                        <span>30 ngày gần nhất</span>
                     </div>
                 </div>
                 <div className={`${bgColor} p-4 rounded-xl`}>
@@ -268,10 +268,10 @@ const KYCManagement = () => {
                     <div className="flex items-center justify-between mb-2">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                                KYC Management
+                                Quản lý KYC
                             </h1>
                             <p className="text-gray-600">
-                                Review and approve user identity verification requests
+                                Xem xét và phê duyệt các yêu cầu xác thực danh tính người dùng
                             </p>
                         </div>
                         <button
@@ -279,7 +279,7 @@ const KYCManagement = () => {
                             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                         >
                             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                            <span className="font-medium">Refresh</span>
+                            <span className="font-medium">Tải lại</span>
                         </button>
                     </div>
                 </div>
@@ -288,28 +288,28 @@ const KYCManagement = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <StatCard
                         icon={FileCheck}
-                        label="Total Submissions"
+                        label="Tổng hồ sơ"
                         value={stats.total}
                         color="text-blue-600"
                         bgColor="bg-blue-50"
                     />
                     <StatCard
                         icon={Clock}
-                        label="Pending Review"
+                        label="Đang chờ duyệt"
                         value={stats.pending}
                         color="text-yellow-600"
                         bgColor="bg-yellow-50"
                     />
                     <StatCard
                         icon={CheckCircle}
-                        label="Approved"
+                        label="Đã duyệt"
                         value={stats.approved}
                         color="text-green-600"
                         bgColor="bg-green-50"
                     />
                     <StatCard
                         icon={XCircle}
-                        label="Rejected"
+                        label="Đã từ chối"
                         value={stats.rejected}
                         color="text-red-600"
                         bgColor="bg-red-50"
@@ -329,10 +329,10 @@ const KYCManagement = () => {
                     <div className="p-6 border-b border-gray-100">
                         <div className="flex items-center justify-between">
                             <h2 className="text-xl font-semibold text-gray-900">
-                                KYC Submissions
+                                Danh sách hồ sơ KYC
                             </h2>
                             <div className="flex items-center gap-2 text-sm text-gray-600">
-                                <span>Showing {kycList.length} results</span>
+                                <span>Đang hiển thị {kycList.length} kết quả</span>
                             </div>
                         </div>
                     </div>
@@ -341,17 +341,17 @@ const KYCManagement = () => {
                         <div className="flex items-center justify-center py-20">
                             <div className="text-center">
                                 <RefreshCw className="w-12 h-12 text-blue-500 animate-spin mx-auto mb-4" />
-                                <p className="text-gray-600">Loading KYC submissions...</p>
+                                <p className="text-gray-600">Đang tải danh sách hồ sơ KYC...</p>
                             </div>
                         </div>
                     ) : kycList.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20">
                             <FileCheck className="w-16 h-16 text-gray-300 mb-4" />
                             <h3 className="text-lg font-medium text-gray-900 mb-2">
-                                No KYC submissions found
+                                Không tìm thấy hồ sơ KYC
                             </h3>
                             <p className="text-gray-600 text-center max-w-md">
-                                There are no KYC submissions matching your filters. Try adjusting your search criteria.
+                                Không có hồ sơ phù hợp với bộ lọc hiện tại. Hãy thử thay đổi điều kiện tìm kiếm.
                             </p>
                         </div>
                     ) : (
@@ -367,7 +367,7 @@ const KYCManagement = () => {
                         <div className="px-6 py-4 border-t border-gray-100 bg-gray-50">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm text-gray-600">
-                                    Page {filters.page} of {Math.ceil(stats.total / filters.limit)}
+                                    Trang {filters.page} / {Math.ceil(stats.total / filters.limit)}
                                 </div>
                                 <div className="flex gap-2">
                                     <button
@@ -375,14 +375,14 @@ const KYCManagement = () => {
                                         disabled={filters.page === 1}
                                         className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                                     >
-                                        Previous
+                                        Trang trước
                                     </button>
                                     <button
                                         onClick={() => setFilters(prev => ({ ...prev, page: prev.page + 1 }))}
                                         disabled={filters.page >= Math.ceil(stats.total / filters.limit)}
                                         className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                                     >
-                                        Next
+                                        Trang sau
                                     </button>
                                 </div>
                             </div>

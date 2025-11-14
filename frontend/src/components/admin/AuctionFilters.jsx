@@ -17,11 +17,11 @@ export default function AuctionFilters({ filters, onFilterChange }) {
     const [localFilters, setLocalFilters] = useState(filters);
 
     const statusOptions = [
-        { value: 'all', label: 'All Status', icon: Filter, color: 'text-gray-600' },
-        { value: 'UPCOMING', label: 'Upcoming', icon: Calendar, color: 'text-purple-600' },
-        { value: 'ONGOING', label: 'Ongoing', icon: Clock, color: 'text-blue-600' },
-        { value: 'COMPLETED', label: 'Completed', icon: CheckCircle, color: 'text-green-600' },
-        { value: 'CANCELLED', label: 'Cancelled', icon: Ban, color: 'text-red-600' }
+        { value: 'all', label: 'Tất cả trạng thái', icon: Filter, color: 'text-gray-600' },
+        { value: 'UPCOMING', label: 'Sắp diễn ra', icon: Calendar, color: 'text-purple-600' },
+        { value: 'ONGOING', label: 'Đang diễn ra', icon: Clock, color: 'text-blue-600' },
+        { value: 'COMPLETED', label: 'Hoàn thành', icon: CheckCircle, color: 'text-green-600' },
+        { value: 'CANCELLED', label: 'Đã hủy', icon: Ban, color: 'text-red-600' }
     ];
 
     const handleStatusChange = (status) => {
@@ -78,7 +78,7 @@ export default function AuctionFilters({ filters, onFilterChange }) {
                             type="text"
                             value={localFilters.search}
                             onChange={handleSearchChange}
-                            placeholder="Search by auction title or property name..."
+                            placeholder="Tìm theo tiêu đề phiên hoặc tên bất động sản..."
                             className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                         />
                         {localFilters.search && (
@@ -102,12 +102,12 @@ export default function AuctionFilters({ filters, onFilterChange }) {
                     <button
                         onClick={() => setShowAdvanced(!showAdvanced)}
                         className={`flex items-center gap-2 px-4 py-2.5 border-2 rounded-xl transition-all duration-200 font-medium ${showAdvanced || hasActiveFilters
-                                ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
-                                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                            ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
+                            : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <Filter className="w-4 h-4" />
-                        <span>Filters</span>
+                        <span>Bộ lọc</span>
                         {hasActiveFilters && (
                             <span className="w-5 h-5 bg-indigo-600 text-white text-xs rounded-full flex items-center justify-center">
                                 {[
@@ -125,7 +125,7 @@ export default function AuctionFilters({ filters, onFilterChange }) {
                             className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 border-2 border-gray-200 rounded-xl hover:bg-gray-200 transition-colors font-medium"
                         >
                             <RotateCcw className="w-4 h-4" />
-                            <span>Reset</span>
+                            <span>Đặt lại</span>
                         </button>
                     )}
                 </div>
@@ -142,8 +142,8 @@ export default function AuctionFilters({ filters, onFilterChange }) {
                             key={option.value}
                             onClick={() => handleStatusChange(option.value)}
                             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${isActive
-                                    ? 'bg-indigo-600 text-white shadow-md'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                ? 'bg-indigo-600 text-white shadow-md'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                         >
                             <Icon className={`w-4 h-4 ${isActive ? 'text-white' : option.color}`} />
@@ -162,7 +162,7 @@ export default function AuctionFilters({ filters, onFilterChange }) {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
-                                    From Date
+                                    Từ ngày
                                 </div>
                             </label>
                             <input
@@ -178,7 +178,7 @@ export default function AuctionFilters({ filters, onFilterChange }) {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
-                                    To Date
+                                    Đến ngày
                                 </div>
                             </label>
                             <input
@@ -191,9 +191,7 @@ export default function AuctionFilters({ filters, onFilterChange }) {
 
                         {/* Results per page */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Results per page
-                            </label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Số kết quả/trang</label>
                             <select
                                 value={localFilters.limit}
                                 onChange={(e) => {
@@ -203,24 +201,22 @@ export default function AuctionFilters({ filters, onFilterChange }) {
                                 }}
                                 className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             >
-                                <option value={10}>10 per page</option>
-                                <option value={25}>25 per page</option>
-                                <option value={50}>50 per page</option>
-                                <option value={100}>100 per page</option>
+                                <option value={10}>10/trang</option>
+                                <option value={25}>25/trang</option>
+                                <option value={50}>50/trang</option>
+                                <option value={100}>100/trang</option>
                             </select>
                         </div>
                     </div>
 
                     {/* Quick Date Filters */}
                     <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="text-sm font-medium text-gray-700 mr-2 self-center">
-                            Quick filters:
-                        </span>
+                        <span className="text-sm font-medium text-gray-700 mr-2 self-center">Bộ lọc nhanh:</span>
                         {[
-                            { label: 'Today', days: 0 },
-                            { label: 'This Week', days: 7 },
-                            { label: 'This Month', days: 30 },
-                            { label: 'Next 3 Months', days: 90 }
+                            { label: 'Hôm nay', days: 0 },
+                            { label: 'Tuần này', days: 7 },
+                            { label: 'Tháng này', days: 30 },
+                            { label: '3 tháng tới', days: 90 }
                         ].map((quickFilter) => (
                             <button
                                 key={quickFilter.label}

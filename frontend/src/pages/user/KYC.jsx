@@ -29,10 +29,10 @@ export default function KYC() {
                             <Shield className="w-10 h-10 text-white" />
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                            Identity Verification
+                            Xác thực danh tính
                         </h1>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            Complete your KYC verification to unlock full access to our platform features including property listings and auction participation.
+                            Hoàn tất xác thực KYC để mở khóa toàn bộ tính năng của nền tảng, bao gồm đăng tin bất động sản và tham gia đấu giá.
                         </p>
                     </div>
 
@@ -42,9 +42,9 @@ export default function KYC() {
                             <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
                                 <CheckCircle className="w-6 h-6 text-green-600" />
                             </div>
-                            <h3 className="font-bold text-gray-900 mb-2">Enhanced Security</h3>
+                            <h3 className="font-bold text-gray-900 mb-2">Bảo mật nâng cao</h3>
                             <p className="text-sm text-gray-600">
-                                Protect your account and transactions with verified identity
+                                Bảo vệ tài khoản và giao dịch của bạn với danh tính đã xác thực
                             </p>
                         </div>
 
@@ -52,9 +52,9 @@ export default function KYC() {
                             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
                                 <Shield className="w-6 h-6 text-blue-600" />
                             </div>
-                            <h3 className="font-bold text-gray-900 mb-2">Full Platform Access</h3>
+                            <h3 className="font-bold text-gray-900 mb-2">Truy cập đầy đủ</h3>
                             <p className="text-sm text-gray-600">
-                                Participate in auctions and post property listings
+                                Tham gia đấu giá và đăng tin bất động sản
                             </p>
                         </div>
 
@@ -62,9 +62,9 @@ export default function KYC() {
                             <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
                                 <AlertCircle className="w-6 h-6 text-purple-600" />
                             </div>
-                            <h3 className="font-bold text-gray-900 mb-2">Build Trust</h3>
+                            <h3 className="font-bold text-gray-900 mb-2">Xây dựng niềm tin</h3>
                             <p className="text-sm text-gray-600">
-                                Increase credibility with verified badge on your profile
+                                Tăng uy tín với huy hiệu đã xác thực trên hồ sơ của bạn
                             </p>
                         </div>
                     </div>
@@ -78,12 +78,12 @@ export default function KYC() {
                                 </div>
                             </div>
                             <div>
-                                <h3 className="font-bold text-orange-900 mb-2">Important Information</h3>
+                                <h3 className="font-bold text-orange-900 mb-2">Thông tin quan trọng</h3>
                                 <ul className="text-sm text-orange-800 space-y-1">
-                                    <li>• Verification typically takes 24-48 hours</li>
-                                    <li>• All documents must be clear and readable</li>
-                                    <li>• Information must match your ID card exactly</li>
-                                    <li>• Your data is encrypted and stored securely</li>
+                                    <li>• Xác thực thường mất 24-48 giờ</li>
+                                    <li>• Tất cả tài liệu phải rõ ràng và dễ đọc</li>
+                                    <li>• Thông tin phải khớp chính xác với CMND/CCCD của bạn</li>
+                                    <li>• Dữ liệu của bạn được mã hóa và lưu trữ an toàn</li>
                                 </ul>
                             </div>
                         </div>
@@ -94,16 +94,16 @@ export default function KYC() {
 
                     {/* Help Section */}
                     <div className="mt-12 bg-white rounded-2xl shadow-lg p-8 text-center">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Need Help?</h3>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">Cần hỗ trợ?</h3>
                         <p className="text-gray-600 mb-6">
-                            If you have any questions about the KYC process, our support team is here to help.
+                            Nếu bạn có bất kỳ câu hỏi nào về quy trình KYC, đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giúp đỡ.
                         </p>
                         <div className="flex gap-4 justify-center">
                             <button className="px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors font-medium">
-                                Contact Support
+                                Liên hệ hỗ trợ
                             </button>
                             <button className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium">
-                                View FAQ
+                                Xem câu hỏi thường gặp
                             </button>
                         </div>
                     </div>

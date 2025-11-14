@@ -16,10 +16,10 @@ export default function AuctionCard({ auction }) {
 
     const getStatusBadge = (status) => {
         const config = {
-            UPCOMING: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Upcoming' },
-            ONGOING: { bg: 'bg-green-100', text: 'text-green-700', label: 'Live Now', pulse: true },
-            COMPLETED: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Completed' },
-            CANCELLED: { bg: 'bg-red-100', text: 'text-red-700', label: 'Cancelled' },
+            UPCOMING: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Sắp diễn ra' },
+            ONGOING: { bg: 'bg-green-100', text: 'text-green-700', label: 'Đang diễn ra', pulse: true },
+            COMPLETED: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Đã kết thúc' },
+            CANCELLED: { bg: 'bg-red-100', text: 'text-red-700', label: 'Đã hủy' },
         };
         const { bg, text, label, pulse } = config[auction.status] || config.UPCOMING;
 
@@ -54,7 +54,7 @@ export default function AuctionCard({ auction }) {
                 {/* Bid Count */}
                 <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-full flex items-center gap-1.5">
                     <Users className="w-4 h-4 text-white" />
-                    <span className="text-xs font-medium text-white">{auction.bids?.length || 0} Bids</span>
+                    <span className="text-xs font-medium text-white">{auction.bids?.length || 0} Lượt trả giá</span>
                 </div>
             </div>
 
@@ -69,7 +69,7 @@ export default function AuctionCard({ auction }) {
                 <div className="mb-4 pb-4 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-xs text-gray-500 mb-1">Current Bid</p>
+                            <p className="text-xs text-gray-500 mb-1">Giá hiện tại</p>
                             <div className="flex items-center gap-2">
                                 <p className="text-3xl font-bold text-primary">
                                     {formatPrice(auction.currentPrice)}
@@ -80,7 +80,7 @@ export default function AuctionCard({ auction }) {
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-xs text-gray-500 mb-1">Starting Price</p>
+                            <p className="text-xs text-gray-500 mb-1">Giá khởi điểm</p>
                             <p className="text-lg font-semibold text-gray-700">
                                 {formatPrice(auction.startPrice)}
                             </p>
@@ -91,7 +91,7 @@ export default function AuctionCard({ auction }) {
                 {/* Time Remaining */}
                 {auction.status === 'ONGOING' && (
                     <div className="mb-4">
-                        <p className="text-xs text-gray-500 mb-2">Time Remaining</p>
+                        <p className="text-xs text-gray-500 mb-2">Còn lại</p>
                         <CountdownTimer endTime={auction.endTime} />
                     </div>
                 )}
@@ -99,26 +99,22 @@ export default function AuctionCard({ auction }) {
                 {auction.status === 'UPCOMING' && (
                     <div className="mb-4 flex items-center gap-2 text-gray-600">
                         <Calendar className="w-4 h-4" />
-                        <p className="text-sm">
-                            Starts: {new Date(auction.startTime).toLocaleString()}
-                        </p>
+                        <p className="text-sm">Bắt đầu: {new Date(auction.startTime).toLocaleString()}</p>
                     </div>
                 )}
 
                 {/* CTA Button */}
                 <button
                     className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${auction.status === 'ONGOING'
-                            ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 shadow-lg'
-                            : auction.status === 'UPCOMING'
-                                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                                : 'bg-gray-200 text-gray-600 cursor-not-allowed'
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 shadow-lg'
+                        : auction.status === 'UPCOMING'
+                            ? 'bg-blue-500 text-white hover:bg-blue-600'
+                            : 'bg-gray-200 text-gray-600 cursor-not-allowed'
                         }`}
                     disabled={auction.status === 'COMPLETED' || auction.status === 'CANCELLED'}
                 >
                     <Gavel className="w-5 h-5" />
-                    {auction.status === 'ONGOING' ? 'Bid Now' :
-                        auction.status === 'UPCOMING' ? 'View Details' :
-                            'Auction Ended'}
+                    {auction.status === 'ONGOING' ? 'Tham gia trả giá' : auction.status === 'UPCOMING' ? 'Xem chi tiết' : 'Phiên đã kết thúc'}
                 </button>
             </div>
         </div>

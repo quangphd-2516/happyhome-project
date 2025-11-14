@@ -33,7 +33,7 @@ export default function LocationPicker({ value, onChange }) {
             {/* Address */}
             <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Full Address <span className="text-red-500">*</span>
+                    Địa chỉ đầy đủ <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -41,7 +41,7 @@ export default function LocationPicker({ value, onChange }) {
                         type="text"
                         value={value?.address || ''}
                         onChange={(e) => handleChange('address', e.target.value)}
-                        placeholder="123 Main Street"
+                        placeholder="VD: 123 Đường chính"
                         className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                         required
                     />
@@ -52,7 +52,7 @@ export default function LocationPicker({ value, onChange }) {
             <div className="grid md:grid-cols-3 gap-4">
                 <div>
                     <label className="block text-sm font-semibold text-gray-900 mb-2">
-                        City/Province <span className="text-red-500">*</span>
+                        Tỉnh/Thành phố <span className="text-red-500">*</span>
                     </label>
                     <select
                         value={value?.city || ''}
@@ -60,7 +60,7 @@ export default function LocationPicker({ value, onChange }) {
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                         required
                     >
-                        <option value="">Select City</option>
+                        <option value="">Chọn thành phố</option>
                         {cities.map(city => (
                             <option key={city} value={city}>{city}</option>
                         ))}
@@ -69,13 +69,13 @@ export default function LocationPicker({ value, onChange }) {
 
                 <div>
                     <label className="block text-sm font-semibold text-gray-900 mb-2">
-                        District <span className="text-red-500">*</span>
+                        Quận/Huyện <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="text"
                         value={value?.district || ''}
                         onChange={(e) => handleChange('district', e.target.value)}
-                        placeholder="District name"
+                        placeholder="Tên quận/huyện"
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                         required
                     />
@@ -83,13 +83,13 @@ export default function LocationPicker({ value, onChange }) {
 
                 <div>
                     <label className="block text-sm font-semibold text-gray-900 mb-2">
-                        Ward <span className="text-red-500">*</span>
+                        Phường/Xã <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="text"
                         value={value?.ward || ''}
                         onChange={(e) => handleChange('ward', e.target.value)}
-                        placeholder="Ward name"
+                        placeholder="Tên phường/xã"
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                         required
                     />
@@ -99,22 +99,20 @@ export default function LocationPicker({ value, onChange }) {
             {/* Coordinates */}
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-semibold text-gray-900">
-                        Coordinates (Optional)
-                    </label>
+                    <label className="text-sm font-semibold text-gray-900">Toạ độ (không bắt buộc)</label>
                     <button
                         type="button"
                         onClick={handleGetLocation}
                         className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-primary rounded-lg hover:bg-blue-100 transition-colors"
                     >
                         <Navigation className="w-4 h-4" />
-                        <span className="text-sm font-medium">Get Current Location</span>
+                        <span className="text-sm font-medium">Lấy vị trí hiện tại</span>
                     </button>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-xs text-gray-600 mb-1">Latitude</label>
+                        <label className="block text-xs text-gray-600 mb-1">Vĩ độ</label>
                         <input
                             type="number"
                             step="any"
@@ -126,7 +124,7 @@ export default function LocationPicker({ value, onChange }) {
                     </div>
 
                     <div>
-                        <label className="block text-xs text-gray-600 mb-1">Longitude</label>
+                        <label className="block text-xs text-gray-600 mb-1">Kinh độ</label>
                         <input
                             type="number"
                             step="any"
@@ -142,7 +140,7 @@ export default function LocationPicker({ value, onChange }) {
             {/* Map Preview Placeholder */}
             <div className="bg-gray-100 rounded-xl p-8 text-center">
                 <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm text-gray-600">Map preview will appear here</p>
+                <p className="text-sm text-gray-600">Bản đồ sẽ hiển thị tại đây</p>
             </div>
         </div>
     );

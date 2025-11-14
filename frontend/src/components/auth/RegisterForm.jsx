@@ -129,10 +129,10 @@ export default function RegisterForm() {
         <div className="w-full max-w-md mx-auto">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                    Create Your Account
+                    Tạo tài khoản của bạn
                 </h1>
                 <p className="text-gray-500">
-                    Welcome back! Please enter your details
+                    Chào mừng bạn! Vui lòng nhập thông tin bên dưới
                 </p>
             </div>
 
@@ -155,13 +155,13 @@ export default function RegisterForm() {
                     <path d="M4.39748 11.9366C4.18219 11.3166 4.05759 10.6521 4.05759 9.96565C4.05759 9.27909 4.18219 8.61473 4.38615 7.99466L4.38045 7.8626L1.19304 5.44366L1.08876 5.49214C0.397576 6.84305 0.000976562 8.36008 0.000976562 9.96565C0.000976562 11.5712 0.397576 13.0882 1.08876 14.4391L4.39748 11.9366Z" fill="#FBBC05" />
                     <path d="M10.1993 3.85336C12.1142 3.85336 13.406 4.66168 14.1425 5.33718L17.0207 2.59107C15.253 0.985496 12.9527 0 10.1993 0C6.2106 0 2.76588 2.23672 1.08887 5.49214L4.38626 7.99466C5.21352 5.59183 7.50242 3.85336 10.1993 3.85336Z" fill="#EB4335" />
                 </svg>
-                <span className="font-medium text-gray-700">Sign up with Google</span>
+                <span className="font-medium text-gray-700">Đăng ký với Google</span>
             </button>
 
             {/* Divider */}
             <div className="flex items-center gap-4 mb-6">
                 <div className="flex-1 h-px bg-gray-300"></div>
-                <span className="text-sm text-gray-500 font-medium">OR</span>
+                <span className="text-sm text-gray-500 font-medium">HOẶC</span>
                 <div className="flex-1 h-px bg-gray-300"></div>
             </div>
 
@@ -170,7 +170,7 @@ export default function RegisterForm() {
                 {/* Name */}
                 <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                        Name
+                        Họ và tên
                     </label>
                     <input
                         type="text"
@@ -178,7 +178,7 @@ export default function RegisterForm() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Enter your name"
+                        placeholder="Nhập họ tên của bạn"
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow ${errors.name ? 'border-red-500' : 'border-gray-300'
                             }`}
                     />
@@ -198,7 +198,7 @@ export default function RegisterForm() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="Enter your email"
+                        placeholder="Nhập email của bạn"
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow ${errors.email ? 'border-red-500' : 'border-gray-300'
                             }`}
                     />
@@ -210,7 +210,7 @@ export default function RegisterForm() {
                 {/* Password */}
                 <div>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                        Password
+                        Mật khẩu
                     </label>
                     <div className="relative">
                         <input
@@ -239,14 +239,14 @@ export default function RegisterForm() {
                         <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                     )}
                     <p className="mt-1 text-xs text-gray-500">
-                        At least 8 characters, with letters and numbers
+                        Tối thiểu 8 ký tự, bao gồm chữ và số
                     </p>
                 </div>
 
                 {/* Retype Password */}
                 <div>
                     <label htmlFor="retypePassword" className="block text-sm font-medium text-gray-700 mb-2">
-                        Retype Password
+                        Nhập lại mật khẩu
                     </label>
                     <div className="relative">
                         <input
@@ -289,9 +289,9 @@ export default function RegisterForm() {
                                 }`}
                         />
                         <label htmlFor="acceptTerms" className="text-sm text-gray-600">
-                            I accepted all{' '}
+                            Tôi đồng ý với{' '}
                             <a href="#" className="text-primary font-medium hover:underline">
-                                tearms & conditions
+                                điều khoản & điều kiện
                             </a>
                             .
                         </label>
@@ -313,18 +313,18 @@ export default function RegisterForm() {
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                             </svg>
-                            Processing...
+                            Đang xử lý...
                         </span>
                     ) : (
-                        'Sign up'
+                        'Đăng ký'
                     )}
                 </button>
 
                 {/* Sign In Link */}
                 <p className="text-center text-sm text-gray-600">
-                    Already have an account?{' '}
+                    Đã có tài khoản?{' '}
                     <a href="/login" className="text-primary font-medium hover:underline">
-                        Sign in
+                        Đăng nhập
                     </a>
                 </p>
             </form>

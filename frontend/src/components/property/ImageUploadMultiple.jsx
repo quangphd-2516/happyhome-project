@@ -65,10 +65,10 @@ export default function ImageUploadMultiple({ images = [], onChange, maxImages =
                         </div>
                         <div>
                             <p className="text-sm font-semibold text-gray-900 mb-1">
-                                Click to upload images
+                                Bấm để tải ảnh lên
                             </p>
                             <p className="text-xs text-gray-500">
-                                PNG, JPG up to 5MB each (Max {maxImages} images)
+                                PNG, JPG tối đa 5MB mỗi ảnh (Tối đa {maxImages} ảnh)
                             </p>
                         </div>
                     </div>
@@ -86,7 +86,7 @@ export default function ImageUploadMultiple({ images = [], onChange, maxImages =
             {previews.length > 0 && (
                 <div>
                     <p className="text-sm font-semibold text-gray-900 mb-3">
-                        Uploaded Images ({previews.length}/{maxImages})
+                        Ảnh đã tải lên ({previews.length}/{maxImages})
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {previews.map((url, index) => (
@@ -103,7 +103,7 @@ export default function ImageUploadMultiple({ images = [], onChange, maxImages =
                                     {index === mainImageIndex && (
                                         <div className="absolute top-2 left-2 px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full flex items-center gap-1">
                                             <Star className="w-3 h-3 fill-yellow-900" />
-                                            Main
+                                            Ảnh đại diện
                                         </div>
                                     )}
 
@@ -114,7 +114,7 @@ export default function ImageUploadMultiple({ images = [], onChange, maxImages =
                                                 onClick={() => handleSetMain(index)}
                                                 className="px-3 py-1.5 bg-yellow-400 text-yellow-900 rounded-lg text-xs font-semibold hover:bg-yellow-500 transition-colors"
                                             >
-                                                Set Main
+                                                Đặt làm đại diện
                                             </button>
                                         )}
                                         <button
@@ -129,7 +129,7 @@ export default function ImageUploadMultiple({ images = [], onChange, maxImages =
                         ))}
                     </div>
                     <p className="text-xs text-gray-500 mt-2">
-                        * Click "Set Main" to choose the thumbnail image
+                        * Bấm "Đặt làm đại diện" để chọn ảnh đại diện
                     </p>
                 </div>
             )}

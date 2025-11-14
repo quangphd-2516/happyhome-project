@@ -45,14 +45,14 @@ export default function ProfileInfo({ user: initialUser }) {
         <div className="bg-white rounded-2xl shadow-lg p-8">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Personal Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Thông tin cá nhân</h2>
                 {!isEditing ? (
                     <button
                         onClick={() => setIsEditing(true)}
                         className="flex items-center gap-2 px-4 py-2 text-primary hover:bg-blue-50 rounded-lg transition-colors"
                     >
                         <Edit2 className="w-4 h-4" />
-                        <span className="font-medium">Edit</span>
+                        <span className="font-medium">Chỉnh sửa</span>
                     </button>
                 ) : (
                     <div className="flex gap-2">
@@ -62,7 +62,7 @@ export default function ProfileInfo({ user: initialUser }) {
                             className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                         >
                             <X className="w-4 h-4" />
-                            Cancel
+                            Hủy
                         </button>
                         <button
                             onClick={handleSave}
@@ -70,7 +70,7 @@ export default function ProfileInfo({ user: initialUser }) {
                             className="flex items-center gap-2 px-4 py-2 bg-primary text-white hover:bg-primary-light rounded-lg transition-colors disabled:opacity-50"
                         >
                             <Save className="w-4 h-4" />
-                            {isSaving ? 'Saving...' : 'Save'}
+                            {isSaving ? 'Đang lưu...' : 'Lưu'}
                         </button>
                     </div>
                 )}
@@ -82,7 +82,7 @@ export default function ProfileInfo({ user: initialUser }) {
                 <div className="grid md:grid-cols-3 gap-4 items-center">
                     <div className="flex items-center gap-3 text-gray-600">
                         <User className="w-5 h-5" />
-                        <span className="font-medium">Full Name</span>
+                        <span className="font-medium">Họ và tên</span>
                     </div>
                     <div className="md:col-span-2">
                         {isEditing ? (
@@ -107,7 +107,7 @@ export default function ProfileInfo({ user: initialUser }) {
                     </div>
                     <div className="md:col-span-2">
                         <p className="text-gray-900 font-medium">{initialUser.email}</p>
-                        <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                        <p className="text-xs text-gray-500 mt-1">Email không thể thay đổi</p>
                     </div>
                 </div>
 
@@ -115,7 +115,7 @@ export default function ProfileInfo({ user: initialUser }) {
                 <div className="grid md:grid-cols-3 gap-4 items-center">
                     <div className="flex items-center gap-3 text-gray-600">
                         <Phone className="w-5 h-5" />
-                        <span className="font-medium">Phone Number</span>
+                        <span className="font-medium">Số điện thoại</span>
                     </div>
                     <div className="md:col-span-2">
                         {isEditing ? (
@@ -124,12 +124,12 @@ export default function ProfileInfo({ user: initialUser }) {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                placeholder="Enter phone number"
+                                placeholder="Nhập số điện thoại"
                                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                         ) : (
                             <p className="text-gray-900 font-medium">
-                                {initialUser.phone || <span className="text-gray-400">Not provided</span>}
+                                {initialUser.phone || <span className="text-gray-400">Chưa cập nhật</span>}
                             </p>
                         )}
                     </div>
@@ -139,11 +139,11 @@ export default function ProfileInfo({ user: initialUser }) {
                 <div className="grid md:grid-cols-3 gap-4 items-center">
                     <div className="flex items-center gap-3 text-gray-600">
                         <Calendar className="w-5 h-5" />
-                        <span className="font-medium">Member Since</span>
+                        <span className="font-medium">Thành viên từ</span>
                     </div>
                     <div className="md:col-span-2">
                         <p className="text-gray-900 font-medium">
-                            {new Date(initialUser.createdAt).toLocaleDateString('en-US', {
+                            {new Date(initialUser.createdAt).toLocaleDateString('vi-VN', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'

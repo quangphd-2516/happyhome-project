@@ -18,10 +18,11 @@ export default function StatsSection() {
                     <div className="order-1 lg:order-2 space-y-8">
                         <div>
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4">
-                                We Help You To Find<br />Your Dream Home
+                                Chúng tôi giúp bạn tìm
+                                <br />Ngôi nhà mơ ước
                             </h2>
                             <p className="text-gray-600 text-lg">
-                                From cozy cottages to luxurious estates, our curated selection caters to every taste and lifestyle, ensuring you find the perfect place to call home.
+                                Từ những ngôi nhà ấm cúng đến các khu biệt thự sang trọng, danh mục được chọn lọc của chúng tôi đáp ứng mọi phong cách và nhu cầu, đảm bảo bạn tìm được mái ấm hoàn hảo.
                             </p>
                         </div>
 

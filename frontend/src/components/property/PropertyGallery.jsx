@@ -25,7 +25,7 @@ export default function PropertyGallery({ images }) {
     if (!images || images.length === 0) {
         return (
             <div className="bg-gray-200 rounded-2xl h-96 flex items-center justify-center">
-                <p className="text-gray-500">No images available</p>
+                <p className="text-gray-500">Không có hình ảnh</p>
             </div>
         );
     }

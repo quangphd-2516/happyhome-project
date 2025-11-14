@@ -17,10 +17,10 @@ export default function RegisterHero() {
             <div className="relative z-10 flex items-center justify-center h-full">
                 <div className="text-center">
                     <h1 className="text-7xl md:text-8xl font-bold text-white drop-shadow-2xl">
-                        Dwello
+                        HappyHome
                     </h1>
                     <p className="text-xl text-white mt-4 drop-shadow-lg font-light tracking-widest">
-                        REAL ESTATE & AUCTION
+                        SÀN ĐẤU GIÁ & BẤT ĐỘNG SẢN
                     </p>
                 </div>
             </div>

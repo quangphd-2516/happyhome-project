@@ -124,7 +124,7 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
         <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
             {/* Rating Overview */}
             <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Reviews & Ratings</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Đánh giá & Xếp hạng</h3>
 
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
                     {/* Average Rating */}
@@ -134,7 +134,7 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
                         </div>
                         {renderStars(Math.round(averageRating))}
                         <p className="text-sm text-gray-600 mt-2">
-                            Based on {displayReviews.length} reviews
+                            Dựa trên {displayReviews.length} lượt đánh giá
                         </p>
                     </div>
 
@@ -166,7 +166,7 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
                     className="w-full py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium flex items-center justify-center gap-2"
                 >
                     <MessageCircle className="w-5 h-5" />
-                    Write a Review
+                    Viết đánh giá
                 </button>
             )}
 
@@ -175,7 +175,7 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
                 <form onSubmit={handleSubmitReview} className="bg-gray-50 rounded-xl p-6 space-y-4">
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Your Rating
+                            Đánh giá của bạn
                         </label>
                         <div className="flex gap-2">
                             {[1, 2, 3, 4, 5].map((star) => (
@@ -198,12 +198,12 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
 
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Your Review
+                            Nhận xét của bạn
                         </label>
                         <textarea
                             value={newReview.comment}
                             onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                            placeholder="Share your experience with this property..."
+                            placeholder="Chia sẻ trải nghiệm của bạn về bất động sản này..."
                             rows={4}
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none"
                             required
@@ -217,14 +217,14 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
                             className="flex-1 py-3 bg-primary text-white rounded-xl hover:bg-primary-light transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50"
                         >
                             <Send className="w-5 h-5" />
-                            {submitting ? 'Submitting...' : 'Submit Review'}
+                            {submitting ? 'Đang gửi...' : 'Gửi đánh giá'}
                         </button>
                         <button
                             type="button"
                             onClick={() => setShowReviewForm(false)}
                             className="px-6 py-3 border-2 border-gray-200 rounded-xl hover:border-gray-300 transition-colors font-medium"
                         >
-                            Cancel
+                            Hủy
                         </button>
                     </div>
                 </form>
@@ -233,7 +233,7 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
             {/* Reviews List */}
             <div className="space-y-6 pt-6 border-t border-gray-200">
                 <h4 className="text-lg font-bold text-gray-900">
-                    Customer Reviews ({displayReviews.length})
+                    Đánh giá khách hàng ({displayReviews.length})
                 </h4>
 
                 {displayReviews.map((review) => (
@@ -260,7 +260,7 @@ export default function PropertyReviews({ propertyId, reviews: initialReviews })
 
                                 <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors">
                                     <ThumbsUp className="w-4 h-4" />
-                                    Helpful ({review.helpful})
+                                    Hữu ích ({review.helpful})
                                 </button>
                             </div>
                         </div>

@@ -88,10 +88,10 @@ export default function ChatPage() {
                                         <MessageCircle className="w-12 h-12 text-primary" />
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                        Select a conversation
+                                        Chọn cuộc trò chuyện
                                     </h3>
                                     <p className="text-gray-600 max-w-md">
-                                        Choose a conversation from the list to start chatting with property owners and sellers
+                                        Chọn một cuộc trò chuyện từ danh sách để bắt đầu trò chuyện với chủ nhà và người bán
                                     </p>
                                 </div>
                             )}

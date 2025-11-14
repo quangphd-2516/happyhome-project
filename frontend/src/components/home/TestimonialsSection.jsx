@@ -20,10 +20,10 @@ export default function TestimonialsSection() {
                 {/* Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-2">
-                        What People Say
+                        Khách hàng nói gì ?
                     </h2>
                     <h3 className="text-2xl md:text-3xl font-bold text-primary">
-                        About Dwello
+                        Về HappyHome
                     </h3>
                 </div>
 

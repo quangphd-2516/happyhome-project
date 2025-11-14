@@ -19,13 +19,13 @@ export default function ImageUploader({
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
+            alert('Vui lòng chọn đúng định dạng ảnh');
             return;
         }
 
         // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
-            alert('File size must be less than 5MB');
+            alert('Kích thước ảnh phải nhỏ hơn 5MB');
             return;
         }
 
@@ -100,10 +100,10 @@ export default function ImageUploader({
                         </div>
                         <div>
                             <p className="text-sm font-medium text-gray-900 mb-1">
-                                Click to upload or drag and drop
+                                Nhấn để tải ảnh hoặc kéo thả vào đây
                             </p>
                             <p className="text-xs text-gray-500">
-                                PNG, JPG up to 5MB
+                                Định dạng PNG, JPG tối đa 5MB
                             </p>
                         </div>
                     </div>
@@ -128,14 +128,14 @@ export default function ImageUploader({
                             className="px-4 py-2 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-medium flex items-center gap-2"
                         >
                             <Upload className="w-4 h-4" />
-                            Change
+                            Thay đổi
                         </button>
                         <button
                             onClick={handleRemove}
                             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center gap-2"
                         >
                             <X className="w-4 h-4" />
-                            Remove
+                            Gỡ bỏ
                         </button>
                     </div>
                     <input

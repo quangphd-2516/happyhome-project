@@ -1,4 +1,5 @@
 import { MapPin, Home, DollarSign, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function HeroSection() {
     return (
@@ -8,14 +9,17 @@ export default function HeroSection() {
                     {/* Left Content */}
                     <div className="space-y-6">
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight">
-                            Find Your<br />Dream Home
+                            Tìm Ngôi Nhà Mơ Ước Của Bạn
                         </h1>
                         <p className="text-gray-600 text-lg md:text-xl max-w-lg">
-                            Explore our curated selection of exquisite properties meticulously tailored to your unique dream home vision
+                            Khám phá tuyển chọn các bất động sản tinh tế, được thiết kế phù hợp với tầm nhìn ngôi nhà trong mơ của bạn
                         </p>
-                        <button className="bg-primary text-white px-8 py-3.5 rounded-lg hover:bg-primary-light transition-colors font-medium text-lg shadow-lg">
-                            Start now
-                        </button>
+                        <Link
+                            to="/properties"
+                            className="mt-[5px] bg-primary text-white px-8 py-3.5 rounded-lg hover:bg-primary-light transition-colors font-medium text-lg shadow-lg inline-block"
+                        >
+                            Bắt đầu ngay
+                        </Link>
                     </div>
 
                     {/* Right Image */}
@@ -34,12 +38,12 @@ export default function HeroSection() {
                         {/* Location */}
                         <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Location
+                                Khu vực
                             </label>
                             <div className="relative">
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <select className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white">
-                                    <option>Select location</option>
+                                    <option>Chọn khu vực</option>
                                     <option>San Francisco</option>
                                     <option>Los Angeles</option>
                                     <option>San Diego</option>
@@ -50,15 +54,15 @@ export default function HeroSection() {
                         {/* Type */}
                         <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Type
+                                Loại hình
                             </label>
                             <div className="relative">
                                 <Home className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <select className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white">
-                                    <option>Property type</option>
-                                    <option>House</option>
-                                    <option>Apartment</option>
-                                    <option>Villa</option>
+                                    <option>Loại bất động sản</option>
+                                    <option>Nhà riêng</option>
+                                    <option>Căn hộ</option>
+                                    <option>Biệt thự</option>
                                 </select>
                             </div>
                         </div>
@@ -66,15 +70,15 @@ export default function HeroSection() {
                         {/* Price Range */}
                         <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Price Range
+                                Mức giá
                             </label>
                             <div className="relative">
                                 <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <select className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white">
-                                    <option>Select price</option>
-                                    <option>$0 - $500k</option>
-                                    <option>$500k - $1M</option>
-                                    <option>$1M+</option>
+                                    <option>Chọn giá</option>
+                                    <option>0 - 500 triệu</option>
+                                    <option>500 triệu - 1 tỷ</option>
+                                    <option>Trên 1 tỷ</option>
                                 </select>
                             </div>
                         </div>
@@ -83,7 +87,7 @@ export default function HeroSection() {
                         <div className="flex items-end">
                             <button className="w-full bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-light transition-colors font-medium flex items-center justify-center gap-2">
                                 <Search className="w-5 h-5" />
-                                <span>Search</span>
+                                <span>Tìm kiếm</span>
                             </button>
                         </div>
                     </div>

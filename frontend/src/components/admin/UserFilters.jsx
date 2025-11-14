@@ -48,7 +48,7 @@ export default function UserFilters({ onFilter, onSearch }) {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search by name, email, phone..."
+                        placeholder="Tìm theo tên, email hoặc số điện thoại..."
                         className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
                     />
                 </div>
@@ -56,7 +56,7 @@ export default function UserFilters({ onFilter, onSearch }) {
                     type="submit"
                     className="px-6 py-3.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:shadow-lg transition-all font-medium"
                 >
-                    Search
+                    Tìm kiếm
                 </button>
                 <button
                     type="button"
@@ -64,7 +64,7 @@ export default function UserFilters({ onFilter, onSearch }) {
                     className="relative px-6 py-3.5 border-2 border-gray-200 rounded-xl hover:border-purple-500 transition-colors flex items-center gap-2"
                 >
                     <Filter className="w-5 h-5" />
-                    <span className="font-medium">Filters</span>
+                    <span className="font-medium">Bộ lọc</span>
                     {activeFiltersCount > 0 && (
                         <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                             {activeFiltersCount}
@@ -77,14 +77,14 @@ export default function UserFilters({ onFilter, onSearch }) {
             {showFilters && (
                 <div className="space-y-6 pt-6 border-t border-gray-200">
                     <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-gray-900">Advanced Filters</h3>
+                        <h3 className="text-lg font-bold text-gray-900">Bộ lọc nâng cao</h3>
                         {activeFiltersCount > 0 && (
                             <button
                                 onClick={clearFilters}
                                 className="text-sm text-red-500 hover:text-red-600 font-medium flex items-center gap-1"
                             >
                                 <X className="w-4 h-4" />
-                                Clear All
+                                Xóa tất cả
                             </button>
                         )}
                     </div>
@@ -93,66 +93,66 @@ export default function UserFilters({ onFilter, onSearch }) {
                         {/* Role Filter */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Role
+                                Vai trò
                             </label>
                             <select
                                 value={filters.role}
                                 onChange={(e) => handleFilterChange('role', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                             >
-                                <option value="">All Roles</option>
-                                <option value="USER">User</option>
-                                <option value="ADMIN">Admin</option>
-                                <option value="MODERATOR">Moderator</option>
+                                <option value="">Tất cả vai trò</option>
+                                <option value="USER">Người dùng</option>
+                                <option value="ADMIN">Quản trị viên</option>
+                                <option value="MODERATOR">Điều phối viên</option>
                             </select>
                         </div>
 
                         {/* KYC Status Filter */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                KYC Status
+                                Trạng thái KYC
                             </label>
                             <select
                                 value={filters.kycStatus}
                                 onChange={(e) => handleFilterChange('kycStatus', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                             >
-                                <option value="">All Status</option>
-                                <option value="APPROVED">Approved</option>
-                                <option value="PENDING">Pending</option>
-                                <option value="REJECTED">Rejected</option>
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="APPROVED">Đã xác thực</option>
+                                <option value="PENDING">Chờ duyệt</option>
+                                <option value="REJECTED">Từ chối</option>
                             </select>
                         </div>
 
                         {/* Account Status Filter */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Account Status
+                                Trạng thái tài khoản
                             </label>
                             <select
                                 value={filters.isBlocked}
                                 onChange={(e) => handleFilterChange('isBlocked', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                             >
-                                <option value="">All Accounts</option>
-                                <option value="false">Active</option>
-                                <option value="true">Blocked</option>
+                                <option value="">Tất cả</option>
+                                <option value="false">Đang hoạt động</option>
+                                <option value="true">Đã chặn</option>
                             </select>
                         </div>
 
                         {/* Verification Status */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Email Verified
+                                Email đã xác thực
                             </label>
                             <select
                                 value={filters.isVerified}
                                 onChange={(e) => handleFilterChange('isVerified', e.target.value)}
                                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                             >
-                                <option value="">All Users</option>
-                                <option value="true">Verified</option>
-                                <option value="false">Not Verified</option>
+                                <option value="">Tất cả</option>
+                                <option value="true">Đã xác thực</option>
+                                <option value="false">Chưa xác thực</option>
                             </select>
                         </div>
                     </div>

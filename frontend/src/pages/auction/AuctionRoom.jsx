@@ -28,7 +28,7 @@ export default function AuctionRoom() {
     useEffect(() => {
         const checkAccessAndJoin = async () => {
             if (!isAuthenticated) {
-                alert('Please login first');
+                alert('Vui lòng đăng nhập trước');
                 navigate('/login');
                 return;
             }
@@ -42,7 +42,7 @@ export default function AuctionRoom() {
                 const depositData = depositResponse.data || depositResponse;
 
                 if (!depositData.depositPaid) {
-                    alert('Please pay deposit first!');
+                    alert('Bạn cần nộp tiền đặt cọc trước khi tham gia');
                     navigate(`/auctions/${id}/deposit`);
                     return;
                 }
@@ -52,14 +52,14 @@ export default function AuctionRoom() {
                 const auctionData = auctionResponse.data || auctionResponse;
 
                 if (!auctionData) {
-                    alert('Auction not found');
+                    alert('Không tìm thấy phiên đấu giá');
                     navigate('/auctions');
                     return;
                 }
 
                 // Step 3: Check auction status
                 if (auctionData.status === 'COMPLETED' || auctionData.status === 'CANCELLED') {
-                    alert('Auction has ended!');
+                    alert('Phiên đấu giá đã kết thúc');
                     navigate(`/auctions/${id}`);
                     return;
                 }
@@ -140,13 +140,13 @@ export default function AuctionRoom() {
             console.error('Auction error:', error);
 
             if (error.message?.includes('Deposit required')) {
-                alert('Deposit payment required');
+                alert('Bạn cần nộp tiền đặt cọc để tiếp tục');
                 navigate(`/auctions/${id}/deposit`);
             } else if (error.message?.includes('not ongoing')) {
-                alert('Auction has ended');
+                alert('Phiên đấu giá đã kết thúc');
                 navigate(`/auctions/${id}`);
             } else {
-                alert(error.message || 'An error occurred');
+                alert(error.message || 'Đã xảy ra lỗi');
             }
         });
 
@@ -162,7 +162,7 @@ export default function AuctionRoom() {
         websocketService.onBidPlaced((data) => {
             console.log('Your bid placed:', data);
             setIsBidding(false);
-            alert('Bid placed successfully!');
+            alert('Trả giá thành công!');
         });
 
         websocketService.onBidError((error) => {
@@ -170,11 +170,11 @@ export default function AuctionRoom() {
             setIsBidding(false);
 
             if (error.message?.includes('not ongoing')) {
-                alert('Auction has not started yet. Please wait.');
+                alert('Phiên đấu giá chưa bắt đầu. Vui lòng đợi.');
             } else if (error.message?.includes('Minimum bid')) {
                 alert(error.message);
             } else {
-                alert(error.message || 'Failed to place bid');
+                alert(error.message || 'Đặt giá thất bại');
             }
         });
 
@@ -191,12 +191,12 @@ export default function AuctionRoom() {
             console.log('🎉 Auction started!', data);
             setWaitingMode(false);
             setAuctionStatus('ONGOING');
-            alert('Auction has started! You can now place bids.');
+            alert('Phiên đấu giá đã bắt đầu! Bạn có thể trả giá ngay.');
         });
 
         websocketService.onAuctionEnded((data) => {
             console.log('🏁 Auction ended!', data);
-            alert(`Auction has ended! ${data.winner ? `Winner: ${data.winner.fullName}` : 'No winner'}`);
+            alert(`Phiên đấu giá đã kết thúc! ${data.winner ? `Người thắng: ${data.winner.fullName}` : 'Chưa có người thắng'}`);
             navigate(`/auctions/${id}`);
         });
 
@@ -223,12 +223,12 @@ export default function AuctionRoom() {
 
     const handlePlaceBid = async (amount) => {
         if (!websocketService.isConnected()) {
-            alert('Not connected to auction. Please refresh the page.');
+            alert('Chưa kết nối tới phòng đấu giá. Vui lòng tải lại trang.');
             return;
         }
 
         if (waitingMode) {
-            alert('Auction has not started yet. Please wait.');
+            alert('Phiên đấu giá chưa bắt đầu. Vui lòng chờ.');
             return;
         }
 
@@ -238,19 +238,19 @@ export default function AuctionRoom() {
         } catch (error) {
             console.error('Place bid error:', error);
             setIsBidding(false);
-            alert('Failed to place bid. Please try again.');
+            alert('Đặt giá thất bại. Vui lòng thử lại.');
         }
     };
 
     const handleAuctionEnd = () => {
-        alert('Auction has ended!');
+        alert('Phiên đấu giá đã kết thúc!');
         navigate(`/auctions/${id}`);
     };
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
         }).format(price);
     };
@@ -260,9 +260,9 @@ export default function AuctionRoom() {
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading auction...</p>
+                    <p className="text-gray-600">Đang tải phòng đấu giá...</p>
                     {connectionStatus === 'connecting' && (
-                        <p className="text-sm text-gray-500 mt-2">Connecting to auction room...</p>
+                        <p className="text-sm text-gray-500 mt-2">Đang kết nối tới phòng đấu giá...</p>
                     )}
                 </div>
             </div>
@@ -274,12 +274,12 @@ export default function AuctionRoom() {
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Auction Not Found</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy phiên đấu giá</h2>
                     <button
                         onClick={() => navigate('/auctions')}
                         className="mt-4 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light"
                     >
-                        Back to Auctions
+                        Quay lại danh sách đấu giá
                     </button>
                 </div>
             </div>
@@ -300,11 +300,11 @@ export default function AuctionRoom() {
                     <div className="flex items-center justify-center gap-3 text-white">
                         <span className="w-3 h-3 bg-white rounded-full animate-pulse"></span>
                         <span className="font-bold text-lg">
-                            {waitingMode ? 'WAITING FOR AUCTION TO START' : 'LIVE AUCTION'}
+                            {waitingMode ? 'ĐANG CHỜ PHIÊN BẮT ĐẦU' : 'PHIÊN ĐẤU GIÁ TRỰC TIẾP'}
                         </span>
                         <span className="px-3 py-1 bg-white/20 rounded-full text-sm flex items-center gap-2">
                             <Users className="w-4 h-4" />
-                            {participants} {waitingMode ? 'waiting' : 'watching'}
+                            {participants} {waitingMode ? 'đang chờ' : 'đang theo dõi'}
                         </span>
                     </div>
                 </div>
@@ -330,7 +330,7 @@ export default function AuctionRoom() {
                             <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
                                 {waitingMode ? (
                                     <div className="flex-1">
-                                        <p className="text-sm text-gray-600 mb-2">Starts in:</p>
+                                        <p className="text-sm text-gray-600 mb-2">Bắt đầu sau:</p>
                                         <CountdownTimer
                                             endTime={auction.startTime}
                                             onEnd={() => {
@@ -341,7 +341,7 @@ export default function AuctionRoom() {
                                     </div>
                                 ) : (
                                     <div className="flex-1">
-                                        <p className="text-sm text-gray-600 mb-2">Ends in:</p>
+                                        <p className="text-sm text-gray-600 mb-2">Kết thúc sau:</p>
                                         <CountdownTimer endTime={auction.endTime} onEnd={handleAuctionEnd} />
                                     </div>
                                 )}
@@ -363,20 +363,20 @@ export default function AuctionRoom() {
                                 </div>
                                 <div className="text-center">
                                     <TrendingUp className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                                    <p className="text-sm text-gray-600">{bids.length} Bids</p>
+                                    <p className="text-sm text-gray-600">{bids.length} lượt trả giá</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Description */}
                         <div className="bg-white rounded-2xl p-6 shadow-lg">
-                            <h2 className="text-xl font-bold text-gray-900 mb-4">Description</h2>
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">Mô tả</h2>
                             <p className="text-gray-600 leading-relaxed">{auction.description}</p>
                         </div>
 
                         {/* Bid History */}
                         <div className="bg-white rounded-2xl p-6 shadow-lg">
-                            <h2 className="text-xl font-bold text-gray-900 mb-6">Bid History</h2>
+                            <h2 className="text-xl font-bold text-gray-900 mb-6">Lịch sử trả giá</h2>
                             <BidHistory bids={bids} />
                         </div>
                     </div>
@@ -385,10 +385,10 @@ export default function AuctionRoom() {
                     <div className="space-y-6">
                         {/* Current Bid */}
                         <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 text-white shadow-xl">
-                            <p className="text-white/80 text-sm font-medium mb-2">Current Highest Bid</p>
+                            <p className="text-white/80 text-sm font-medium mb-2">Giá cao nhất hiện tại</p>
                             <p className="text-5xl font-bold mb-4">{formatPrice(auction.currentPrice)}</p>
                             <div className="flex items-center justify-between text-sm">
-                                <span>Starting Price: {formatPrice(auction.startPrice)}</span>
+                                <span>Giá khởi điểm: {formatPrice(auction.startPrice)}</span>
                                 {auction.currentPrice > auction.startPrice && (
                                     <span className="flex items-center gap-1">
                                         <TrendingUp className="w-4 h-4" />
@@ -406,9 +406,9 @@ export default function AuctionRoom() {
                                         <Gavel className="w-8 h-8 text-white" />
                                     </div>
                                 </div>
-                                <h3 className="font-bold text-blue-900 mb-2">Waiting for Auction to Start</h3>
+                                <h3 className="font-bold text-blue-900 mb-2">Đang chờ phiên bắt đầu</h3>
                                 <p className="text-sm text-blue-700">
-                                    You can place bids when the auction begins
+                                    Bạn có thể trả giá khi phiên đấu giá bắt đầu
                                 </p>
                             </div>
                         ) : (
@@ -423,25 +423,25 @@ export default function AuctionRoom() {
 
                         {/* Auction Info */}
                         <div className="bg-white rounded-2xl p-6 shadow-lg">
-                            <h3 className="font-bold text-gray-900 mb-4">Auction Information</h3>
+                            <h3 className="font-bold text-gray-900 mb-4">Thông tin phiên</h3>
                             <div className="space-y-3 text-sm">
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Status:</span>
+                                    <span className="text-gray-600">Trạng thái:</span>
                                     <span className={`font-semibold ${auctionStatus === 'ONGOING' ? 'text-green-600' : 'text-blue-600'
                                         }`}>
-                                        {auctionStatus}
+                                        {auctionStatus === 'ONGOING' ? 'Đang diễn ra' : auctionStatus === 'UPCOMING' ? 'Sắp diễn ra' : auctionStatus}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Bid Step:</span>
+                                    <span className="text-gray-600">Bước giá:</span>
                                     <span className="font-semibold">{formatPrice(auction.bidStep)}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Deposit Required:</span>
+                                    <span className="text-gray-600">Tiền đặt cọc:</span>
                                     <span className="font-semibold">{formatPrice(auction.depositAmount)}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Total Bids:</span>
+                                    <span className="text-gray-600">Tổng lượt trả giá:</span>
                                     <span className="font-semibold">{bids.length}</span>
                                 </div>
                             </div>
@@ -449,12 +449,12 @@ export default function AuctionRoom() {
 
                         {/* Rules */}
                         <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
-                            <h3 className="font-bold text-blue-900 mb-3">Bidding Rules</h3>
+                            <h3 className="font-bold text-blue-900 mb-3">Quy tắc trả giá</h3>
                             <ul className="space-y-2 text-sm text-blue-800">
-                                <li>• Bids are binding and cannot be withdrawn</li>
-                                <li>• Each bid must exceed the current bid by the bid step amount</li>
-                                <li>• Winner must pay within 24 hours</li>
-                                <li>• Deposit will be refunded if you don't win</li>
+                                <li>• Mọi lượt trả giá đều có hiệu lực và không thể hủy</li>
+                                <li>• Mỗi lần trả giá phải cao hơn giá hiện tại tối thiểu bằng bước giá</li>
+                                <li>• Người thắng phải thanh toán trong vòng 24 giờ</li>
+                                <li>• Đặt cọc sẽ được hoàn trả nếu bạn không thắng</li>
                             </ul>
                         </div>
                     </div>

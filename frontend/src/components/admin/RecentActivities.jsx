@@ -50,12 +50,10 @@ export default function RecentActivities({ activities }) {
         <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">Recent Activities</h3>
-                    <p className="text-sm text-gray-600">Latest system activities</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">Hoạt động gần đây</h3>
+                    <p className="text-sm text-gray-600">Các hoạt động mới nhất trong hệ thống</p>
                 </div>
-                <button className="text-sm text-primary hover:text-primary-light font-medium">
-                    View all
-                </button>
+                <button className="text-sm text-primary hover:text-primary-light font-medium">Xem tất cả</button>
             </div>
 
             <div className="space-y-4">

@@ -12,9 +12,9 @@ export default function PropertyMap({ properties, center }) {
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                         <MapPin className="w-16 h-16 text-primary mx-auto mb-4" />
-                        <p className="text-gray-600 font-medium">Map View</p>
+                        <p className="text-gray-600 font-medium">Xem bản đồ</p>
                         <p className="text-sm text-gray-500 mt-2">
-                            Install react-leaflet or Google Maps to view map
+                            Cài đặt react-leaflet hoặc Google Maps để xem bản đồ
                         </p>
                     </div>
                 </div>
@@ -33,7 +33,7 @@ export default function PropertyMap({ properties, center }) {
             {/* Property Count */}
             <div className="p-4 border-t border-gray-200">
                 <p className="text-sm text-gray-600">
-                    Showing <span className="font-bold text-primary">{properties?.length || 0}</span> properties on map
+                    Đang hiển thị <span className="font-bold text-primary">{properties?.length || 0}</span> bất động sản trên bản đồ
                 </p>
             </div>
         </div>

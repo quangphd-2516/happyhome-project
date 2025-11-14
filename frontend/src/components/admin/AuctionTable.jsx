@@ -19,28 +19,28 @@ export default function AuctionTable({ data, onViewDetail, onRefresh }) {
                 text: 'text-purple-800',
                 border: 'border-purple-200',
                 icon: Calendar,
-                label: 'Upcoming'
+                label: 'Sắp diễn ra'
             },
             ONGOING: {
                 bg: 'bg-blue-100',
                 text: 'text-blue-800',
                 border: 'border-blue-200',
                 icon: Clock,
-                label: 'Ongoing'
+                label: 'Đang diễn ra'
             },
             COMPLETED: {
                 bg: 'bg-green-100',
                 text: 'text-green-800',
                 border: 'border-green-200',
                 icon: CheckCircle,
-                label: 'Completed'
+                label: 'Hoàn thành'
             },
             CANCELLED: {
                 bg: 'bg-red-100',
                 text: 'text-red-800',
                 border: 'border-red-200',
                 icon: Ban,
-                label: 'Cancelled'
+                label: 'Đã hủy'
             }
         };
         return configs[status] || configs.UPCOMING;
@@ -97,27 +97,13 @@ export default function AuctionTable({ data, onViewDetail, onRefresh }) {
             <table className="w-full">
                 <thead>
                     <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Property
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Auction Title
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Price Info
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Time
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Activity
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            Actions
-                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Bất động sản</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Tiêu đề phiên</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Giá</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Thời gian</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Trạng thái</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Hoạt động</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -131,7 +117,7 @@ export default function AuctionTable({ data, onViewDetail, onRefresh }) {
                                 <div className="flex items-center gap-3">
                                     <img
                                         src={auction.property.thumbnail}
-                                        alt={auction.property.title}
+                                        alt={auction.property.tittle}
                                         className="w-16 h-16 rounded-lg object-cover"
                                     />
                                     <div>
@@ -159,13 +145,13 @@ export default function AuctionTable({ data, onViewDetail, onRefresh }) {
                             <td className="px-6 py-4">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
-                                        <span className="text-xs text-gray-500">Start:</span>
+                                        <span className="text-xs text-gray-500">Bắt đầu:</span>
                                         <span className="font-semibold text-gray-900">
                                             {formatCurrency(auction.startPrice)}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-xs text-gray-500">Current:</span>
+                                        <span className="text-xs text-gray-500">Hiện tại:</span>
                                         <span className="font-bold text-green-600">
                                             {formatCurrency(auction.currentPrice)}
                                         </span>
@@ -210,16 +196,14 @@ export default function AuctionTable({ data, onViewDetail, onRefresh }) {
                                     <div className="flex items-center gap-2 text-sm">
                                         <Gavel className="w-4 h-4 text-gray-400" />
                                         <span className="font-semibold text-gray-900">
-                                            {auction._count?.bids || 0}
+                                            {auction._count?.bids || 0}<span className="text-gray-500"> lượt trả giá</span>
                                         </span>
-                                        <span className="text-gray-500">bids</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm">
                                         <Users className="w-4 h-4 text-gray-400" />
                                         <span className="font-semibold text-gray-900">
-                                            {auction._count?.participants || 0}
+                                            {auction._count?.participants || 0}<span className="text-gray-500"> người tham gia</span>
                                         </span>
-                                        <span className="text-gray-500">participants</span>
                                     </div>
                                 </div>
                             </td>
@@ -231,7 +215,7 @@ export default function AuctionTable({ data, onViewDetail, onRefresh }) {
                                     className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm font-medium"
                                 >
                                     <Eye className="w-4 h-4" />
-                                    View
+                                    Xem
                                 </button>
                             </td>
                         </tr>

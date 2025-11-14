@@ -9,9 +9,9 @@ export default function PropertyCard({ property }) {
     const [isFavorite, setIsFavorite] = useState(false);
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
         }).format(price);
     };
@@ -51,7 +51,7 @@ export default function PropertyCard({ property }) {
                 <div className="absolute top-4 left-4 flex gap-2">
                     {property.isPremium && (
                         <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full">
-                            PREMIUM
+                            NỔI BẬT
                         </span>
                     )}
                     <span className="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
@@ -94,13 +94,13 @@ export default function PropertyCard({ property }) {
                     {property.bedrooms && (
                         <div className="flex items-center gap-1.5">
                             <Bed className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-700 font-medium">{property.bedrooms} Beds</span>
+                            <span className="text-sm text-gray-700 font-medium">{property.bedrooms} Phòng ngủ</span>
                         </div>
                     )}
                     {property.bathrooms && (
                         <div className="flex items-center gap-1.5">
                             <Bath className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-700 font-medium">{property.bathrooms} Baths</span>
+                            <span className="text-sm text-gray-700 font-medium">{property.bathrooms} Phòng tắm</span>
                         </div>
                     )}
                     <div className="flex items-center gap-1.5">
@@ -120,7 +120,7 @@ export default function PropertyCard({ property }) {
                         </p>
                     </div>
                     <button className="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-light transition-colors font-medium">
-                        View Details
+                        Xem chi tiết
                     </button>
                 </div>
             </div>

@@ -14,8 +14,8 @@ export default function RevenueChart({ data }) {
     return (
         <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Revenue Overview</h3>
-                <p className="text-sm text-gray-600">Total revenue from property sales and auctions</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Tổng quan doanh thu</h3>
+                <p className="text-sm text-gray-600">Doanh thu từ bán bất động sản và phiên đấu giá</p>
             </div>
 
             <ResponsiveContainer width="100%" height={300}>
@@ -48,7 +48,7 @@ export default function RevenueChart({ data }) {
                         strokeWidth={3}
                         dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
                         activeDot={{ r: 6 }}
-                        name="Revenue"
+                        name="Doanh thu"
                     />
                     <Line
                         type="monotone"
@@ -56,7 +56,7 @@ export default function RevenueChart({ data }) {
                         stroke="#10b981"
                         strokeWidth={2}
                         dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
-                        name="Auctions"
+                        name="Phiên đấu giá"
                     />
                 </LineChart>
             </ResponsiveContainer>

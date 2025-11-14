@@ -32,31 +32,31 @@ export default function KYCForm() {
 
     const validateForm = () => {
         if (!formData.idCardNumber.trim()) {
-            setError('ID Card Number is required');
+            setError('Vui lòng nhập số CMND/CCCD');
             return false;
         }
         if (!formData.fullName.trim()) {
-            setError('Full Name is required');
+            setError('Vui lòng nhập họ và tên');
             return false;
         }
         if (!formData.dateOfBirth) {
-            setError('Date of Birth is required');
+            setError('Vui lòng chọn ngày sinh');
             return false;
         }
         if (!formData.address.trim()) {
-            setError('Address is required');
+            setError('Vui lòng nhập địa chỉ');
             return false;
         }
         if (!formData.idCardFront) {
-            setError('ID Card Front image is required');
+            setError('Vui lòng tải ảnh mặt trước CMND/CCCD');
             return false;
         }
         if (!formData.idCardBack) {
-            setError('ID Card Back image is required');
+            setError('Vui lòng tải ảnh mặt sau CMND/CCCD');
             return false;
         }
         if (!formData.selfieWithId) {
-            setError('Selfie with ID is required');
+            setError('Vui lòng tải ảnh selfie cùng CMND/CCCD');
             return false;
         }
         return true;
@@ -91,12 +91,12 @@ export default function KYCForm() {
                 selfieWithId: selfieRes.url,
             });
 
-            alert('KYC submitted successfully! Your documents will be reviewed within 24-48 hours.');
+            alert('Gửi KYC thành công! Hồ sơ của bạn sẽ được duyệt trong 24-48 giờ.');
             navigate('/profile');
 
         } catch (err) {
             console.error('KYC submission error:', err);
-            setError(err.response?.data?.message || 'Failed to submit KYC. Please try again.');
+            setError(err.response?.data?.message || 'Gửi KYC thất bại. Vui lòng thử lại.');
         } finally {
             setIsSubmitting(false);
         }
@@ -118,8 +118,8 @@ export default function KYCForm() {
                         <UserIcon className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">Personal Information</h2>
-                        <p className="text-sm text-gray-500">Enter your personal details as shown on your ID</p>
+                        <h2 className="text-xl font-bold text-gray-900">Thông tin cá nhân</h2>
+                        <p className="text-sm text-gray-500">Nhập thông tin cá nhân đúng như trên giấy tờ</p>
                     </div>
                 </div>
 
@@ -127,14 +127,14 @@ export default function KYCForm() {
                     {/* ID Card Number */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            ID Card Number <span className="text-red-500">*</span>
+                            Số CMND/CCCD <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
                             name="idCardNumber"
                             value={formData.idCardNumber}
                             onChange={handleChange}
-                            placeholder="Enter your ID card number"
+                            placeholder="Nhập số CMND/CCCD"
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                             required
                         />
@@ -143,14 +143,14 @@ export default function KYCForm() {
                     {/* Full Name */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Full Name <span className="text-red-500">*</span>
+                            Họ và tên <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
                             name="fullName"
                             value={formData.fullName}
                             onChange={handleChange}
-                            placeholder="Enter your full name"
+                            placeholder="Nhập họ và tên"
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                             required
                         />
@@ -159,7 +159,7 @@ export default function KYCForm() {
                     {/* Date of Birth */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Date of Birth <span className="text-red-500">*</span>
+                            Ngày sinh <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -177,7 +177,7 @@ export default function KYCForm() {
                     {/* Address */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Address <span className="text-red-500">*</span>
+                            Địa chỉ <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -186,7 +186,7 @@ export default function KYCForm() {
                                 name="address"
                                 value={formData.address}
                                 onChange={handleChange}
-                                placeholder="Enter your address"
+                                placeholder="Nhập địa chỉ thường trú"
                                 className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                                 required
                             />
@@ -202,16 +202,16 @@ export default function KYCForm() {
                         <CreditCard className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">Identity Documents</h2>
-                        <p className="text-sm text-gray-500">Upload clear photos of your ID card</p>
+                        <h2 className="text-xl font-bold text-gray-900">Giấy tờ định danh</h2>
+                        <p className="text-sm text-gray-500">Tải lên ảnh CMND/CCCD rõ nét</p>
                     </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                     {/* ID Card Front */}
                     <ImageUploader
-                        label="ID Card (Front)"
-                        description="Upload the front side of your ID card"
+                        label="CMND/CCCD (Mặt trước)"
+                        description="Tải ảnh mặt trước CMND/CCCD"
                         value={formData.idCardFront}
                         onChange={(file) => handleImageChange('idCardFront', file)}
                         required
@@ -220,8 +220,8 @@ export default function KYCForm() {
 
                     {/* ID Card Back */}
                     <ImageUploader
-                        label="ID Card (Back)"
-                        description="Upload the back side of your ID card"
+                        label="CMND/CCCD (Mặt sau)"
+                        description="Tải ảnh mặt sau CMND/CCCD"
                         value={formData.idCardBack}
                         onChange={(file) => handleImageChange('idCardBack', file)}
                         required
@@ -237,15 +237,15 @@ export default function KYCForm() {
                         <Camera className="w-6 h-6 text-pink-600" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-gray-900">Selfie Verification</h2>
-                        <p className="text-sm text-gray-500">Take a selfie while holding your ID card</p>
+                        <h2 className="text-xl font-bold text-gray-900">Xác thực selfie</h2>
+                        <p className="text-sm text-gray-500">Chụp ảnh selfie cầm CMND/CCCD</p>
                     </div>
                 </div>
 
                 <div className="max-w-md mx-auto">
                     <ImageUploader
-                        label="Selfie with ID Card"
-                        description="Hold your ID card next to your face and take a clear photo"
+                        label="Ảnh selfie cùng CMND/CCCD"
+                        description="Cầm CMND/CCCD cạnh mặt và chụp ảnh rõ nét"
                         value={formData.selfieWithId}
                         onChange={(file) => handleImageChange('selfieWithId', file)}
                         required
@@ -255,13 +255,13 @@ export default function KYCForm() {
 
                 {/* Guidelines */}
                 <div className="mt-6 p-4 bg-blue-50 rounded-xl">
-                    <h3 className="font-semibold text-blue-900 mb-2">Selfie Guidelines:</h3>
+                    <h3 className="font-semibold text-blue-900 mb-2">Hướng dẫn chụp selfie:</h3>
                     <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                        <li>Hold your ID card next to your face</li>
-                        <li>Make sure your face and ID details are clearly visible</li>
-                        <li>Use good lighting - avoid shadows</li>
-                        <li>Remove sunglasses or hats</li>
-                        <li>Look directly at the camera</li>
+                        <li>Giữ CMND/CCCD cạnh khuôn mặt</li>
+                        <li>Ảnh phải thấy rõ mặt và thông tin CMND/CCCD</li>
+                        <li>Ánh sáng tốt, không bị đổ bóng</li>
+                        <li>Tháo kính/đội mũ (nếu có)</li>
+                        <li>Nhìn thẳng vào camera</li>
                     </ul>
                 </div>
             </div>
@@ -274,7 +274,7 @@ export default function KYCForm() {
                     disabled={isSubmitting}
                     className="flex-1 px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
                 >
-                    Cancel
+                    Hủy
                 </button>
                 <button
                     type="submit"
@@ -287,10 +287,10 @@ export default function KYCForm() {
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                             </svg>
-                            Submitting...
+                            Đang gửi...
                         </span>
                     ) : (
-                        'Submit KYC'
+                        'Gửi KYC'
                     )}
                 </button>
             </div>

@@ -15,7 +15,7 @@ export default function AuctionList() {
     const mockAuctions = [
         {
             id: 1,
-            title: 'Luxury Villa Auction - Beverly Hills',
+            title: 'Đấu giá biệt thự cao cấp - Beverly Hills',
             status: 'ONGOING',
             startPrice: 2000000,
             currentPrice: 2500000,
@@ -29,7 +29,7 @@ export default function AuctionList() {
         },
         {
             id: 2,
-            title: 'Modern Penthouse - San Francisco',
+            title: 'Penthouse hiện đại - San Francisco',
             status: 'UPCOMING',
             startPrice: 1500000,
             currentPrice: 1500000,
@@ -43,7 +43,7 @@ export default function AuctionList() {
         },
         {
             id: 3,
-            title: 'Beachfront Estate - Malibu',
+            title: 'Biệt thự ven biển - Malibu',
             status: 'COMPLETED',
             startPrice: 3000000,
             currentPrice: 4200000,
@@ -96,10 +96,10 @@ export default function AuctionList() {
                         <Gavel className="w-10 h-10 text-white" />
                     </div>
                     <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                        Property Auctions
+                        Phiên đấu giá bất động sản
                     </h1>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Participate in live auctions and bid on premium properties
+                        Tham gia đấu giá trực tuyến và sở hữu những bất động sản cao cấp
                     </p>
                 </div>
 
@@ -110,7 +110,7 @@ export default function AuctionList() {
                             <Gavel className="w-8 h-8 text-purple-500" />
                             <span className="text-3xl font-bold text-gray-900">{stats.total}</span>
                         </div>
-                        <p className="text-gray-600 font-medium">Total Auctions</p>
+                        <p className="text-gray-600 font-medium">Tổng số phiên</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 shadow-lg text-white">
@@ -118,7 +118,7 @@ export default function AuctionList() {
                             <TrendingUp className="w-8 h-8" />
                             <span className="text-3xl font-bold">{stats.ongoing}</span>
                         </div>
-                        <p className="font-medium">Live Now</p>
+                        <p className="font-medium">Đang diễn ra</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 shadow-lg text-white">
@@ -126,7 +126,7 @@ export default function AuctionList() {
                             <Clock className="w-8 h-8" />
                             <span className="text-3xl font-bold">{stats.upcoming}</span>
                         </div>
-                        <p className="font-medium">Upcoming</p>
+                        <p className="font-medium">Sắp diễn ra</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl p-6 shadow-lg text-white">
@@ -134,7 +134,7 @@ export default function AuctionList() {
                             <CheckCircle className="w-8 h-8" />
                             <span className="text-3xl font-bold">{stats.completed}</span>
                         </div>
-                        <p className="font-medium">Completed</p>
+                        <p className="font-medium">Đã kết thúc</p>
                     </div>
                 </div>
 
@@ -142,10 +142,10 @@ export default function AuctionList() {
                 <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
                     <div className="flex flex-wrap gap-3">
                         {[
-                            { key: 'all', label: 'All Auctions', color: 'bg-purple-500' },
-                            { key: 'ongoing', label: 'Live Now', color: 'bg-green-500' },
-                            { key: 'upcoming', label: 'Upcoming', color: 'bg-blue-500' },
-                            { key: 'completed', label: 'Completed', color: 'bg-gray-500' }
+                            { key: 'all', label: 'Tất cả', color: 'bg-purple-500' },
+                            { key: 'ongoing', label: 'Đang diễn ra', color: 'bg-green-500' },
+                            { key: 'upcoming', label: 'Sắp diễn ra', color: 'bg-blue-500' },
+                            { key: 'completed', label: 'Đã kết thúc', color: 'bg-gray-500' }
                         ].map(({ key, label, color }) => (
                             <button
                                 key={key}
@@ -169,8 +169,8 @@ export default function AuctionList() {
                 ) : filteredAuctions.length === 0 ? (
                     <div className="text-center py-20 bg-white rounded-2xl shadow-lg">
                         <Gavel className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold text-gray-900 mb-2">No Auctions Found</h3>
-                        <p className="text-gray-600">Check back later for new auctions</p>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy phiên đấu giá</h3>
+                        <p className="text-gray-600">Hãy quay lại sau để xem các phiên đấu giá mới</p>
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

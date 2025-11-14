@@ -175,7 +175,7 @@ export default function ChatRoom({ chatId, onBack }) {
                     <div>
                         <h3 className="font-bold text-gray-900">{otherUser?.fullName}</h3>
                         <p className="text-sm text-gray-500">
-                            {isTyping ? 'Typing...' : 'Active now'}
+                            {isTyping ? 'Đang nhập...' : 'Đang hoạt động'}
                         </p>
                     </div>
                 </div>
@@ -229,7 +229,7 @@ export default function ChatRoom({ chatId, onBack }) {
                                     handleSendMessage(e);
                                 }
                             }}
-                            placeholder="Type a message..."
+                            placeholder="Nhập tin nhắn..."
                             rows={1}
                             className="w-full px-4 py-3 pr-12 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none"
                             style={{ maxHeight: '120px' }}

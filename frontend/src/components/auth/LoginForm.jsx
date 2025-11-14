@@ -66,10 +66,10 @@ export default function LoginForm() {
             {/* Header */}
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-white mb-2">
-                    Welcome back
+                    Đăng nhập
                 </h1>
                 <p className="text-gray-400">
-                    Login to your Acme Inc account
+                    Đăng nhập vào tài khoản của bạn
                 </p>
             </div>
 
@@ -103,10 +103,10 @@ export default function LoginForm() {
                 <div>
                     <div className="flex items-center justify-between mb-2">
                         <label htmlFor="password" className="text-sm font-medium text-white">
-                            Password
+                            Mật khẩu
                         </label>
                         <a href="/forgot-password" className="text-sm text-gray-400 hover:text-white transition-colors">
-                            Forgot your password?
+                            Quên mật khẩu?
                         </a>
                     </div>
                     <div className="relative">
@@ -145,10 +145,10 @@ export default function LoginForm() {
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                             </svg>
-                            Logging in...
+                            Đang đăng nhập...
                         </span>
                     ) : (
-                        'Login'
+                        'Đăng nhập'
                     )}
                 </button>
 
@@ -158,7 +158,7 @@ export default function LoginForm() {
                         <div className="w-full border-t border-gray-700"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
-                        <span className="px-4 bg-gray-900 text-gray-400">Or continue with</span>
+                        <span className="px-4 bg-gray-900 text-gray-400">Hoặc tiếp tục với</span>
                     </div>
                 </div>
 
@@ -203,9 +203,9 @@ export default function LoginForm() {
 
                 {/* Sign Up Link */}
                 <p className="text-center text-sm text-gray-400 mt-6">
-                    Don't have an account?{' '}
+                    Bạn chưa có tài khoản?{' '}
                     <a href="/register" className="text-white font-medium hover:underline">
-                        Sign up
+                        Đăng ký
                     </a>
                 </p>
             </form>

@@ -26,12 +26,12 @@ export default function ProfileHeader({ user, onAvatarUpdate }) {
 
         // Validate file
         if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
+            alert('Vui lòng chọn đúng định dạng ảnh');
             return;
         }
 
         if (file.size > 5 * 1024 * 1024) {
-            alert('File size must be less than 5MB');
+            alert('Kích thước ảnh phải nhỏ hơn 5MB');
             return;
         }
 
@@ -44,14 +44,14 @@ export default function ProfileHeader({ user, onAvatarUpdate }) {
             setShowActions(false);
         } catch (error) {
             console.error('Upload avatar error:', error);
-            alert('Failed to upload avatar');
+            alert('Không thể tải ảnh đại diện');
         } finally {
             setIsUploading(false);
         }
     };
 
     const handleDeleteAvatar = async () => {
-        if (!confirm('Are you sure you want to delete your avatar?')) return;
+        if (!confirm('Bạn có chắc muốn xóa ảnh đại diện không?')) return;
 
         setIsUploading(true);
         try {
@@ -62,7 +62,7 @@ export default function ProfileHeader({ user, onAvatarUpdate }) {
             setShowActions(false);
         } catch (error) {
             console.error('Delete avatar error:', error);
-            alert('Failed to delete avatar');
+            alert('Không thể xóa ảnh đại diện');
         } finally {
             setIsUploading(false);
         }
@@ -113,7 +113,7 @@ export default function ProfileHeader({ user, onAvatarUpdate }) {
                                 className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3"
                             >
                                 <Upload className="w-4 h-4" />
-                                {user.avatar ? 'Change Avatar' : 'Upload Avatar'}
+                                {user.avatar ? 'Đổi ảnh' : 'Tải ảnh'}
                             </button>
                             {user.avatar && (
                                 <button
@@ -122,7 +122,7 @@ export default function ProfileHeader({ user, onAvatarUpdate }) {
                                     className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
                                 >
                                     <Trash2 className="w-4 h-4" />
-                                    Delete Avatar
+                                    Xóa ảnh
                                 </button>
                             )}
                         </div>
@@ -148,12 +148,12 @@ export default function ProfileHeader({ user, onAvatarUpdate }) {
                     )}
                     <div className="flex items-center gap-3 mt-4 justify-center md:justify-start">
                         <span className="px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-medium">
-                            {user.role}
+                            {user.role === 'ADMIN' ? 'Quản trị viên' : user.role === 'MODERATOR' ? 'Điều phối viên' : 'Người dùng'}
                         </span>
                         {user.isVerified && (
                             <span className="px-4 py-1.5 bg-green-500/20 backdrop-blur-sm rounded-full text-white text-sm font-medium flex items-center gap-1.5">
                                 <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                                Email Verified
+                                Email đã xác thực
                             </span>
                         )}
                     </div>

@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     Gavel, Users, TrendingUp, MapPin, Home, Maximize2,
     Bed, Bath, Calendar, Eye, Share2, Heart, ArrowLeft,
-    DollarSign, Clock, CheckCircle, AlertCircle, Trophy
+    DollarSign, Clock, CheckCircle, AlertCircle, Trophy, Shield
 } from 'lucide-react';
 import Header from '../../components/common/Header';
 import Footer from '../../components/common/Footer';
@@ -22,6 +22,8 @@ export default function AuctionDetail() {
     const [depositStatus, setDepositStatus] = useState(null);
     const [statistics, setStatistics] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [showCancelModal, setShowCancelModal] = useState(false);
+    const [cancelReason, setCancelReason] = useState('');
 
     useEffect(() => {
         fetchAuction();
@@ -90,7 +92,7 @@ export default function AuctionDetail() {
             }
         } else {
             navigator.clipboard.writeText(window.location.href);
-            alert('Link copied to clipboard!');
+            alert('Đã sao chép liên kết vào bộ nhớ tạm!');
         }
     };
 
@@ -100,29 +102,30 @@ export default function AuctionDetail() {
     };
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
         }).format(price);
     };
 
     const formatDate = (date) => {
-        return new Intl.DateTimeFormat('en-US', {
+        return new Intl.DateTimeFormat('vi-VN', {
+            year: 'numeric',
             month: 'long',
             day: 'numeric',
-            year: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
+            hour12: false,
         }).format(new Date(date));
     };
 
     const getStatusBadge = (status) => {
         const badges = {
-            UPCOMING: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Upcoming', icon: Clock },
-            ONGOING: { bg: 'bg-green-100', text: 'text-green-700', label: 'Live Now', icon: TrendingUp },
-            COMPLETED: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Completed', icon: CheckCircle },
-            CANCELLED: { bg: 'bg-red-100', text: 'text-red-700', label: 'Cancelled', icon: AlertCircle },
+            UPCOMING: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Sắp diễn ra', icon: Clock },
+            ONGOING: { bg: 'bg-green-100', text: 'text-green-700', label: 'Đang diễn ra', icon: TrendingUp },
+            COMPLETED: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Đã kết thúc', icon: CheckCircle },
+            CANCELLED: { bg: 'bg-red-100', text: 'text-red-700', label: 'Đã hủy', icon: AlertCircle },
         };
 
         const badge = badges[status] || badges.UPCOMING;
@@ -147,7 +150,7 @@ export default function AuctionDetail() {
                         className="w-full py-4 bg-gradient-to-r from-primary to-primary-light text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
                     >
                         <Gavel className="w-6 h-6" />
-                        Login to Register
+                        Đăng nhập để đăng ký
                     </button>
                 );
             }
@@ -157,9 +160,9 @@ export default function AuctionDetail() {
                     <div className="space-y-3">
                         <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center">
                             <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
-                            <p className="font-bold text-green-900">You're Registered!</p>
+                            <p className="font-bold text-green-900">Bạn đã đăng ký thành công!</p>
                             <p className="text-sm text-green-700 mt-1">
-                                Auction starts {formatDate(auction.startTime)}
+                                Phiên sẽ bắt đầu vào {formatDate(auction.startTime)}
                             </p>
                         </div>
                         <button
@@ -167,7 +170,7 @@ export default function AuctionDetail() {
                             className="w-full py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all font-semibold flex items-center justify-center gap-2"
                         >
                             <Clock className="w-5 h-5" />
-                            Join Waiting Room
+                            Vào phòng chờ
                         </button>
                     </div>
                 );
@@ -179,7 +182,7 @@ export default function AuctionDetail() {
                     className="w-full py-4 bg-gradient-to-r from-primary to-primary-light text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
                 >
                     <Gavel className="w-6 h-6" />
-                    Register for Auction (Pay Deposit)
+                    Đăng ký tham gia (nộp đặt cọc)
                 </button>
             );
         }
@@ -193,7 +196,7 @@ export default function AuctionDetail() {
                         className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
                     >
                         <TrendingUp className="w-6 h-6" />
-                        Login to Bid Now
+                        Đăng nhập để tham gia trả giá
                     </button>
                 );
             }
@@ -203,9 +206,9 @@ export default function AuctionDetail() {
                     <div className="space-y-3">
                         <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
                             <AlertCircle className="w-6 h-6 text-red-600 mx-auto mb-2" />
-                            <p className="font-bold text-red-900">Auction in Progress</p>
+                            <p className="font-bold text-red-900">Phiên đang diễn ra</p>
                             <p className="text-sm text-red-700 mt-1">
-                                Deposit required to participate
+                                Bạn cần nộp tiền đặt cọc để tham gia
                             </p>
                         </div>
                         <button
@@ -213,7 +216,7 @@ export default function AuctionDetail() {
                             className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2"
                         >
                             <AlertCircle className="w-6 h-6" />
-                            Pay Deposit to Bid Now
+                            Nộp đặt cọc để tham gia ngay
                         </button>
                     </div>
                 );
@@ -225,7 +228,7 @@ export default function AuctionDetail() {
                     className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:shadow-xl transition-all font-bold text-lg flex items-center justify-center gap-2 animate-pulse"
                 >
                     <TrendingUp className="w-6 h-6" />
-                    🔴 Join Live Auction Now
+                    🔴 Tham gia đấu giá trực tiếp
                 </button>
             );
         }
@@ -235,10 +238,10 @@ export default function AuctionDetail() {
             return (
                 <div className="bg-gray-100 rounded-xl p-4 text-center">
                     <CheckCircle className="w-6 h-6 text-gray-600 mx-auto mb-2" />
-                    <p className="font-bold text-gray-900">Auction Ended</p>
+                    <p className="font-bold text-gray-900">Phiên đã kết thúc</p>
                     {auction.winnerId && (
                         <p className="text-sm text-gray-600 mt-2">
-                            Winner: {auction.winner?.fullName || 'Announced'}
+                            Người thắng: {auction.winner?.fullName || 'Đang cập nhật'}
                         </p>
                     )}
                 </div>
@@ -250,7 +253,7 @@ export default function AuctionDetail() {
             return (
                 <div className="bg-red-100 rounded-xl p-4 text-center">
                     <AlertCircle className="w-6 h-6 text-red-600 mx-auto mb-2" />
-                    <p className="font-bold text-red-900">Auction Cancelled</p>
+                    <p className="font-bold text-red-900">Phiên đấu giá đã bị hủy</p>
                 </div>
             );
         }
@@ -272,12 +275,12 @@ export default function AuctionDetail() {
                 <Header />
                 <div className="container mx-auto px-4 py-20 text-center">
                     <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Auction Not Found</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy phiên đấu giá</h2>
                     <button
                         onClick={() => navigate('/auctions')}
                         className="mt-4 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-light"
                     >
-                        Back to Auctions
+                        Quay lại danh sách đấu giá
                     </button>
                 </div>
                 <Footer />
@@ -295,10 +298,10 @@ export default function AuctionDetail() {
                     <div className="container mx-auto px-4">
                         <div className="flex items-center justify-center gap-3 text-white">
                             <span className="w-3 h-3 bg-white rounded-full animate-pulse"></span>
-                            <span className="font-bold text-lg">AUCTION LIVE NOW</span>
+                            <span className="font-bold text-lg">PHIÊN ĐẤU GIÁ ĐANG DIỄN RA</span>
                             <span className="px-3 py-1 bg-white/20 rounded-full text-sm flex items-center gap-2">
                                 <Users className="w-4 h-4" />
-                                {statistics?.totalParticipants || 0} participants
+                                {statistics?.totalParticipants || 0} người tham gia
                             </span>
                         </div>
                     </div>
@@ -312,7 +315,7 @@ export default function AuctionDetail() {
                     className="flex items-center gap-2 text-gray-600 hover:text-primary mb-6 transition-colors"
                 >
                     <ArrowLeft className="w-5 h-5" />
-                    <span className="font-medium">Back to Auctions</span>
+                    <span className="font-medium">Quay lại danh sách đấu giá</span>
                 </button>
 
                 <div className="grid lg:grid-cols-3 gap-8">
@@ -379,7 +382,7 @@ export default function AuctionDetail() {
                                         <Home className="w-6 h-6 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Type</p>
+                                        <p className="text-sm text-gray-600">Loại hình</p>
                                         <p className="font-bold text-gray-900">{auction.property?.type}</p>
                                     </div>
                                 </div>
@@ -389,7 +392,7 @@ export default function AuctionDetail() {
                                         <Maximize2 className="w-6 h-6 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Area</p>
+                                        <p className="text-sm text-gray-600">Diện tích</p>
                                         <p className="font-bold text-gray-900">{auction.property?.area} m²</p>
                                     </div>
                                 </div>
@@ -399,7 +402,7 @@ export default function AuctionDetail() {
                                         <Bed className="w-6 h-6 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Bedrooms</p>
+                                        <p className="text-sm text-gray-600">Phòng ngủ</p>
                                         <p className="font-bold text-gray-900">{auction.property?.bedrooms}</p>
                                     </div>
                                 </div>
@@ -409,7 +412,7 @@ export default function AuctionDetail() {
                                         <Bath className="w-6 h-6 text-primary" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Bathrooms</p>
+                                        <p className="text-sm text-gray-600">Phòng tắm</p>
                                         <p className="font-bold text-gray-900">{auction.property?.bathrooms}</p>
                                     </div>
                                 </div>
@@ -419,16 +422,16 @@ export default function AuctionDetail() {
                             <div className="grid md:grid-cols-3 gap-4 text-sm">
                                 <div className="flex items-center gap-2 text-gray-600">
                                     <Eye className="w-4 h-4" />
-                                    <span>{auction.property?.views || 0} views</span>
+                                    <span>{auction.property?.views || 0} lượt xem</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-gray-600">
                                     <Calendar className="w-4 h-4" />
-                                    <span>Posted {formatDate(auction.createdAt)}</span>
+                                    <span>Đăng ngày {formatDate(auction.createdAt)}</span>
                                 </div>
                                 {auction.property?.hasLegalDoc && (
                                     <div className="flex items-center gap-2 text-green-600">
                                         <CheckCircle className="w-4 h-4" />
-                                        <span>Legal Documents</span>
+                                        <span>Tài liệu pháp lý</span>
                                     </div>
                                 )}
                             </div>
@@ -436,7 +439,7 @@ export default function AuctionDetail() {
 
                         {/* Description */}
                         <div className="bg-white rounded-2xl p-6 shadow-lg">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">Mô tả</h2>
                             <p className="text-gray-700 leading-relaxed whitespace-pre-line">
                                 {auction.description}
                             </p>
@@ -445,29 +448,29 @@ export default function AuctionDetail() {
                         {/* Auction Statistics */}
                         {statistics && (
                             <div className="bg-white rounded-2xl p-6 shadow-lg">
-                                <h2 className="text-2xl font-bold text-gray-900 mb-6">Auction Statistics</h2>
+                                <h2 className="text-2xl font-bold text-gray-900 mb-6">Thống kê đấu giá</h2>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     <div className="text-center p-4 bg-blue-50 rounded-xl">
                                         <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                                         <p className="text-2xl font-bold text-gray-900">{statistics.totalParticipants || 0}</p>
-                                        <p className="text-sm text-gray-600">Participants</p>
+                                        <p className="text-sm text-gray-600">Người tham gia</p>
                                     </div>
                                     <div className="text-center p-4 bg-green-50 rounded-xl">
                                         <Gavel className="w-8 h-8 text-green-600 mx-auto mb-2" />
                                         <p className="text-2xl font-bold text-gray-900">{statistics.totalBids || 0}</p>
-                                        <p className="text-sm text-gray-600">Total Bids</p>
+                                        <p className="text-sm text-gray-600">Tổng lượt trả giá</p>
                                     </div>
                                     <div className="text-center p-4 bg-purple-50 rounded-xl">
                                         <Trophy className="w-8 h-8 text-purple-600 mx-auto mb-2" />
                                         <p className="text-2xl font-bold text-gray-900">{statistics.uniqueBidders || 0}</p>
-                                        <p className="text-sm text-gray-600">Unique Bidders</p>
+                                        <p className="text-sm text-gray-600">Người trả giá duy nhất</p>
                                     </div>
                                     <div className="text-center p-4 bg-orange-50 rounded-xl">
                                         <TrendingUp className="w-8 h-8 text-orange-600 mx-auto mb-2" />
                                         <p className="text-2xl font-bold text-gray-900">
                                             {statistics.averageBid > 0 ? formatPrice(statistics.averageBid) : 'N/A'}
                                         </p>
-                                        <p className="text-sm text-gray-600">Avg Bid</p>
+                                        <p className="text-sm text-gray-600">Mức trả giá trung bình</p>
                                     </div>
                                 </div>
                             </div>
@@ -479,7 +482,7 @@ export default function AuctionDetail() {
                         {/* Status */}
                         <div className="bg-white rounded-2xl p-6 shadow-lg">
                             <div className="flex items-center justify-between mb-6">
-                                <h3 className="text-lg font-bold text-gray-900">Auction Status</h3>
+                                <h3 className="text-lg font-bold text-gray-900">Trạng thái phiên</h3>
                                 {getStatusBadge(auction.status)}
                             </div>
 
@@ -487,7 +490,7 @@ export default function AuctionDetail() {
                             {(auction.status === 'UPCOMING' || auction.status === 'ONGOING') && (
                                 <div className="mb-6">
                                     <p className="text-sm text-gray-600 mb-2">
-                                        {auction.status === 'UPCOMING' ? 'Starts in:' : 'Ends in:'}
+                                        {auction.status === 'UPCOMING' ? 'Bắt đầu sau:' : 'Kết thúc sau:'}
                                     </p>
                                     <CountdownTimer
                                         endTime={auction.status === 'UPCOMING' ? auction.startTime : auction.endTime}
@@ -499,11 +502,11 @@ export default function AuctionDetail() {
                             {/* Schedule */}
                             <div className="space-y-3 text-sm">
                                 <div className="flex justify-between py-2 border-b border-gray-100">
-                                    <span className="text-gray-600">Start Time:</span>
+                                    <span className="text-gray-600">Thời gian bắt đầu:</span>
                                     <span className="font-semibold text-gray-900">{formatDate(auction.startTime)}</span>
                                 </div>
                                 <div className="flex justify-between py-2">
-                                    <span className="text-gray-600">End Time:</span>
+                                    <span className="text-gray-600">Thời gian kết thúc:</span>
                                     <span className="font-semibold text-gray-900">{formatDate(auction.endTime)}</span>
                                 </div>
                             </div>
@@ -512,13 +515,13 @@ export default function AuctionDetail() {
                         {/* Price Info */}
                         <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 text-white shadow-xl">
                             <p className="text-white/80 text-sm font-medium mb-2">
-                                {auction.status === 'UPCOMING' ? 'Starting Price' : 'Current Bid'}
+                                {auction.status === 'UPCOMING' ? 'Giá khởi điểm' : 'Giá hiện tại'}
                             </p>
                             <p className="text-4xl font-bold mb-4">
                                 {formatPrice(auction.currentPrice)}
                             </p>
                             <div className="flex items-center justify-between text-sm">
-                                <span className="text-white/80">Starting: {formatPrice(auction.startPrice)}</span>
+                                <span className="text-white/80">Khởi điểm: {formatPrice(auction.startPrice)}</span>
                                 {auction.currentPrice > auction.startPrice && (
                                     <span className="flex items-center gap-1">
                                         <TrendingUp className="w-4 h-4" />
@@ -530,18 +533,18 @@ export default function AuctionDetail() {
 
                         {/* Auction Requirements */}
                         <div className="bg-white rounded-2xl p-6 shadow-lg">
-                            <h3 className="font-bold text-gray-900 mb-4">Auction Details</h3>
+                            <h3 className="font-bold text-gray-900 mb-4">Thông tin đấu giá</h3>
                             <div className="space-y-3 text-sm">
                                 <div className="flex justify-between py-2 border-b border-gray-100">
-                                    <span className="text-gray-600">Bid Step:</span>
+                                    <span className="text-gray-600">Bước giá:</span>
                                     <span className="font-semibold text-gray-900">{formatPrice(auction.bidStep)}</span>
                                 </div>
                                 <div className="flex justify-between py-2 border-b border-gray-100">
-                                    <span className="text-gray-600">Deposit Required:</span>
+                                    <span className="text-gray-600">Tiền đặt cọc:</span>
                                     <span className="font-semibold text-primary">{formatPrice(auction.depositAmount)}</span>
                                 </div>
                                 <div className="flex justify-between py-2">
-                                    <span className="text-gray-600">Total Bids:</span>
+                                    <span className="text-gray-600">Tổng lượt trả giá:</span>
                                     <span className="font-semibold text-gray-900">{statistics?.totalBids || 0}</span>
                                 </div>
                             </div>
@@ -560,13 +563,13 @@ export default function AuctionDetail() {
                                         <AlertCircle className="w-6 h-6 text-orange-500" />
                                     )}
                                     <h3 className="font-bold">
-                                        {depositStatus.depositPaid ? 'Deposit Paid' : 'Deposit Required'}
+                                        {depositStatus.depositPaid ? 'Đã nộp đặt cọc' : 'Chưa nộp đặt cọc'}
                                     </h3>
                                 </div>
                                 <p className={`text-sm ${depositStatus.depositPaid ? 'text-white/80' : 'text-gray-600'}`}>
                                     {depositStatus.depositPaid
-                                        ? 'You can participate in this auction'
-                                        : 'Pay deposit to join this auction'}
+                                        ? 'Bạn đủ điều kiện tham gia đấu giá này'
+                                        : 'Vui lòng nộp đặt cọc để tham gia phiên'}
                                 </p>
                             </div>
                         )}
@@ -578,14 +581,14 @@ export default function AuctionDetail() {
                         <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
                             <h3 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
                                 <DollarSign className="w-5 h-5" />
-                                Bidding Rules
+                                Quy tắc đấu giá
                             </h3>
                             <ul className="space-y-2 text-sm text-blue-800">
-                                <li>• Deposit must be paid before bidding</li>
-                                <li>• Each bid must exceed current bid by step amount</li>
-                                <li>• Bids are binding and cannot be withdrawn</li>
-                                <li>• Winner must complete payment within 24 hours</li>
-                                <li>• Deposit refunded if you don't win</li>
+                                <li>• Phải nộp tiền đặt cọc trước khi tham gia</li>
+                                <li>• Mỗi lần trả giá phải tăng tối thiểu bằng bước giá</li>
+                                <li>• Giá đặt ra là cam kết và không thể rút lại</li>
+                                <li>• Người thắng phải thanh toán trong vòng 24 giờ</li>
+                                <li>• Đặt cọc sẽ được hoàn trả nếu bạn không thắng</li>
                             </ul>
                         </div>
                     </div>

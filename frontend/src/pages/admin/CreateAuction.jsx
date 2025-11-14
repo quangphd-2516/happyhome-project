@@ -30,14 +30,14 @@ export default function CreateAuction() {
     const [showPreview, setShowPreview] = useState(false);
 
     const steps = [
-        { number: 1, title: 'Select Property', description: 'Choose a property for auction' },
-        { number: 2, title: 'Auction Details', description: 'Set auction parameters' },
-        { number: 3, title: 'Review & Submit', description: 'Confirm auction information' }
+        { number: 1, title: 'Chọn bất động sản', description: 'Lựa chọn bất động sản tham gia đấu giá' },
+        { number: 2, title: 'Thiết lập phiên đấu giá', description: 'Cấu hình thông số và mức giá' },
+        { number: 3, title: 'Xem lại & gửi duyệt', description: 'Kiểm tra thông tin trước khi tạo' }
     ];
 
     const validateStep1 = () => {
         if (!selectedProperty) {
-            alert('Please select a property');
+            alert('Vui lòng chọn một bất động sản');
             return false;
         }
         return true;
@@ -47,32 +47,32 @@ export default function CreateAuction() {
         const newErrors = {};
 
         if (!auctionData.title.trim()) {
-            newErrors.title = 'Title is required';
+            newErrors.title = 'Vui lòng nhập tiêu đề';
         }
 
         if (!auctionData.startPrice || parseFloat(auctionData.startPrice) <= 0) {
-            newErrors.startPrice = 'Valid start price is required';
+            newErrors.startPrice = 'Vui lòng nhập giá khởi điểm hợp lệ';
         }
 
         if (!auctionData.bidStep || parseFloat(auctionData.bidStep) <= 0) {
-            newErrors.bidStep = 'Valid bid step is required';
+            newErrors.bidStep = 'Vui lòng nhập bước giá hợp lệ';
         }
 
         if (!auctionData.depositAmount || parseFloat(auctionData.depositAmount) <= 0) {
-            newErrors.depositAmount = 'Valid deposit amount is required';
+            newErrors.depositAmount = 'Vui lòng nhập tiền đặt cọc hợp lệ';
         }
 
         if (!auctionData.startTime) {
-            newErrors.startTime = 'Start time is required';
+            newErrors.startTime = 'Vui lòng chọn thời gian bắt đầu';
         }
 
         if (!auctionData.endTime) {
-            newErrors.endTime = 'End time is required';
+            newErrors.endTime = 'Vui lòng chọn thời gian kết thúc';
         }
 
         if (auctionData.startTime && auctionData.endTime) {
             if (new Date(auctionData.endTime) <= new Date(auctionData.startTime)) {
-                newErrors.endTime = 'End time must be after start time';
+                newErrors.endTime = 'Thời gian kết thúc phải sau thời gian bắt đầu';
             }
         }
 
@@ -113,7 +113,7 @@ export default function CreateAuction() {
             };
 
             await adminService.createAuction(submitData);
-            alert('Auction created successfully!');
+            alert('Tạo phiên đấu giá thành công!');
             navigate('/admin/auctions');
 
             // Using mock for now
@@ -123,7 +123,7 @@ export default function CreateAuction() {
             }, 1000); */
         } catch (error) {
             console.error('Error creating auction:', error);
-            alert('Failed to create auction. Please try again.');
+            alert('Tạo phiên đấu giá thất bại. Vui lòng thử lại.');
         } finally {
             setLoading(false);
         }
@@ -174,7 +174,7 @@ export default function CreateAuction() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
                 <div className="sticky top-0 bg-gradient-to-r from-indigo-600 to-purple-600 p-6 flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-white">Auction Preview</h2>
+                    <h2 className="text-2xl font-bold text-white">Xem trước phiên đấu giá</h2>
                     <button
                         onClick={() => setShowPreview(false)}
                         className="p-2 hover:bg-white/20 rounded-lg transition-colors"
@@ -186,7 +186,7 @@ export default function CreateAuction() {
                 <div className="p-6 space-y-6">
                     {/* Property Info */}
                     <div className="bg-gray-50 rounded-xl p-4">
-                        <h3 className="text-lg font-bold text-gray-900 mb-3">Property</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-3">Thông tin bất động sản</h3>
                         <div className="flex gap-4">
                             <img
                                 src={selectedProperty?.thumbnail}
@@ -206,39 +206,39 @@ export default function CreateAuction() {
 
                     {/* Auction Details */}
                     <div className="space-y-4">
-                        <h3 className="text-lg font-bold text-gray-900">Auction Details</h3>
+                        <h3 className="text-lg font-bold text-gray-900">Chi tiết phiên đấu giá</h3>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <p className="text-sm text-gray-600">Title</p>
+                                <p className="text-sm text-gray-600">Tiêu đề</p>
                                 <p className="font-semibold text-gray-900">{auctionData.title}</p>
                             </div>
                             <div>
-                                <p className="text-sm text-gray-600">Start Price</p>
+                                <p className="text-sm text-gray-600">Giá khởi điểm</p>
                                 <p className="font-semibold text-green-600">
                                     {formatCurrency(auctionData.startPrice)}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-sm text-gray-600">Bid Step</p>
+                                <p className="text-sm text-gray-600">Bước giá</p>
                                 <p className="font-semibold text-gray-900">
                                     {formatCurrency(auctionData.bidStep)}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-sm text-gray-600">Deposit Amount</p>
+                                <p className="text-sm text-gray-600">Tiền đặt cọc</p>
                                 <p className="font-semibold text-gray-900">
                                     {formatCurrency(auctionData.depositAmount)}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-sm text-gray-600">Start Time</p>
+                                <p className="text-sm text-gray-600">Thời gian bắt đầu</p>
                                 <p className="font-semibold text-gray-900">
                                     {new Date(auctionData.startTime).toLocaleString('vi-VN')}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-sm text-gray-600">End Time</p>
+                                <p className="text-sm text-gray-600">Thời gian kết thúc</p>
                                 <p className="font-semibold text-gray-900">
                                     {new Date(auctionData.endTime).toLocaleString('vi-VN')}
                                 </p>
@@ -247,7 +247,7 @@ export default function CreateAuction() {
 
                         {auctionData.description && (
                             <div>
-                                <p className="text-sm text-gray-600">Description</p>
+                                <p className="text-sm text-gray-600">Mô tả</p>
                                 <p className="text-gray-900 mt-1">{auctionData.description}</p>
                             </div>
                         )}
@@ -267,14 +267,14 @@ export default function CreateAuction() {
                         className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
-                        <span className="font-medium">Back</span>
+                        <span className="font-medium">Quay lại</span>
                     </button>
 
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                        Create New Auction
+                        Tạo phiên đấu giá mới
                     </h1>
                     <p className="text-gray-600">
-                        Set up a new property auction in 3 easy steps
+                        Thiết lập phiên đấu giá bất động sản chỉ với 3 bước
                     </p>
                 </div>
 
@@ -304,9 +304,9 @@ export default function CreateAuction() {
                             <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
                                 <CheckCircle className="w-6 h-6 text-green-600" />
                                 <div>
-                                    <p className="font-semibold text-green-900">Ready to Create</p>
+                                    <p className="font-semibold text-green-900">Sẵn sàng tạo phiên</p>
                                     <p className="text-sm text-green-700">
-                                        Please review all information before submitting
+                                        Vui lòng kiểm tra thông tin trước khi tạo phiên đấu giá
                                     </p>
                                 </div>
                             </div>
@@ -316,19 +316,19 @@ export default function CreateAuction() {
                                 className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-indigo-100 text-indigo-700 rounded-xl hover:bg-indigo-200 transition-colors font-medium"
                             >
                                 <Eye className="w-5 h-5" />
-                                Preview Auction Details
+                                Xem trước thông tin phiên
                             </button>
 
                             <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-xl">
                                 <div className="flex items-start gap-3">
                                     <AlertCircle className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" />
                                     <div>
-                                        <p className="font-semibold text-yellow-900 mb-2">Important Notes:</p>
+                                        <p className="font-semibold text-yellow-900 mb-2">Lưu ý quan trọng:</p>
                                         <ul className="text-sm text-yellow-800 space-y-1 list-disc list-inside">
-                                            <li>Once created, auction details cannot be modified</li>
-                                            <li>Property will be locked for this auction period</li>
-                                            <li>Participants will be notified automatically</li>
-                                            <li>Deposit will be required from all participants</li>
+                                            <li>Sau khi tạo, thông tin phiên đấu giá sẽ không thể chỉnh sửa</li>
+                                            <li>Bất động sản sẽ được khóa trong suốt thời gian đấu giá</li>
+                                            <li>Người tham gia sẽ được thông báo tự động</li>
+                                            <li>Tất cả người tham gia cần nộp tiền đặt cọc</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -343,7 +343,7 @@ export default function CreateAuction() {
                         onClick={handleBack}
                         className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                     >
-                        {currentStep === 1 ? 'Cancel' : 'Back'}
+                        {currentStep === 1 ? 'Hủy' : 'Quay lại'}
                     </button>
 
                     <div className="flex gap-3">
@@ -353,7 +353,7 @@ export default function CreateAuction() {
                                 className="px-6 py-3 bg-white border-2 border-indigo-300 text-indigo-600 rounded-xl hover:bg-indigo-50 transition-colors font-medium flex items-center gap-2"
                             >
                                 <Eye className="w-5 h-5" />
-                                Preview
+                                Xem trước
                             </button>
                         )}
 
@@ -362,7 +362,7 @@ export default function CreateAuction() {
                                 onClick={handleNext}
                                 className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all font-medium"
                             >
-                                Next Step
+                                Bước tiếp theo
                             </button>
                         ) : (
                             <button
@@ -373,12 +373,12 @@ export default function CreateAuction() {
                                 {loading ? (
                                     <>
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                        Creating...
+                                        Đang tạo...
                                     </>
                                 ) : (
                                     <>
                                         <Save className="w-5 h-5" />
-                                        Create Auction
+                                        Tạo phiên đấu giá
                                     </>
                                 )}
                             </button>

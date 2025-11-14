@@ -16,37 +16,12 @@ export default function AdminLayout({ children }) {
     const [showUserMenu, setShowUserMenu] = useState(false);
 
     const menuItems = [
-        {
-            title: 'Dashboard',
-            icon: LayoutDashboard,
-            path: '/admin/dashboard',
-        },
-        {
-            title: 'User Management',
-            icon: Users,
-            path: '/admin/users',
-        },
-        {
-            title: 'KYC Management',
-            icon: FileCheck,
-            path: '/admin/kyc',
-        },
-        {
-            title: 'Property Management',
-            icon: Home,
-            path: '/admin/properties',
-        },
-        {
-            title: 'Auction Management',
-            icon: Gavel,
-            path: '/admin/auctions',
-        },
-
-        {
-            title: 'Settings',
-            icon: Settings,
-            path: '/admin/settings',
-        },
+        { title: 'Bảng điều khiển', icon: LayoutDashboard, path: '/admin/dashboard' },
+        { title: 'Quản lý người dùng', icon: Users, path: '/admin/users' },
+        { title: 'Quản lý KYC', icon: FileCheck, path: '/admin/kyc' },
+        { title: 'Quản lý bất động sản', icon: Home, path: '/admin/properties' },
+        { title: 'Quản lý đấu giá', icon: Gavel, path: '/admin/auctions' },
+        { title: 'Cài đặt', icon: Settings, path: '/admin/settings' },
     ];
 
     const handleLogout = () => {
@@ -71,7 +46,7 @@ export default function AdminLayout({ children }) {
                                 <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                                     HappyHome Admin
                                 </h1>
-                                <p className="text-xs text-gray-400 mt-1">Management Panel</p>
+                                <p className="text-xs text-gray-400 mt-1">Bảng quản trị</p>
                             </div>
                         )}
                         <button
@@ -127,7 +102,7 @@ export default function AdminLayout({ children }) {
                                 className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
                             >
                                 <LogOut className="w-4 h-4" />
-                                <span className="text-sm font-medium">Logout</span>
+                                <span className="text-sm font-medium">Đăng xuất</span>
                             </button>
                         )}
                     </div>
@@ -152,7 +127,7 @@ export default function AdminLayout({ children }) {
                                 <Search className="w-5 h-5 text-gray-400" />
                                 <input
                                     type="text"
-                                    placeholder="Search..."
+                                    placeholder="Tìm kiếm..."
                                     className="bg-transparent flex-1 outline-none text-sm"
                                 />
                             </div>
@@ -185,20 +160,20 @@ export default function AdminLayout({ children }) {
                                             onClick={() => navigate('/admin/profile')}
                                             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
                                         >
-                                            Profile
+                                            Hồ sơ cá nhân
                                         </button>
                                         <button
                                             onClick={() => navigate('/admin/settings')}
                                             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
                                         >
-                                            Settings
+                                            Cài đặt
                                         </button>
                                         <hr className="my-2" />
                                         <button
                                             onClick={handleLogout}
                                             className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                                         >
-                                            Logout
+                                            Đăng xuất
                                         </button>
                                     </div>
                                 )}

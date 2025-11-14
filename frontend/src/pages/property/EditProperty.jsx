@@ -30,7 +30,7 @@ export default function EditProperty() {
             setProperty(response.data);
         } catch (error) {
             console.error('Fetch property error:', error);
-            alert('Failed to load property');
+            alert('Không thể tải thông tin bất động sản');
             navigate('/my-properties');
         } finally {
             setLoading(false);
@@ -57,10 +57,10 @@ export default function EditProperty() {
                             <Edit className="w-10 h-10 text-white" />
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                            Edit Property
+                            Chỉnh sửa bất động sản
                         </h1>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            Update your property listing details
+                            Cập nhật thông tin tin đăng bất động sản của bạn
                         </p>
                     </div>
 

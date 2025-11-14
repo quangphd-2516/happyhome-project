@@ -16,10 +16,10 @@ const KYCFilters = ({ filters, onFilterChange }) => {
     const [localFilters, setLocalFilters] = useState(filters);
 
     const statusOptions = [
-        { value: 'all', label: 'All Status', icon: Filter, color: 'text-gray-600' },
-        { value: 'PENDING', label: 'Pending', icon: Clock, color: 'text-yellow-600' },
-        { value: 'APPROVED', label: 'Approved', icon: CheckCircle, color: 'text-green-600' },
-        { value: 'REJECTED', label: 'Rejected', icon: XCircle, color: 'text-red-600' }
+        { value: 'all', label: 'Tất cả trạng thái', icon: Filter, color: 'text-gray-600' },
+        { value: 'PENDING', label: 'Chờ duyệt', icon: Clock, color: 'text-yellow-600' },
+        { value: 'APPROVED', label: 'Đã duyệt', icon: CheckCircle, color: 'text-green-600' },
+        { value: 'REJECTED', label: 'Từ chối', icon: XCircle, color: 'text-red-600' }
     ];
 
     const handleStatusChange = (status) => {
@@ -76,7 +76,7 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                             type="text"
                             value={localFilters.search}
                             onChange={handleSearchChange}
-                            placeholder="Search by name, email, or ID card number..."
+                            placeholder="Tìm theo tên, email hoặc số giấy tờ..."
                             className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                         {localFilters.search && (
@@ -105,7 +105,7 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                             }`}
                     >
                         <Filter className="w-4 h-4" />
-                        <span className="font-medium">Filters</span>
+                        <span className="font-medium">Bộ lọc</span>
                         {hasActiveFilters && (
                             <span className="w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
                                 {[
@@ -123,7 +123,7 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                             className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors"
                         >
                             <RotateCcw className="w-4 h-4" />
-                            <span className="font-medium">Reset</span>
+                            <span className="font-medium">Đặt lại</span>
                         </button>
                     )}
                 </div>
@@ -160,7 +160,7 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
-                                    From Date
+                                    Từ ngày
                                 </div>
                             </label>
                             <input
@@ -176,7 +176,7 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
-                                    To Date
+                                    Đến ngày
                                 </div>
                             </label>
                             <input
@@ -190,7 +190,7 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                         {/* Results per page */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Results per page
+                                Số kết quả/trang
                             </label>
                             <select
                                 value={localFilters.limit}
@@ -201,10 +201,10 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                                 }}
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
-                                <option value={10}>10 per page</option>
-                                <option value={25}>25 per page</option>
-                                <option value={50}>50 per page</option>
-                                <option value={100}>100 per page</option>
+                                <option value={10}>10/trang</option>
+                                <option value={25}>25/trang</option>
+                                <option value={50}>50/trang</option>
+                                <option value={100}>100/trang</option>
                             </select>
                         </div>
                     </div>
@@ -212,13 +212,13 @@ const KYCFilters = ({ filters, onFilterChange }) => {
                     {/* Quick Date Filters */}
                     <div className="mt-4 flex flex-wrap gap-2">
                         <span className="text-sm font-medium text-gray-700 mr-2 self-center">
-                            Quick filters:
+                            Bộ lọc nhanh:
                         </span>
                         {[
-                            { label: 'Today', days: 0 },
-                            { label: 'Last 7 days', days: 7 },
-                            { label: 'Last 30 days', days: 30 },
-                            { label: 'Last 90 days', days: 90 }
+                            { label: 'Hôm nay', days: 0 },
+                            { label: '7 ngày qua', days: 7 },
+                            { label: '30 ngày qua', days: 30 },
+                            { label: '90 ngày qua', days: 90 }
                         ].map((quickFilter) => (
                             <button
                                 key={quickFilter.label}
