@@ -23,19 +23,22 @@ const server = http.createServer(app);
 // ✅ Tạo Socket.IO server
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    methods: ['GET', 'POST'],
+    origin: process.env.FRONTEND_URL?.split(',') || [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://happyhome-project.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   },
   transports: ['websocket', 'polling'],
 });
 
-// ✅ Gắn io vào app để có thể dùng ở nơi khác
 app.set('io', io);
 
 // ✅ Khởi tạo WebSocket và Scheduler
 initializeWebSocket(io);
-initializeAuctionScheduler(); // ✅ nếu có cron job
+initializeAuctionScheduler();
 
 // Logging
 if (config.env !== 'test') {
@@ -43,18 +46,26 @@ if (config.env !== 'test') {
   app.use(morgan.errorHandler);
 }
 
-// CORS
-app.use(
-  cors({
-    origin: process.env.front_url?.split(',') || [
-      "http://localhost:3000",
-      "http://localhost:5173",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+// ✅ CORS phải để trước route
+const allowedOrigins = process.env.FRONTEND_URL?.split(',') || [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://happyhome-project.vercel.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser requests
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
 
 // Security headers
 app.use(helmet());
@@ -70,7 +81,9 @@ app.use(compression());
 if (config.env === 'production') {
   app.use('/api/v1/auth', authLimiter);
 }
-app.use('/api', routes); // 👈 Thêm dòng này ngay sau /api/v1
+
+// ✅ Mount API routes 1 lần duy nhất
+app.use('/api', routes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -80,9 +93,6 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-
-// API routes
-app.use('/api/v1', routes);
 
 // Catch 404 (trừ socket.io)
 app.use((req, res, next) => {
@@ -94,5 +104,4 @@ app.use((req, res, next) => {
 app.use(errorConverter);
 app.use(errorHandler);
 
-// ✅ Export cả app, server và io
 module.exports = { app, server, io };
