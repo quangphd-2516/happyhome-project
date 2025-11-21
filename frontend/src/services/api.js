@@ -2,12 +2,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+    baseURL: `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`,
     timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
 });
+
 
 // Request interceptor - Tự động thêm token vào header
 api.interceptors.request.use(
