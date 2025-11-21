@@ -355,7 +355,7 @@ const sendDepositSuccessEmail = async (to, depositData) => {
           </div>
 
           <div style="text-align: center;">
-            <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/auctions/${auctionId}" class="action-button">
+            <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/auctions/${auctionId}" class="action-button">
               Xem chi tiết phiên đấu giá
             </a>
           </div>
@@ -379,8 +379,8 @@ const sendDepositSuccessEmail = async (to, depositData) => {
           <p>© 2025 OK NHA BRO!!!!</p>
           <p>Đây là email tự động, vui lòng không trả lời.</p>
           <p style="margin-top: 10px;">
-            <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/support" style="color: #667eea;">Liên hệ hỗ trợ</a> | 
-            <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/terms" style="color: #667eea;">Điều khoản</a>
+            <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/support" style="color: #667eea;">Liên hệ hỗ trợ</a> | 
+            <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/terms" style="color: #667eea;">Điều khoản</a>
           </p>
         </div>
       </div>
