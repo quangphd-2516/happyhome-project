@@ -4,38 +4,22 @@ const logger = require('../config/logger');
 
 // SendGrid setup (optional)
 let sgMail = null;
-if (config.sendgrid.enabled) {
+if (config.sendgrid?.enabled) {
   try {
     sgMail = require('@sendgrid/mail');
     sgMail.setApiKey(config.sendgrid.apiKey);
     logger.info('✅ SendGrid initialized');
   } catch (error) {
-    logger.warn('⚠️  SendGrid not available, falling back to SMTP');
+    logger.warn('⚠️  SendGrid package not installed');
   }
 }
 
 // SMTP Transport setup
 let transport = null;
 if (config.email.smtp) {
-  console.log('📧 SMTP config:', {
-    host: config.email.smtp.host,
-    port: config.email.smtp.port,
-    secure: config.email.smtp.secure,
-    user: config.email.smtp.auth.user,
-  });
-
+  console.log('📧 Initializing SMTP transport...');
   transport = nodemailer.createTransport(config.email.smtp);
-
-  // Verify connection (non-blocking)
-  if (config.env !== 'test') {
-    transport
-      .verify()
-      .then(() => logger.info('✅ Connected to SMTP server'))
-      .catch((error) => {
-        logger.error('❌ SMTP connection failed:', error.message);
-        logger.warn('⚠️  Emails may not be sent. Consider using SendGrid.');
-      });
-  }
+  logger.info('✅ SMTP transport created (verification skipped for Render compatibility)');
 }
 
 /**
@@ -43,7 +27,7 @@ if (config.email.smtp) {
  */
 const sendEmailViaProvider = async (to, subject, text, html) => {
   // Try SendGrid first if enabled
-  if (sgMail && config.sendgrid.enabled) {
+  if (sgMail && config.sendgrid?.enabled) {
     try {
       const msg = {
         to,
@@ -54,7 +38,7 @@ const sendEmailViaProvider = async (to, subject, text, html) => {
       };
       await sgMail.send(msg);
       logger.info(`✅ Email sent via SendGrid to ${to}`);
-      return;
+      return { success: true, provider: 'SendGrid' };
     } catch (error) {
       logger.error(`❌ SendGrid failed: ${error.message}`);
       // Fall through to SMTP
@@ -63,7 +47,9 @@ const sendEmailViaProvider = async (to, subject, text, html) => {
 
   // Fallback to SMTP
   if (!transport) {
-    throw new Error('No email transport configured (neither SendGrid nor SMTP)');
+    const error = new Error('No email transport configured. Please set up SendGrid or SMTP.');
+    logger.error(error.message);
+    throw error;
   }
 
   try {
@@ -74,11 +60,14 @@ const sendEmailViaProvider = async (to, subject, text, html) => {
       text,
       html,
     };
-    await transport.sendMail(msg);
-    logger.info(`✅ Email sent via SMTP to ${to}`);
+
+    logger.info(`📤 Attempting to send email via SMTP to ${to}...`);
+    const result = await transport.sendMail(msg);
+    logger.info(`✅ Email sent via SMTP to ${to} (Message ID: ${result.messageId})`);
+    return { success: true, provider: 'SMTP', messageId: result.messageId };
   } catch (error) {
-    logger.error(`❌ Failed to send email: ${error.message}`);
-    throw error;
+    logger.error(`❌ SMTP failed to send email: ${error.message}`);
+    throw new Error(`Email delivery failed: ${error.message}. Consider using SendGrid for reliable email delivery.`);
   }
 };
 
@@ -90,7 +79,7 @@ const sendEmailViaProvider = async (to, subject, text, html) => {
  * @returns {Promise}
  */
 const sendEmail = async (to, subject, text) => {
-  await sendEmailViaProvider(to, subject, text);
+  return await sendEmailViaProvider(to, subject, text);
 };
 
 /**
@@ -100,19 +89,27 @@ const sendEmail = async (to, subject, text) => {
  * @returns {Promise}
  */
 const sendResetPasswordEmail = async (to, token) => {
-  const subject = 'Reset password';
+  const subject = 'Reset password - HappyHome';
   const resetPasswordUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${token}`;
   const text = `Dear user,
 To reset your password, click on this link: ${resetPasswordUrl}
 If you did not request any password resets, then ignore this email.`;
 
   const html = `
-    <p>Dear user,</p>
-    <p>To reset your password, click on this link: <a href="${resetPasswordUrl}">${resetPasswordUrl}</a></p>
-    <p>If you did not request any password resets, then ignore this email.</p>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>Reset Your Password</h2>
+      <p>Dear user,</p>
+      <p>To reset your password, click on the button below:</p>
+      <p style="text-align: center; margin: 30px 0;">
+        <a href="${resetPasswordUrl}" style="background-color: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Password</a>
+      </p>
+      <p>Or copy this link: <a href="${resetPasswordUrl}">${resetPasswordUrl}</a></p>
+      <p>If you did not request any password resets, please ignore this email.</p>
+      <p>Best regards,<br>The HappyHome Team</p>
+    </div>
   `;
 
-  await sendEmailViaProvider(to, subject, text, html);
+  return await sendEmailViaProvider(to, subject, text, html);
 };
 
 /**
@@ -122,19 +119,27 @@ If you did not request any password resets, then ignore this email.`;
  * @returns {Promise}
  */
 const sendVerificationEmail = async (to, token) => {
-  const subject = 'Email Verification';
+  const subject = 'Email Verification - HappyHome';
   const verificationEmailUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?token=${token}`;
   const text = `Dear user,
 To verify your email, click on this link: ${verificationEmailUrl}
 If you did not create an account, then ignore this email.`;
 
   const html = `
-    <p>Dear user,</p>
-    <p>To verify your email, click on this link: <a href="${verificationEmailUrl}">${verificationEmailUrl}</a></p>
-    <p>If you did not create an account, then ignore this email.</p>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2>Verify Your Email</h2>
+      <p>Dear user,</p>
+      <p>To verify your email address, click on the button below:</p>
+      <p style="text-align: center; margin: 30px 0;">
+        <a href="${verificationEmailUrl}" style="background-color: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email</a>
+      </p>
+      <p>Or copy this link: <a href="${verificationEmailUrl}">${verificationEmailUrl}</a></p>
+      <p>If you did not create an account, please ignore this email.</p>
+      <p>Best regards,<br>The HappyHome Team</p>
+    </div>
   `;
 
-  await sendEmailViaProvider(to, subject, text, html);
+  return await sendEmailViaProvider(to, subject, text, html);
 };
 
 /**
@@ -163,54 +168,14 @@ The HappyHome Team`;
     <html>
     <head>
       <style>
-        body {
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
-          margin: 0;
-          padding: 0;
-        }
-        .container {
-          max-width: 600px;
-          margin: 40px auto;
-          background-color: #ffffff;
-          border-radius: 8px;
-          overflow: hidden;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .header {
-          background-color: #2C3E50;
-          color: #ffffff;
-          padding: 30px;
-          text-align: center;
-        }
-        .header h1 {
-          margin: 0;
-          font-size: 28px;
-        }
-        .content {
-          padding: 40px 30px;
-        }
-        .otp-code {
-          background-color: #f8f9fa;
-          border: 2px dashed #2C3E50;
-          border-radius: 8px;
-          padding: 20px;
-          text-align: center;
-          margin: 30px 0;
-        }
-        .otp-code h2 {
-          font-size: 36px;
-          letter-spacing: 8px;
-          color: #2C3E50;
-          margin: 0;
-        }
-        .footer {
-          background-color: #f8f9fa;
-          padding: 20px;
-          text-align: center;
-          font-size: 12px;
-          color: #666;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header { background-color: #2C3E50; color: #ffffff; padding: 30px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .content { padding: 40px 30px; }
+        .otp-code { background-color: #f8f9fa; border: 2px dashed #2C3E50; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0; }
+        .otp-code h2 { font-size: 36px; letter-spacing: 8px; color: #2C3E50; margin: 0; }
+        .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; }
       </style>
     </head>
     <body>
@@ -245,7 +210,7 @@ The HappyHome Team`;
     </html>
   `;
 
-  await sendEmailViaProvider(to, subject, text, html);
+  return await sendEmailViaProvider(to, subject, text, html);
 };
 
 /**
@@ -355,7 +320,18 @@ The HappyHome Team`;
     </html>
   `;
 
-  await sendEmailViaProvider(to, subject, text, html);
+  return await sendEmailViaProvider(to, subject, text, html);
+};
+
+// Health check function for email service
+const checkEmailHealth = () => {
+  const status = {
+    sendgridEnabled: !!sgMail && config.sendgrid?.enabled,
+    smtpConfigured: !!transport,
+    ready: (!!sgMail && config.sendgrid?.enabled) || !!transport
+  };
+
+  return status;
 };
 
 module.exports = {
@@ -365,4 +341,5 @@ module.exports = {
   sendVerificationEmail,
   sendOTPEmail,
   sendDepositSuccessEmail,
+  checkEmailHealth,
 };
