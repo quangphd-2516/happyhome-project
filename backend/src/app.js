@@ -16,18 +16,43 @@ const { initializeWebSocket } = require('./services/websocket.service');
 const { initializeAuctionScheduler } = require('./services/auctionScheduler');
 
 const app = express();
-
-// ✅ Tạo HTTP server
 const server = http.createServer(app);
 
-// ✅ Tạo Socket.IO server
+// ============================
+// 🔥 FIX CORS PRINT — Render bắt buộc
+// ============================
+
+const allowedOrigins = process.env.FRONTEND_URL?.split(',') || [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://happyhome-project.vercel.app",
+  "https://happyhome-project-7hk4p7lqc-quangnt22810310333-6281s-projects.vercel.app"
+];
+
+// ⚠️ CORS MUST be placed BEFORE all middlewares
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    console.warn("❌ Blocked by CORS:", origin);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+// ⚠️ FIX QUAN TRỌNG CHO OPTIONS PRE-FLIGHT
+app.options("*", cors());
+
+// ============================
+// Socket.IO
+// ============================
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL?.split(',') || [
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "https://happyhome-project.vercel.app"
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   },
@@ -35,8 +60,6 @@ const io = new Server(server, {
 });
 
 app.set('io', io);
-
-// ✅ Khởi tạo WebSocket và Scheduler
 initializeWebSocket(io);
 initializeAuctionScheduler();
 
@@ -46,43 +69,22 @@ if (config.env !== 'test') {
   app.use(morgan.errorHandler);
 }
 
-// ✅ CORS phải để trước route
-const allowedOrigins = process.env.FRONTEND_URL?.split(',') || [
-  "http://localhost:3000",
-  "http://localhost:5173",
-  "https://happyhome-project.vercel.app"
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser requests
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-}));
-
-// Security headers
+// Security
 app.use(helmet());
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Compression
 app.use(compression());
 
-// Rate limiter cho auth
+// Rate limit (auth)
 if (config.env === 'production') {
   app.use('/api/v1/auth', authLimiter);
 }
 
-// ✅ Mount API routes 1 lần duy nhất
+// Routes
 app.use('/api', routes);
 
 // Health check
@@ -94,7 +96,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Catch 404 (trừ socket.io)
+// 404 handler (ignore socket)
 app.use((req, res, next) => {
   if (req.path.startsWith('/socket.io')) return next();
   next(new ApiError(StatusCodes.NOT_FOUND, 'Route not found'));
