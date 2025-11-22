@@ -46,14 +46,14 @@ module.exports = {
   email: {
     smtp: {
       host: envVars.SMTP_HOST,
-      port: envVars.SMTP_PORT,
-      secure: false, // ⚠️ quan trọng — Gmail dùng STARTTLS, không SSL trực tiếp
+      port: envVars.SMTP_PORT || 465,
+      secure: true, // ⚠️ quan trọng — Gmail dùng STARTTLS, không SSL trực tiếp
       auth: {
         user: envVars.SMTP_USERNAME,
         pass: envVars.SMTP_PASSWORD,
       },
       tls: {
-        rejectUnauthorized: false, // ⚠️ bỏ kiểm tra chứng chỉ tự ký
+        rejectUnauthorized: true, // ⚠️ bỏ kiểm tra chứng chỉ tự ký
       },
     },
     from: envVars.EMAIL_FROM,
