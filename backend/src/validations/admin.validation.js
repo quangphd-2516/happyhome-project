@@ -77,6 +77,7 @@ const getAllProperties = {
         type: Joi.string().valid('HOUSE', 'APARTMENT', 'LAND', 'VILLA', 'SHOPHOUSE'),
         city: Joi.string(),
         district: Joi.string(),
+        hasAuction: Joi.boolean().optional(),
         sortBy: Joi.string().valid(
             'createdAt:asc',
             'createdAt:desc',
