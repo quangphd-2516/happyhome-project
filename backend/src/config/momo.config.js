@@ -1,6 +1,7 @@
 // backend/src/config/momo.config.js
 
 // Debug: Log config values on load
+// LẤY RA CÁC GIÁ TRỊ CẤU HÌNH TỪ BIẾN MÔI TRƯỜNG HOẶC SỬ DỤNG MẶC ĐỊNH TRÊN DEPLOY ĐÃ CẤU HÌNH LINK RETURN THẬT
 console.log('🔧 MoMo Config Loaded:');
 console.log('- Partner Code:', process.env.MOMO_PARTNER_CODE || 'MOMO (default)');
 console.log('- Access Key:', process.env.MOMO_ACCESS_KEY ? '✅ SET' : '❌ NOT SET');
