@@ -9,6 +9,9 @@ const getAllAuctions = {
         limit: Joi.number().integer().min(1).max(100),
         status: Joi.string().valid('all', 'UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED').allow(''),
         propertyId: Joi.string(),
+        search: Joi.string().allow('').optional(),
+        dateFrom: Joi.string().allow('').optional(),
+        dateTo: Joi.string().allow('').optional(),
         sortBy: Joi.string().valid(
             'createdAt:asc',
             'createdAt:desc',
