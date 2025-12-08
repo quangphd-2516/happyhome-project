@@ -116,7 +116,7 @@ export default function AuctionTable({ data, onViewDetail, onRefresh }) {
                             <td className="px-6 py-4">
                                 <div className="flex items-center gap-3">
                                     <img
-                                        src={auction.property.thumbnail}
+                                        src={auction.property.thumbnail || auction.property.images?.[0]}
                                         alt={auction.property.tittle}
                                         className="w-16 h-16 rounded-lg object-cover"
                                     />

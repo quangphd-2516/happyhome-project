@@ -22,87 +22,7 @@ import {
 } from 'lucide-react';
 import { adminService } from '../../services/adminService';
 
-// Mock auction detail data
-const mockAuctionDetail = {
-    id: 'auction_001',
-    propertyId: 'prop_001',
-    property: {
-        id: 'prop_001',
-        title: 'Biệt thự hiện đại tại Quận 2',
-        address: '123 Nguyễn Văn Hưởng, Thảo Điền, Quận 2, TP.HCM',
-        thumbnail: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
-        type: 'VILLA',
-        area: 450,
-        bedrooms: 5,
-        bathrooms: 4,
-        price: 15000000000
-    },
-    createdBy: 'admin_001',
-    creator: {
-        id: 'admin_001',
-        fullName: 'Quản trị viên',
-        email: 'admin@example.com'
-    },
-    title: 'Đấu giá biệt thự cao cấp Quận 2',
-    description: 'Biệt thự cao cấp tại vị trí đắc địa, tiện nghi hiện đại cùng khu vườn tuyệt đẹp',
-    startPrice: 15000000000,
-    bidStep: 500000000,
-    depositAmount: 1500000000,
-    currentPrice: 16500000000,
-    startTime: '2024-04-01T10:00:00Z',
-    endTime: '2024-04-15T18:00:00Z',
-    status: 'ONGOING',
-    winnerId: null,
-    bids: [
-        {
-            id: 'bid_001',
-            userId: 'user_005',
-            user: { fullName: 'Nguyen Van A', email: 'nguyenvana@example.com' },
-            amount: 16500000000,
-            isAutoBid: false,
-            createdAt: '2024-04-05T14:30:00Z'
-        },
-        {
-            id: 'bid_002',
-            userId: 'user_006',
-            user: { fullName: 'Tran Thi B', email: 'tranthib@example.com' },
-            amount: 16000000000,
-            isAutoBid: false,
-            createdAt: '2024-04-04T11:20:00Z'
-        },
-        {
-            id: 'bid_003',
-            userId: 'user_005',
-            user: { fullName: 'Nguyen Van A', email: 'nguyenvana@example.com' },
-            amount: 15500000000,
-            isAutoBid: true,
-            maxAmount: 17000000000,
-            createdAt: '2024-04-03T09:15:00Z'
-        }
-    ],
-    participants: [
-        {
-            id: 'part_001',
-            userId: 'user_005',
-            user: { fullName: 'Nguyen Van A', email: 'nguyenvana@example.com' },
-            depositPaid: true,
-            depositTxId: 'tx_001',
-            isRefunded: false,
-            createdAt: '2024-03-28T10:00:00Z'
-        },
-        {
-            id: 'part_002',
-            userId: 'user_006',
-            user: { fullName: 'Tran Thi B', email: 'tranthib@example.com' },
-            depositPaid: true,
-            depositTxId: 'tx_002',
-            isRefunded: false,
-            createdAt: '2024-03-29T14:00:00Z'
-        }
-    ],
-    createdAt: '2024-03-20T09:00:00Z',
-    updatedAt: '2024-04-05T14:30:00Z'
-};
+
 
 export default function AdminAuctionDetail() {
     const { id } = useParams();
@@ -285,7 +205,7 @@ export default function AdminAuctionDetail() {
                         {/* Property Info */}
                         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                             <img
-                                src={auction.property.thumbnail}
+                                src={auction.property.thumbnail || auction.property.images?.[0]}
                                 alt={auction.property.title}
                                 className="w-full h-64 object-cover"
                             />
