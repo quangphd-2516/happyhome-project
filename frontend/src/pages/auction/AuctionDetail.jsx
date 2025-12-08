@@ -324,7 +324,7 @@ export default function AuctionDetail() {
                         {/* Main Image */}
                         <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
                             <img
-                                src={auction.property?.thumbnail}
+                                src={auction.property?.thumbnail || auction.property.images?.[0]}
                                 alt={auction.title}
                                 className="w-full h-96 object-cover"
                             />

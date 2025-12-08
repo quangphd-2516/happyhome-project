@@ -7,9 +7,9 @@ export default function AuctionCard({ auction }) {
     const navigate = useNavigate();
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'VND',
             minimumFractionDigits: 0,
         }).format(price);
     };
@@ -41,7 +41,7 @@ export default function AuctionCard({ auction }) {
             {/* Image */}
             <div className="relative h-64 overflow-hidden">
                 <img
-                    src={auction.property?.thumbnail || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'}
+                    src={auction.property?.thumbnail || auction.property.images?.[0]}
                     alt={auction.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />

@@ -12,50 +12,7 @@ export default function AuctionList() {
     const [filter, setFilter] = useState('all'); // all, upcoming, ongoing, completed
 
     // Mock data
-    const mockAuctions = [
-        {
-            id: 1,
-            title: 'Đấu giá biệt thự cao cấp - Beverly Hills',
-            status: 'ONGOING',
-            startPrice: 2000000,
-            currentPrice: 2500000,
-            bidStep: 50000,
-            startTime: '2024-03-20T10:00:00',
-            endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2 hours from now
-            property: {
-                thumbnail: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'
-            },
-            bids: [{}, {}, {}]
-        },
-        {
-            id: 2,
-            title: 'Penthouse hiện đại - San Francisco',
-            status: 'UPCOMING',
-            startPrice: 1500000,
-            currentPrice: 1500000,
-            bidStep: 25000,
-            startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 1 day from now
-            endTime: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(),
-            property: {
-                thumbnail: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800'
-            },
-            bids: []
-        },
-        {
-            id: 3,
-            title: 'Biệt thự ven biển - Malibu',
-            status: 'COMPLETED',
-            startPrice: 3000000,
-            currentPrice: 4200000,
-            bidStep: 100000,
-            startTime: '2024-03-15T10:00:00',
-            endTime: '2024-03-18T18:00:00',
-            property: {
-                thumbnail: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800'
-            },
-            bids: [{}, {}, {}, {}, {}]
-        },
-    ];
+
 
     useEffect(() => {
         fetchAuctions();

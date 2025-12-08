@@ -36,6 +36,7 @@ const getAllAuctions = async (options) => {
                         area: true,
                         bedrooms: true,
                         bathrooms: true,
+                        images: true,
                     },
                 },
                 _count: {
@@ -208,6 +209,7 @@ const getMyAuctions = async (userId, options) => {
                         title: true,
                         thumbnail: true,
                         address: true,
+                        images: true,
                     },
                 },
                 bids: {

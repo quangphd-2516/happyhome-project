@@ -181,7 +181,7 @@ export default function MyAuctions() {
                                     {/* Image */}
                                     <div className="md:w-64 h-48 md:h-auto cursor-pointer" onClick={() => navigate(`/auctions/${auction.id}`)}>
                                         <img
-                                            src={auction.property?.thumbnail}
+                                            src={auction.property?.thumbnail || auction.property.images?.[0]}
                                             alt={auction.title}
                                             className="w-full h-full object-cover"
                                         />
