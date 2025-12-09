@@ -197,7 +197,7 @@ export default function PropertySelector({ selectedProperty, onSelect }) {
                             {/* Image */}
                             <div className="relative h-48">
                                 <img
-                                    src={property.thumbnail}
+                                    src={property.thumbnail || property.images?.[0]}
                                     alt={property.title}
                                     className="w-full h-full object-cover"
                                 />
